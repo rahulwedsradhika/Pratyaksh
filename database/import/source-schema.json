@@ -1,0 +1,5666 @@
+[
+  {
+    "name": "admin_audit_logs",
+    "sql": "CREATE TABLE admin_audit_logs (\n      id TEXT PRIMARY KEY,\n      admin_id TEXT NOT NULL,\n      admin_name TEXT NOT NULL,\n      action TEXT NOT NULL, /* STUDENT_CREATED, MEMBERSHIP_EXTENDED, PAYMENT_APPROVED, etc. */\n      entity_type TEXT NOT NULL, /* student, membership, payment_order, plan, settings */\n      entity_id TEXT NOT NULL,\n      details_json TEXT,\n      ip_address TEXT,\n      created_at TEXT NOT NULL\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "admin_id",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "admin_name",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "action",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "entity_type",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "entity_id",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "details_json",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 7,
+        "name": "ip_address",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 8,
+        "name": "created_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_admin_audit_logs_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "admin_sessions",
+    "sql": "CREATE TABLE admin_sessions (\n      id TEXT PRIMARY KEY,\n      admin_id TEXT NOT NULL,\n      token_hash TEXT NOT NULL UNIQUE,\n      expires_at TEXT NOT NULL,\n      revoked_at TEXT,\n      created_at TEXT NOT NULL,\n      FOREIGN KEY (admin_id) REFERENCES admin_users(id)\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "admin_id",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "token_hash",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "expires_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "revoked_at",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "created_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "idx_admin_sessions_expires_at",
+        "unique": 0,
+        "origin": "c",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 3,
+            "name": "expires_at"
+          }
+        ]
+      },
+      {
+        "seq": 1,
+        "name": "idx_admin_sessions_admin_id",
+        "unique": 0,
+        "origin": "c",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 1,
+            "name": "admin_id"
+          }
+        ]
+      },
+      {
+        "seq": 2,
+        "name": "sqlite_autoindex_admin_sessions_2",
+        "unique": 1,
+        "origin": "u",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 2,
+            "name": "token_hash"
+          }
+        ]
+      },
+      {
+        "seq": 3,
+        "name": "sqlite_autoindex_admin_sessions_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": [
+      {
+        "id": 0,
+        "seq": 0,
+        "table": "admin_users",
+        "from": "admin_id",
+        "to": "id",
+        "on_update": "NO ACTION",
+        "on_delete": "NO ACTION",
+        "match": "NONE"
+      }
+    ]
+  },
+  {
+    "name": "admin_users",
+    "sql": "CREATE TABLE admin_users (\n      id TEXT PRIMARY KEY,\n      email TEXT UNIQUE NOT NULL,\n      password_hash TEXT NOT NULL,\n      full_name TEXT NOT NULL,\n      role TEXT NOT NULL DEFAULT 'super_admin', /* super_admin, admissions_staff, finance_staff, support_staff */\n      is_active INTEGER DEFAULT 1,\n      mfa_enabled INTEGER DEFAULT 0,\n      mfa_secret TEXT,\n      avatar_url TEXT,\n      phone TEXT,\n      last_login_at TEXT,\n      created_at TEXT NOT NULL,\n      updated_at TEXT NOT NULL\n    , address TEXT NOT NULL DEFAULT '', onboarding_complete INTEGER NOT NULL DEFAULT 0)",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "email",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "password_hash",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "full_name",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "role",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": "'super_admin'",
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "is_active",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "1",
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "mfa_enabled",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "0",
+        "pk": 0
+      },
+      {
+        "cid": 7,
+        "name": "mfa_secret",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 8,
+        "name": "avatar_url",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 9,
+        "name": "phone",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 10,
+        "name": "last_login_at",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 11,
+        "name": "created_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 12,
+        "name": "updated_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 13,
+        "name": "address",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": "''",
+        "pk": 0
+      },
+      {
+        "cid": 14,
+        "name": "onboarding_complete",
+        "type": "INTEGER",
+        "notnull": 1,
+        "dflt_value": "0",
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_admin_users_2",
+        "unique": 1,
+        "origin": "u",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 1,
+            "name": "email"
+          }
+        ]
+      },
+      {
+        "seq": 1,
+        "name": "sqlite_autoindex_admin_users_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "auth_activity_logs",
+    "sql": "CREATE TABLE auth_activity_logs (\n      id TEXT PRIMARY KEY,\n      user_type TEXT NOT NULL DEFAULT 'student',\n      user_id TEXT,\n      email TEXT NOT NULL,\n      provider TEXT NOT NULL,\n      action TEXT NOT NULL,\n      status TEXT NOT NULL,\n      ip_address TEXT,\n      error_reason TEXT,\n      details_json TEXT,\n      created_at TEXT NOT NULL\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "user_type",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": "'student'",
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "user_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "email",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "provider",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "action",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "status",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 7,
+        "name": "ip_address",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 8,
+        "name": "error_reason",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 9,
+        "name": "details_json",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 10,
+        "name": "created_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_auth_activity_logs_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "authentication_settings",
+    "sql": "CREATE TABLE authentication_settings (\n      id TEXT PRIMARY KEY,\n      provider TEXT NOT NULL DEFAULT 'google',\n      environment TEXT NOT NULL DEFAULT 'development',\n      client_id TEXT,\n      is_enabled INTEGER NOT NULL DEFAULT 0,\n      updated_by TEXT,\n      updated_by_name TEXT,\n      last_tested_at TEXT,\n      last_test_status TEXT,\n      last_test_error TEXT,\n      created_at TEXT NOT NULL,\n      updated_at TEXT NOT NULL, client_secret TEXT,\n      UNIQUE (provider, environment)\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "provider",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": "'google'",
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "environment",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": "'development'",
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "client_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "is_enabled",
+        "type": "INTEGER",
+        "notnull": 1,
+        "dflt_value": "0",
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "updated_by",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "updated_by_name",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 7,
+        "name": "last_tested_at",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 8,
+        "name": "last_test_status",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 9,
+        "name": "last_test_error",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 10,
+        "name": "created_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 11,
+        "name": "updated_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 12,
+        "name": "client_secret",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_authentication_settings_2",
+        "unique": 1,
+        "origin": "u",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 1,
+            "name": "provider"
+          },
+          {
+            "seqno": 1,
+            "cid": 2,
+            "name": "environment"
+          }
+        ]
+      },
+      {
+        "seq": 1,
+        "name": "sqlite_autoindex_authentication_settings_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "bank_credit_alerts",
+    "sql": "CREATE TABLE bank_credit_alerts (\n      id TEXT PRIMARY KEY,\n      connection_id TEXT,\n      bank_name TEXT NOT NULL,\n      email_message_id TEXT UNIQUE NOT NULL,\n      received_at TEXT NOT NULL,\n      sender_email TEXT NOT NULL,\n      subject TEXT NOT NULL,\n      raw_snippet TEXT,\n      credit_amount_paise INTEGER NOT NULL,\n      credit_amount_formatted TEXT NOT NULL,\n      utr_number TEXT NOT NULL,\n      remitter_vpa TEXT,\n      remitter_name TEXT,\n      match_status TEXT DEFAULT 'unmatched', /* unmatched, matched_order, ambiguous, approved, rejected */\n      matched_order_id TEXT,\n      match_confidence REAL DEFAULT 0.0,\n      match_reason TEXT,\n      processed_by_admin TEXT,\n      processed_at TEXT,\n      created_at TEXT NOT NULL\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "connection_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "bank_name",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "email_message_id",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "received_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "sender_email",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "subject",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 7,
+        "name": "raw_snippet",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 8,
+        "name": "credit_amount_paise",
+        "type": "INTEGER",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 9,
+        "name": "credit_amount_formatted",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 10,
+        "name": "utr_number",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 11,
+        "name": "remitter_vpa",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 12,
+        "name": "remitter_name",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 13,
+        "name": "match_status",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": "'unmatched'",
+        "pk": 0
+      },
+      {
+        "cid": 14,
+        "name": "matched_order_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 15,
+        "name": "match_confidence",
+        "type": "REAL",
+        "notnull": 0,
+        "dflt_value": "0.0",
+        "pk": 0
+      },
+      {
+        "cid": 16,
+        "name": "match_reason",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 17,
+        "name": "processed_by_admin",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 18,
+        "name": "processed_at",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 19,
+        "name": "created_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_bank_credit_alerts_2",
+        "unique": 1,
+        "origin": "u",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 3,
+            "name": "email_message_id"
+          }
+        ]
+      },
+      {
+        "seq": 1,
+        "name": "sqlite_autoindex_bank_credit_alerts_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "bank_email_connections",
+    "sql": "CREATE TABLE bank_email_connections (\n      id TEXT PRIMARY KEY,\n      admin_id TEXT NOT NULL,\n      email_address TEXT NOT NULL,\n      refresh_token TEXT NOT NULL,\n      is_connected INTEGER DEFAULT 1,\n      last_sync_at TEXT,\n      last_sync_status TEXT,\n      error_message TEXT,\n      total_emails_synced INTEGER DEFAULT 0,\n      created_at TEXT NOT NULL,\n      updated_at TEXT NOT NULL\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "admin_id",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "email_address",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "refresh_token",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "is_connected",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "1",
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "last_sync_at",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "last_sync_status",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 7,
+        "name": "error_message",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 8,
+        "name": "total_emails_synced",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "0",
+        "pk": 0
+      },
+      {
+        "cid": 9,
+        "name": "created_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 10,
+        "name": "updated_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_bank_email_connections_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "bank_sender_rules",
+    "sql": "CREATE TABLE bank_sender_rules (\n      id TEXT PRIMARY KEY,\n      bank_name TEXT NOT NULL,\n      sender_email_pattern TEXT NOT NULL,\n      subject_pattern TEXT NOT NULL,\n      body_parser_regex TEXT NOT NULL,\n      is_active INTEGER DEFAULT 1,\n      created_at TEXT NOT NULL\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "bank_name",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "sender_email_pattern",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "subject_pattern",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "body_parser_regex",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "is_active",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "1",
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "created_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_bank_sender_rules_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "blogs",
+    "sql": "CREATE TABLE blogs (\n      id TEXT PRIMARY KEY,\n      title TEXT,\n      slug TEXT,\n      excerpt TEXT,\n      content TEXT,\n      author TEXT,\n      img TEXT,\n      published_at TEXT\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "title",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "slug",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "excerpt",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "content",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "author",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "img",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 7,
+        "name": "published_at",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_blogs_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "cart_items",
+    "sql": "CREATE TABLE cart_items (\n      id TEXT PRIMARY KEY,\n      student_id TEXT,\n      course_id TEXT,\n      course_name TEXT,\n      price REAL,\n      img TEXT,\n      added_at TEXT\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "student_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "course_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "course_name",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "price",
+        "type": "REAL",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "img",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "added_at",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_cart_items_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "categories",
+    "sql": "CREATE TABLE categories (\n      id TEXT PRIMARY KEY,\n      name TEXT NOT NULL,\n      tab TEXT,\n      detail TEXT,\n      img TEXT,\n      is_active INTEGER DEFAULT 1\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "name",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "tab",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "detail",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "img",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "is_active",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "1",
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_categories_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "chapter_practice_tests",
+    "sql": "CREATE TABLE chapter_practice_tests (\n      chapter_id TEXT NOT NULL,\n      test_id TEXT NOT NULL,\n      title TEXT,\n      total_questions INTEGER,\n      order_num INTEGER NOT NULL DEFAULT 1,\n      PRIMARY KEY (chapter_id, test_id)\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "chapter_id",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "test_id",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 2
+      },
+      {
+        "cid": 2,
+        "name": "title",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "total_questions",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "order_num",
+        "type": "INTEGER",
+        "notnull": 1,
+        "dflt_value": "1",
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_chapter_practice_tests_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "chapter_id"
+          },
+          {
+            "seqno": 1,
+            "cid": 1,
+            "name": "test_id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "chapters",
+    "sql": "CREATE TABLE chapters (\n      id TEXT PRIMARY KEY,\n      module_id TEXT,\n      subject_id TEXT,\n      course_id TEXT,\n      name TEXT NOT NULL,\n      description TEXT,\n      faculty TEXT,\n      img TEXT,\n      order_num INTEGER DEFAULT 1,\n      is_active INTEGER DEFAULT 1\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "module_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "subject_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "course_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "name",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "description",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "faculty",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 7,
+        "name": "img",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 8,
+        "name": "order_num",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "1",
+        "pk": 0
+      },
+      {
+        "cid": 9,
+        "name": "is_active",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "1",
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_chapters_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "coupon_reservations",
+    "sql": "CREATE TABLE coupon_reservations (order_id TEXT PRIMARY KEY,coupon_id TEXT NOT NULL,state TEXT NOT NULL DEFAULT 'reserved',created_at TEXT NOT NULL)",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "order_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "coupon_id",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "state",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": "'reserved'",
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "created_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_coupon_reservations_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "order_id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "coupons",
+    "sql": "CREATE TABLE coupons (\n      id TEXT PRIMARY KEY,\n      code TEXT UNIQUE NOT NULL,\n      discount_type TEXT NOT NULL, /* percentage, fixed_amount */\n      discount_value REAL NOT NULL,\n      min_order_amount REAL DEFAULT 0,\n      max_discount_amount REAL,\n      valid_from TEXT NOT NULL,\n      valid_until TEXT NOT NULL,\n      usage_limit INTEGER DEFAULT 100,\n      times_used INTEGER DEFAULT 0,\n      is_active INTEGER DEFAULT 1,\n      created_at TEXT NOT NULL\n    , deleted_at TEXT)",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "code",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "discount_type",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "discount_value",
+        "type": "REAL",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "min_order_amount",
+        "type": "REAL",
+        "notnull": 0,
+        "dflt_value": "0",
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "max_discount_amount",
+        "type": "REAL",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "valid_from",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 7,
+        "name": "valid_until",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 8,
+        "name": "usage_limit",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "100",
+        "pk": 0
+      },
+      {
+        "cid": 9,
+        "name": "times_used",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "0",
+        "pk": 0
+      },
+      {
+        "cid": 10,
+        "name": "is_active",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "1",
+        "pk": 0
+      },
+      {
+        "cid": 11,
+        "name": "created_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 12,
+        "name": "deleted_at",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_coupons_2",
+        "unique": 1,
+        "origin": "u",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 1,
+            "name": "code"
+          }
+        ]
+      },
+      {
+        "seq": 1,
+        "name": "sqlite_autoindex_coupons_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "courses",
+    "sql": "CREATE TABLE courses (\n      id TEXT PRIMARY KEY,\n      category_id TEXT,\n      category_name TEXT,\n      name TEXT NOT NULL,\n      detail TEXT,\n      img TEXT,\n      price REAL DEFAULT 0,\n      discount_price REAL DEFAULT 0,\n      is_active INTEGER DEFAULT 1,\n      rating REAL DEFAULT 4.9,\n      student_count INTEGER DEFAULT 1250,\n      purchase_type TEXT\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "category_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "category_name",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "name",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "detail",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "img",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "price",
+        "type": "REAL",
+        "notnull": 0,
+        "dflt_value": "0",
+        "pk": 0
+      },
+      {
+        "cid": 7,
+        "name": "discount_price",
+        "type": "REAL",
+        "notnull": 0,
+        "dflt_value": "0",
+        "pk": 0
+      },
+      {
+        "cid": 8,
+        "name": "is_active",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "1",
+        "pk": 0
+      },
+      {
+        "cid": 9,
+        "name": "rating",
+        "type": "REAL",
+        "notnull": 0,
+        "dflt_value": "4.9",
+        "pk": 0
+      },
+      {
+        "cid": 10,
+        "name": "student_count",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "1250",
+        "pk": 0
+      },
+      {
+        "cid": 11,
+        "name": "purchase_type",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_courses_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "demo_cleanup_archive",
+    "sql": "CREATE TABLE demo_cleanup_archive (sequence INTEGER PRIMARY KEY, run_id TEXT NOT NULL, table_name TEXT NOT NULL, record_json TEXT NOT NULL, archived_at TEXT NOT NULL, restored_at TEXT)",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "sequence",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "run_id",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "table_name",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "record_json",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "archived_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "restored_at",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [],
+    "foreignKeys": []
+  },
+  {
+    "name": "email_drafts",
+    "sql": "CREATE TABLE email_drafts (\n      id TEXT PRIMARY KEY,\n      admin_user_id TEXT NOT NULL,\n      recipient TEXT,\n      subject TEXT,\n      body TEXT,\n      template_key TEXT,\n      created_at TEXT NOT NULL,\n      updated_at TEXT NOT NULL\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "admin_user_id",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "recipient",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "subject",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "body",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "template_key",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "created_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 7,
+        "name": "updated_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_email_drafts_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "email_logs",
+    "sql": "CREATE TABLE email_logs (\n      id TEXT PRIMARY KEY,\n      recipient TEXT NOT NULL,\n      subject TEXT NOT NULL,\n      template_key TEXT,\n      message_id TEXT,\n      submission_status TEXT NOT NULL DEFAULT 'Pending',\n      sanitized_error TEXT,\n      body_preview TEXT,\n      created_at TEXT NOT NULL,\n      submitted_at TEXT\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "recipient",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "subject",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "template_key",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "message_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "submission_status",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": "'Pending'",
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "sanitized_error",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 7,
+        "name": "body_preview",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 8,
+        "name": "created_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 9,
+        "name": "submitted_at",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_email_logs_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "email_settings",
+    "sql": "CREATE TABLE email_settings (\n      id TEXT PRIMARY KEY,\n      provider TEXT NOT NULL DEFAULT 'Hostinger Email',\n      smtp_host TEXT NOT NULL DEFAULT 'smtp.hostinger.com',\n      smtp_port INTEGER NOT NULL DEFAULT 465,\n      smtp_security TEXT NOT NULL DEFAULT 'SSL/TLS',\n      smtp_username TEXT NOT NULL DEFAULT 'noreply@ayurvedasidhi.com',\n      sender_name TEXT NOT NULL DEFAULT 'Ayurvedasidhi',\n      sender_email TEXT NOT NULL DEFAULT 'noreply@ayurvedasidhi.com',\n      last_verified_at TEXT,\n      last_verification_status TEXT,\n      last_verification_error TEXT,\n      updated_at TEXT NOT NULL\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "provider",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": "'Hostinger Email'",
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "smtp_host",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": "'smtp.hostinger.com'",
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "smtp_port",
+        "type": "INTEGER",
+        "notnull": 1,
+        "dflt_value": "465",
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "smtp_security",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": "'SSL/TLS'",
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "smtp_username",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": "'noreply@ayurvedasidhi.com'",
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "sender_name",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": "'Ayurvedasidhi'",
+        "pk": 0
+      },
+      {
+        "cid": 7,
+        "name": "sender_email",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": "'noreply@ayurvedasidhi.com'",
+        "pk": 0
+      },
+      {
+        "cid": 8,
+        "name": "last_verified_at",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 9,
+        "name": "last_verification_status",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 10,
+        "name": "last_verification_error",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 11,
+        "name": "updated_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_email_settings_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "email_template_backups",
+    "sql": "CREATE TABLE email_template_backups (version TEXT NOT NULL, template_key TEXT NOT NULL, template_json TEXT NOT NULL, backed_up_at TEXT NOT NULL, PRIMARY KEY(version, template_key))",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "version",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "template_key",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 2
+      },
+      {
+        "cid": 2,
+        "name": "template_json",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "backed_up_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_email_template_backups_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "version"
+          },
+          {
+            "seqno": 1,
+            "cid": 1,
+            "name": "template_key"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "email_template_upgrades",
+    "sql": "CREATE TABLE email_template_upgrades (version TEXT PRIMARY KEY, applied_at TEXT NOT NULL)",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "version",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "applied_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_email_template_upgrades_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "version"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "email_templates",
+    "sql": "CREATE TABLE email_templates (\n      id TEXT PRIMARY KEY,\n      template_key TEXT UNIQUE NOT NULL,\n      name TEXT NOT NULL,\n      category TEXT NOT NULL DEFAULT 'notification',\n      subject TEXT NOT NULL,\n      html_body TEXT NOT NULL,\n      text_body TEXT NOT NULL,\n      variables_json TEXT,\n      enabled INTEGER NOT NULL DEFAULT 1,\n      updated_at TEXT NOT NULL\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "template_key",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "name",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "category",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": "'notification'",
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "subject",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "html_body",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "text_body",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 7,
+        "name": "variables_json",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 8,
+        "name": "enabled",
+        "type": "INTEGER",
+        "notnull": 1,
+        "dflt_value": "1",
+        "pk": 0
+      },
+      {
+        "cid": 9,
+        "name": "updated_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_email_templates_2",
+        "unique": 1,
+        "origin": "u",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 1,
+            "name": "template_key"
+          }
+        ]
+      },
+      {
+        "seq": 1,
+        "name": "sqlite_autoindex_email_templates_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "faculty",
+    "sql": "CREATE TABLE faculty (\n      id TEXT PRIMARY KEY,\n      name TEXT NOT NULL,\n      qualification TEXT,\n      specialization TEXT,\n      designation TEXT,\n      detail TEXT,\n      img TEXT\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "name",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "qualification",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "specialization",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "designation",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "detail",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "img",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_faculty_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "gateway_diagnostic_orders",
+    "sql": "CREATE TABLE gateway_diagnostic_orders(id TEXT PRIMARY KEY,admin_id TEXT NOT NULL,provider_order_id TEXT UNIQUE,amount_paise INTEGER NOT NULL,status TEXT NOT NULL,payment_id TEXT,created_at TEXT NOT NULL,verified_at TEXT)",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "admin_id",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "provider_order_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "amount_paise",
+        "type": "INTEGER",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "status",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "payment_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "created_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 7,
+        "name": "verified_at",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_gateway_diagnostic_orders_2",
+        "unique": 1,
+        "origin": "u",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 2,
+            "name": "provider_order_id"
+          }
+        ]
+      },
+      {
+        "seq": 1,
+        "name": "sqlite_autoindex_gateway_diagnostic_orders_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "gateway_profiles",
+    "sql": "CREATE TABLE gateway_profiles(mode TEXT PRIMARY KEY,key_id TEXT NOT NULL DEFAULT '',key_secret TEXT NOT NULL DEFAULT '',webhook_secret TEXT NOT NULL DEFAULT '',verified_at TEXT,updated_at TEXT NOT NULL)",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "mode",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "key_id",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": "''",
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "key_secret",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": "''",
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "webhook_secret",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": "''",
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "verified_at",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "updated_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_gateway_profiles_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "mode"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "gateway_webhook_receipts",
+    "sql": "CREATE TABLE gateway_webhook_receipts(event_id TEXT PRIMARY KEY,mode TEXT NOT NULL,event_type TEXT NOT NULL,received_at TEXT NOT NULL)",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "event_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "mode",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "event_type",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "received_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_gateway_webhook_receipts_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "event_id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "inquiries",
+    "sql": "CREATE TABLE inquiries (\n      id TEXT PRIMARY KEY,\n      name TEXT,\n      email TEXT,\n      phone TEXT,\n      message TEXT,\n      created_at TEXT\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "name",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "email",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "phone",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "message",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "created_at",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_inquiries_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "lecture_history",
+    "sql": "CREATE TABLE lecture_history (\n      student_id TEXT NOT NULL, lecture_id TEXT NOT NULL, chapter_id TEXT NOT NULL,\n      title TEXT NOT NULL, chapter_title TEXT, position_seconds REAL DEFAULT 0,\n      last_watched_at TEXT NOT NULL, PRIMARY KEY(student_id, lecture_id, chapter_id)\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "student_id",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "lecture_id",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 2
+      },
+      {
+        "cid": 2,
+        "name": "chapter_id",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 3
+      },
+      {
+        "cid": 3,
+        "name": "title",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "chapter_title",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "position_seconds",
+        "type": "REAL",
+        "notnull": 0,
+        "dflt_value": "0",
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "last_watched_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "lecture_history_student",
+        "unique": 0,
+        "origin": "c",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "student_id"
+          },
+          {
+            "seqno": 1,
+            "cid": 6,
+            "name": "last_watched_at"
+          }
+        ]
+      },
+      {
+        "seq": 1,
+        "name": "sqlite_autoindex_lecture_history_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "student_id"
+          },
+          {
+            "seqno": 1,
+            "cid": 1,
+            "name": "lecture_id"
+          },
+          {
+            "seqno": 2,
+            "cid": 2,
+            "name": "chapter_id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "lessons",
+    "sql": "CREATE TABLE lessons (\n      id TEXT PRIMARY KEY,\n      chapter_id TEXT,\n      title TEXT NOT NULL,\n      duration TEXT,\n      video_url TEXT,\n      notes_url TEXT,\n      description TEXT,\n      order_num INTEGER DEFAULT 1\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "chapter_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "title",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "duration",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "video_url",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "notes_url",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "description",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 7,
+        "name": "order_num",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "1",
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_lessons_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "live_class_posts",
+    "sql": "CREATE TABLE live_class_posts (\n    id TEXT PRIMARY KEY, title TEXT NOT NULL, message TEXT NOT NULL, kind TEXT NOT NULL,\n    zoom_url TEXT NOT NULL, starts_at TEXT, state TEXT NOT NULL, deleted INTEGER NOT NULL DEFAULT 0,\n    created_by TEXT NOT NULL, updated_by TEXT NOT NULL, created_at TEXT NOT NULL, updated_at TEXT NOT NULL\n  )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "title",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "message",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "kind",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "zoom_url",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "starts_at",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "state",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 7,
+        "name": "deleted",
+        "type": "INTEGER",
+        "notnull": 1,
+        "dflt_value": "0",
+        "pk": 0
+      },
+      {
+        "cid": 8,
+        "name": "created_by",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 9,
+        "name": "updated_by",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 10,
+        "name": "created_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 11,
+        "name": "updated_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_live_class_posts_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "membership_plan_price_history",
+    "sql": "CREATE TABLE membership_plan_price_history (\n      id TEXT PRIMARY KEY,\n      plan_id TEXT NOT NULL,\n      previous_price REAL NOT NULL,\n      new_price REAL NOT NULL,\n      changed_by_admin_id TEXT,\n      effective_date TEXT NOT NULL\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "plan_id",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "previous_price",
+        "type": "REAL",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "new_price",
+        "type": "REAL",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "changed_by_admin_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "effective_date",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_membership_plan_price_history_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "membership_plans",
+    "sql": "CREATE TABLE membership_plans (\n      id TEXT PRIMARY KEY,\n      duration_months INTEGER NOT NULL,\n      name TEXT NOT NULL,\n      tier_code TEXT NOT NULL,\n      price REAL NOT NULL,\n      currency TEXT DEFAULT 'INR',\n      badge TEXT,\n      is_active INTEGER DEFAULT 1,\n      description TEXT,\n      created_at TEXT NOT NULL\n    , features_json TEXT, eligibility_rules TEXT, display_order INTEGER DEFAULT 0, is_public INTEGER DEFAULT 1, updated_at TEXT)",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "duration_months",
+        "type": "INTEGER",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "name",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "tier_code",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "price",
+        "type": "REAL",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "currency",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": "'INR'",
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "badge",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 7,
+        "name": "is_active",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "1",
+        "pk": 0
+      },
+      {
+        "cid": 8,
+        "name": "description",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 9,
+        "name": "created_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 10,
+        "name": "features_json",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 11,
+        "name": "eligibility_rules",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 12,
+        "name": "display_order",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "0",
+        "pk": 0
+      },
+      {
+        "cid": 13,
+        "name": "is_public",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "1",
+        "pk": 0
+      },
+      {
+        "cid": 14,
+        "name": "updated_at",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_membership_plans_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "memberships",
+    "sql": "CREATE TABLE memberships (\n      id TEXT PRIMARY KEY,\n      student_id TEXT NOT NULL,\n      plan_id TEXT NOT NULL,\n      plan_name_snapshot TEXT NOT NULL,\n      price_snapshot REAL NOT NULL,\n      currency TEXT DEFAULT 'INR',\n      duration_months INTEGER NOT NULL,\n      order_ref TEXT NOT NULL,\n      start_date TEXT NOT NULL,\n      expiry_date TEXT NOT NULL,\n      status TEXT NOT NULL, /* active, expired, suspended */\n      created_at TEXT NOT NULL,\n      updated_at TEXT NOT NULL,\n      FOREIGN KEY (student_id) REFERENCES students(id)\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "student_id",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "plan_id",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "plan_name_snapshot",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "price_snapshot",
+        "type": "REAL",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "currency",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": "'INR'",
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "duration_months",
+        "type": "INTEGER",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 7,
+        "name": "order_ref",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 8,
+        "name": "start_date",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 9,
+        "name": "expiry_date",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 10,
+        "name": "status",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 11,
+        "name": "created_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 12,
+        "name": "updated_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_memberships_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": [
+      {
+        "id": 0,
+        "seq": 0,
+        "table": "students",
+        "from": "student_id",
+        "to": "id",
+        "on_update": "NO ACTION",
+        "on_delete": "NO ACTION",
+        "match": "NONE"
+      }
+    ]
+  },
+  {
+    "name": "modules",
+    "sql": "CREATE TABLE modules (\n      id TEXT PRIMARY KEY,\n      subject_id TEXT,\n      course_id TEXT,\n      name TEXT NOT NULL,\n      detail TEXT,\n      img TEXT,\n      is_demo INTEGER DEFAULT 0,\n      is_active INTEGER DEFAULT 1\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "subject_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "course_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "name",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "detail",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "img",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "is_demo",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "0",
+        "pk": 0
+      },
+      {
+        "cid": 7,
+        "name": "is_active",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "1",
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_modules_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "notes",
+    "sql": "CREATE TABLE notes (\n      id TEXT PRIMARY KEY,\n      chapter_id TEXT,\n      module_id TEXT,\n      subject_id TEXT,\n      course_id TEXT,\n      title TEXT NOT NULL,\n      description TEXT,\n      doc_path TEXT,\n      created_at TEXT\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "chapter_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "module_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "subject_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "course_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "title",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "description",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 7,
+        "name": "doc_path",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 8,
+        "name": "created_at",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_notes_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "payment_events",
+    "sql": "CREATE TABLE payment_events (\n      id TEXT PRIMARY KEY,\n      order_id TEXT NOT NULL,\n      event_type TEXT NOT NULL,\n      payload TEXT,\n      is_reconciled INTEGER DEFAULT 0,\n      created_at TEXT NOT NULL\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "order_id",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "event_type",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "payload",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "is_reconciled",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "0",
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "created_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_payment_events_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "payment_orders",
+    "sql": "CREATE TABLE payment_orders (\n      id TEXT PRIMARY KEY,\n      student_id TEXT NOT NULL,\n      plan_id TEXT NOT NULL,\n      amount REAL NOT NULL,\n      currency TEXT DEFAULT 'INR',\n      status TEXT NOT NULL, /* pending, processing, completed, failed, cancelled */\n      idempotency_key TEXT UNIQUE,\n      provider TEXT DEFAULT 'sandbox',\n      provider_order_id TEXT,\n      provider_payment_id TEXT,\n      provider_signature TEXT,\n      metadata TEXT,\n      created_at TEXT NOT NULL,\n      updated_at TEXT NOT NULL, student_submitted_utr TEXT, utr_submitted_at TEXT, payment_method TEXT DEFAULT 'gateway', coupon_id TEXT, discount_amount REAL DEFAULT 0, base_amount REAL DEFAULT 0, admin_verified_by TEXT, admin_verified_at TEXT, admin_notes TEXT, rejection_reason TEXT, reconciliation_status TEXT DEFAULT 'unreconciled', reconciliation_id TEXT, razorpay_order_id TEXT, razorpay_payment_id TEXT, razorpay_signature TEXT,\n      FOREIGN KEY (student_id) REFERENCES students(id)\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "student_id",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "plan_id",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "amount",
+        "type": "REAL",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "currency",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": "'INR'",
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "status",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "idempotency_key",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 7,
+        "name": "provider",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": "'sandbox'",
+        "pk": 0
+      },
+      {
+        "cid": 8,
+        "name": "provider_order_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 9,
+        "name": "provider_payment_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 10,
+        "name": "provider_signature",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 11,
+        "name": "metadata",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 12,
+        "name": "created_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 13,
+        "name": "updated_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 14,
+        "name": "student_submitted_utr",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 15,
+        "name": "utr_submitted_at",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 16,
+        "name": "payment_method",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": "'gateway'",
+        "pk": 0
+      },
+      {
+        "cid": 17,
+        "name": "coupon_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 18,
+        "name": "discount_amount",
+        "type": "REAL",
+        "notnull": 0,
+        "dflt_value": "0",
+        "pk": 0
+      },
+      {
+        "cid": 19,
+        "name": "base_amount",
+        "type": "REAL",
+        "notnull": 0,
+        "dflt_value": "0",
+        "pk": 0
+      },
+      {
+        "cid": 20,
+        "name": "admin_verified_by",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 21,
+        "name": "admin_verified_at",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 22,
+        "name": "admin_notes",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 23,
+        "name": "rejection_reason",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 24,
+        "name": "reconciliation_status",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": "'unreconciled'",
+        "pk": 0
+      },
+      {
+        "cid": 25,
+        "name": "reconciliation_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 26,
+        "name": "razorpay_order_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 27,
+        "name": "razorpay_payment_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 28,
+        "name": "razorpay_signature",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_payment_orders_2",
+        "unique": 1,
+        "origin": "u",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 6,
+            "name": "idempotency_key"
+          }
+        ]
+      },
+      {
+        "seq": 1,
+        "name": "sqlite_autoindex_payment_orders_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": [
+      {
+        "id": 0,
+        "seq": 0,
+        "table": "students",
+        "from": "student_id",
+        "to": "id",
+        "on_update": "NO ACTION",
+        "on_delete": "NO ACTION",
+        "match": "NONE"
+      }
+    ]
+  },
+  {
+    "name": "payment_settings",
+    "sql": "CREATE TABLE payment_settings (\n      id TEXT PRIMARY KEY,\n      merchant_display_name TEXT NOT NULL,\n      merchant_upi_vpa TEXT NOT NULL,\n      merchant_logo_url TEXT,\n      support_email TEXT,\n      support_phone TEXT,\n      payment_instructions TEXT,\n      qr_preview_enabled INTEGER DEFAULT 1,\n      gateway_provider TEXT DEFAULT 'razorpay',\n      gateway_key_id TEXT DEFAULT '',\n      gateway_key_secret TEXT DEFAULT '',\n      gateway_webhook_secret TEXT DEFAULT '',\n      gateway_enabled INTEGER DEFAULT 1,\n      upi_qr_enabled INTEGER DEFAULT 1,\n      updated_at TEXT NOT NULL\n    , gateway_mode TEXT DEFAULT 'test', auto_activate_membership INTEGER DEFAULT 1, webhook_url TEXT DEFAULT 'https://api.pratyakshayurveda.com/api/payment/razorpay/webhook')",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "merchant_display_name",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "merchant_upi_vpa",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "merchant_logo_url",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "support_email",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "support_phone",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "payment_instructions",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 7,
+        "name": "qr_preview_enabled",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "1",
+        "pk": 0
+      },
+      {
+        "cid": 8,
+        "name": "gateway_provider",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": "'razorpay'",
+        "pk": 0
+      },
+      {
+        "cid": 9,
+        "name": "gateway_key_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": "''",
+        "pk": 0
+      },
+      {
+        "cid": 10,
+        "name": "gateway_key_secret",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": "''",
+        "pk": 0
+      },
+      {
+        "cid": 11,
+        "name": "gateway_webhook_secret",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": "''",
+        "pk": 0
+      },
+      {
+        "cid": 12,
+        "name": "gateway_enabled",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "1",
+        "pk": 0
+      },
+      {
+        "cid": 13,
+        "name": "upi_qr_enabled",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "1",
+        "pk": 0
+      },
+      {
+        "cid": 14,
+        "name": "updated_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 15,
+        "name": "gateway_mode",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": "'test'",
+        "pk": 0
+      },
+      {
+        "cid": 16,
+        "name": "auto_activate_membership",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "1",
+        "pk": 0
+      },
+      {
+        "cid": 17,
+        "name": "webhook_url",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": "'https://api.pratyakshayurveda.com/api/payment/razorpay/webhook'",
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_payment_settings_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "questions",
+    "sql": "CREATE TABLE questions (\n      id TEXT PRIMARY KEY,\n      paper_id TEXT,\n      subject_name TEXT,\n      question_text TEXT NOT NULL,\n      question_eng TEXT,\n      option_a TEXT NOT NULL,\n      option_b TEXT NOT NULL,\n      option_c TEXT NOT NULL,\n      option_d TEXT NOT NULL,\n      correct_option TEXT NOT NULL,\n      correct_opt_num INTEGER DEFAULT 1,\n      explanation TEXT,\n      reference_samhita TEXT,\n      code TEXT,\n      q_type TEXT\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "paper_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "subject_name",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "question_text",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "question_eng",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "option_a",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "option_b",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 7,
+        "name": "option_c",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 8,
+        "name": "option_d",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 9,
+        "name": "correct_option",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 10,
+        "name": "correct_opt_num",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "1",
+        "pk": 0
+      },
+      {
+        "cid": 11,
+        "name": "explanation",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 12,
+        "name": "reference_samhita",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 13,
+        "name": "code",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 14,
+        "name": "q_type",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_questions_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "student_exam_history",
+    "sql": "CREATE TABLE student_exam_history (\n      id TEXT PRIMARY KEY, student_id TEXT NOT NULL, paper_id TEXT NOT NULL,\n      title TEXT NOT NULL, completed_at TEXT NOT NULL, result_json TEXT NOT NULL\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "student_id",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "paper_id",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "title",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "completed_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "result_json",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "exam_history_student",
+        "unique": 0,
+        "origin": "c",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 1,
+            "name": "student_id"
+          },
+          {
+            "seqno": 1,
+            "cid": 4,
+            "name": "completed_at"
+          }
+        ]
+      },
+      {
+        "seq": 1,
+        "name": "sqlite_autoindex_student_exam_history_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "student_otps",
+    "sql": "CREATE TABLE student_otps (\n      id TEXT PRIMARY KEY,\n      email TEXT NOT NULL,\n      otp_code TEXT NOT NULL,\n      purpose TEXT NOT NULL, /* registration, login, password_reset */\n      attempts INTEGER DEFAULT 0,\n      expires_at TEXT NOT NULL,\n      used_at TEXT,\n      created_at TEXT NOT NULL\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "email",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "otp_code",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "purpose",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "attempts",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "0",
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "expires_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "used_at",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 7,
+        "name": "created_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_student_otps_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "student_progress",
+    "sql": "CREATE TABLE student_progress (\n      id TEXT PRIMARY KEY,\n      student_id TEXT,\n      lesson_id TEXT,\n      course_id TEXT,\n      completed INTEGER DEFAULT 0,\n      last_position_seconds INTEGER DEFAULT 0,\n      updated_at TEXT\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "student_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "lesson_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "course_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "completed",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "0",
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "last_position_seconds",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "0",
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "updated_at",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_student_progress_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "student_saved_questions",
+    "sql": "CREATE TABLE student_saved_questions (\n      student_id TEXT NOT NULL, question_id TEXT NOT NULL, question_json TEXT NOT NULL,\n      saved_at TEXT NOT NULL, PRIMARY KEY(student_id, question_id)\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "student_id",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "question_id",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 2
+      },
+      {
+        "cid": 2,
+        "name": "question_json",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "saved_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_student_saved_questions_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "student_id"
+          },
+          {
+            "seqno": 1,
+            "cid": 1,
+            "name": "question_id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "student_tasks",
+    "sql": "CREATE TABLE student_tasks (\n    id TEXT PRIMARY KEY, student_id TEXT NOT NULL, title TEXT NOT NULL,\n    category TEXT NOT NULL, priority TEXT NOT NULL, due_date TEXT,\n    notes TEXT NOT NULL DEFAULT '', done INTEGER NOT NULL DEFAULT 0,\n    deleted INTEGER NOT NULL DEFAULT 0, created_at TEXT NOT NULL, updated_at TEXT NOT NULL\n  )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "student_id",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "title",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "category",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "priority",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "due_date",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "notes",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": "''",
+        "pk": 0
+      },
+      {
+        "cid": 7,
+        "name": "done",
+        "type": "INTEGER",
+        "notnull": 1,
+        "dflt_value": "0",
+        "pk": 0
+      },
+      {
+        "cid": 8,
+        "name": "deleted",
+        "type": "INTEGER",
+        "notnull": 1,
+        "dflt_value": "0",
+        "pk": 0
+      },
+      {
+        "cid": 9,
+        "name": "created_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 10,
+        "name": "updated_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "student_tasks_owner",
+        "unique": 0,
+        "origin": "c",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 1,
+            "name": "student_id"
+          },
+          {
+            "seqno": 1,
+            "cid": 8,
+            "name": "deleted"
+          }
+        ]
+      },
+      {
+        "seq": 1,
+        "name": "sqlite_autoindex_student_tasks_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "students",
+    "sql": "CREATE TABLE students (\n      id TEXT PRIMARY KEY,\n      email TEXT UNIQUE NOT NULL,\n      password_hash TEXT,\n      full_name TEXT NOT NULL,\n      phone TEXT,\n      academic_status TEXT,\n      bams_year TEXT,\n      exam_goal TEXT,\n      auth_provider TEXT DEFAULT 'email',\n      email_verified INTEGER DEFAULT 0,\n      onboarding_state TEXT DEFAULT 'registered',\n      role TEXT DEFAULT 'student',\n      is_suspended INTEGER DEFAULT 0,\n      created_at TEXT NOT NULL,\n      updated_at TEXT NOT NULL\n    , avatar_url TEXT, admin_notes TEXT, enrollment_type TEXT DEFAULT 'self_enrolled', invitation_token TEXT, invitation_sent_at TEXT, invitation_accepted_at TEXT)",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "email",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "password_hash",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "full_name",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "phone",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "academic_status",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "bams_year",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 7,
+        "name": "exam_goal",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 8,
+        "name": "auth_provider",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": "'email'",
+        "pk": 0
+      },
+      {
+        "cid": 9,
+        "name": "email_verified",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "0",
+        "pk": 0
+      },
+      {
+        "cid": 10,
+        "name": "onboarding_state",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": "'registered'",
+        "pk": 0
+      },
+      {
+        "cid": 11,
+        "name": "role",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": "'student'",
+        "pk": 0
+      },
+      {
+        "cid": 12,
+        "name": "is_suspended",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "0",
+        "pk": 0
+      },
+      {
+        "cid": 13,
+        "name": "created_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 14,
+        "name": "updated_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 15,
+        "name": "avatar_url",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 16,
+        "name": "admin_notes",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 17,
+        "name": "enrollment_type",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": "'self_enrolled'",
+        "pk": 0
+      },
+      {
+        "cid": 18,
+        "name": "invitation_token",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 19,
+        "name": "invitation_sent_at",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 20,
+        "name": "invitation_accepted_at",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_students_2",
+        "unique": 1,
+        "origin": "u",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 1,
+            "name": "email"
+          }
+        ]
+      },
+      {
+        "seq": 1,
+        "name": "sqlite_autoindex_students_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "subjects",
+    "sql": "CREATE TABLE subjects (\n      id TEXT PRIMARY KEY,\n      course_id TEXT,\n      name TEXT NOT NULL,\n      detail TEXT,\n      icon TEXT,\n      is_active INTEGER DEFAULT 1\n    , img TEXT)",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "course_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "name",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "detail",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "icon",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "is_active",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "1",
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "img",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_subjects_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "test_attempts",
+    "sql": "CREATE TABLE test_attempts (\n      id TEXT PRIMARY KEY,\n      student_id TEXT,\n      paper_id TEXT,\n      paper_title TEXT,\n      started_at TEXT,\n      completed_at TEXT,\n      score REAL,\n      accuracy REAL,\n      correct_count INTEGER,\n      incorrect_count INTEGER,\n      unattempted_count INTEGER,\n      time_spent_seconds INTEGER,\n      answers_json TEXT\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "student_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "paper_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "paper_title",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "started_at",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "completed_at",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "score",
+        "type": "REAL",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 7,
+        "name": "accuracy",
+        "type": "REAL",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 8,
+        "name": "correct_count",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 9,
+        "name": "incorrect_count",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 10,
+        "name": "unattempted_count",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 11,
+        "name": "time_spent_seconds",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 12,
+        "name": "answers_json",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_test_attempts_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "test_papers",
+    "sql": "CREATE TABLE test_papers (\n      id TEXT PRIMARY KEY,\n      series_id TEXT,\n      title TEXT NOT NULL,\n      description TEXT,\n      img TEXT,\n      duration_minutes INTEGER DEFAULT 90,\n      per_q_marks INTEGER DEFAULT 4,\n      per_q_neg_marks INTEGER DEFAULT 1,\n      total_questions INTEGER DEFAULT 120,\n      total_marks INTEGER DEFAULT 480,\n      cutoff INTEGER DEFAULT 240,\n      is_active INTEGER DEFAULT 1\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "series_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "title",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "description",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "img",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "duration_minutes",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "90",
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "per_q_marks",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "4",
+        "pk": 0
+      },
+      {
+        "cid": 7,
+        "name": "per_q_neg_marks",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "1",
+        "pk": 0
+      },
+      {
+        "cid": 8,
+        "name": "total_questions",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "120",
+        "pk": 0
+      },
+      {
+        "cid": 9,
+        "name": "total_marks",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "480",
+        "pk": 0
+      },
+      {
+        "cid": 10,
+        "name": "cutoff",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "240",
+        "pk": 0
+      },
+      {
+        "cid": 11,
+        "name": "is_active",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "1",
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_test_papers_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "test_series",
+    "sql": "CREATE TABLE test_series (\n      id TEXT PRIMARY KEY,\n      course_id TEXT,\n      name TEXT NOT NULL,\n      description TEXT,\n      img TEXT,\n      paper_count INTEGER DEFAULT 1,\n      is_active INTEGER DEFAULT 1\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "course_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "name",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "description",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "img",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "paper_count",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "1",
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "is_active",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "1",
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_test_series_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "testimonials",
+    "sql": "CREATE TABLE testimonials (\n      id TEXT PRIMARY KEY,\n      name TEXT,\n      rank_info TEXT,\n      year TEXT,\n      quote TEXT,\n      img TEXT,\n      rating INTEGER DEFAULT 5\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "name",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "rank_info",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "year",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "quote",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "img",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "rating",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": "5",
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_testimonials_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "transactional_notifications",
+    "sql": "CREATE TABLE transactional_notifications (\n      id TEXT PRIMARY KEY,\n      recipient_email TEXT NOT NULL,\n      recipient_name TEXT,\n      template_type TEXT NOT NULL, /* invitation, payment_success, membership_activated, expiry_reminder, admin_exception */\n      subject TEXT NOT NULL,\n      content_html TEXT NOT NULL,\n      delivery_status TEXT DEFAULT 'delivered',\n      sent_at TEXT NOT NULL,\n      related_order_id TEXT,\n      created_at TEXT NOT NULL\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "recipient_email",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "recipient_name",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "template_type",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "subject",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "content_html",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "delivery_status",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": "'delivered'",
+        "pk": 0
+      },
+      {
+        "cid": 7,
+        "name": "sent_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 8,
+        "name": "related_order_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 9,
+        "name": "created_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_transactional_notifications_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "user_auth_identities",
+    "sql": "CREATE TABLE user_auth_identities (\n      id TEXT PRIMARY KEY,\n      student_id TEXT NOT NULL,\n      provider TEXT NOT NULL DEFAULT 'google',\n      provider_subject TEXT NOT NULL,\n      provider_email TEXT NOT NULL,\n      avatar_url TEXT,\n      linked_at TEXT NOT NULL,\n      last_login_at TEXT NOT NULL,\n      UNIQUE (provider, provider_subject)\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "student_id",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "provider",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": "'google'",
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "provider_subject",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "provider_email",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "avatar_url",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "linked_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 7,
+        "name": "last_login_at",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_user_auth_identities_2",
+        "unique": 1,
+        "origin": "u",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 2,
+            "name": "provider"
+          },
+          {
+            "seqno": 1,
+            "cid": 3,
+            "name": "provider_subject"
+          }
+        ]
+      },
+      {
+        "seq": 1,
+        "name": "sqlite_autoindex_user_auth_identities_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  },
+  {
+    "name": "videos",
+    "sql": "CREATE TABLE videos (\n      id TEXT PRIMARY KEY,\n      chapter_id TEXT,\n      module_id TEXT,\n      subject_id TEXT,\n      course_id TEXT,\n      title TEXT NOT NULL,\n      duration TEXT,\n      bunny_id TEXT,\n      vimo_id TEXT,\n      secure_embed_url TEXT,\n      created_at TEXT\n    )",
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1
+      },
+      {
+        "cid": 1,
+        "name": "chapter_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 2,
+        "name": "module_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 3,
+        "name": "subject_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 4,
+        "name": "course_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 5,
+        "name": "title",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 6,
+        "name": "duration",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 7,
+        "name": "bunny_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 8,
+        "name": "vimo_id",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 9,
+        "name": "secure_embed_url",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      },
+      {
+        "cid": 10,
+        "name": "created_at",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0
+      }
+    ],
+    "indexes": [
+      {
+        "seq": 0,
+        "name": "sqlite_autoindex_videos_1",
+        "unique": 1,
+        "origin": "pk",
+        "partial": 0,
+        "columns": [
+          {
+            "seqno": 0,
+            "cid": 0,
+            "name": "id"
+          }
+        ]
+      }
+    ],
+    "foreignKeys": []
+  }
+]

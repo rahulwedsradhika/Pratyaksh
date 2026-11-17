@@ -1,0 +1,44 @@
+{
+  "name": "pratyakshayurveda",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "db:migrate": "node database/migrate.mjs",
+    "db:import": "node database/import/migrate_sqlite_to_mysql.js",
+    "test:mysql": "node scripts/run_mysql_tests.mjs",
+    "test:deployment": "node scripts/run_deployment_tests.mjs",
+    "security:secrets": "node scripts/scan_secrets.mjs",
+    "server": "node server/index.js",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "db:import-papers": "node database/import/import_paper_snapshots.mjs"
+  },
+  "keywords": [],
+  "type": "module",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.119.0",
+    "cors": "^2.8.6",
+    "dompurify": "^3.4.18",
+    "dotenv": "^18.0.10",
+    "express": "^5.3.0",
+    "google-auth-library": "^11.3.4",
+    "lucide-react": "^1.72.0",
+    "mysql2": "^3.24.6",
+    "nodemailer": "^10.6.0",
+    "puppeteer-core": "^25.17.0",
+    "razorpay": "^2.9.8",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-router-dom": "^7.18.5"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^5.4.11"
+  }
+}

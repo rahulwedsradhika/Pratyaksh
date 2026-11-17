@@ -1,0 +1,15 @@
+# Project audit — 17 November 2026
+
+The existing React 19 / React Router 7 HashRouter application is preserved. Vite 5.4.11 builds the frontend; Express 5 serves dist and first-party JSON APIs. npm and package-lock.json are used. Source lives in src/, server/, public/, database/, tests/ and deploy/hostinger/. No PHP or SSR backend is required.
+
+Before this change, all application records used node:sqlite DatabaseSync, even when the health endpoint probed a separate MySQL connection. The earlier export covered an incomplete table list. The new asynchronous query adapter uses mysql2/promise and a bounded pool for real application reads/writes. SQLite remains an explicit development fallback; production rejects it. Supabase is an installed legacy dependency, while the actual authentication client is a first-party proxy; this runtime does not use Supabase/Postgres or RLS.
+
+Authentication uses server-verified Google ID tokens, email OTP and scrypt password hashes. Student JWTs now require an active server-side session record; logout revokes it. Admin sessions are opaque, hashed, expiring records. There is no privileged test-login bypass. Admin pricing/settings require verified roles. Normal student tasks, activity, bookmarks and test history use student ownership checks.
+
+Razorpay stores separate encrypted Test/Live profiles, quotes prices server-side, verifies signatures and capture, and locks fulfillment per order. SMTP uses Nodemailer with TLS certificate verification. Existing content, administration, Email Centre and payment dashboards remain in place. Remote admin forwarding defaults off; caller login tokens are stripped if an explicitly authorized upstream integration is later enabled.
+
+Business hosting was confirmed by the owner. Hostinger documentation lists Express and Node 24 support; the actual account's Web App option, resources, SSH/migration execution and persistent private storage still need confirmation. This is a Node app, not a static-only deployment.
+
+Release blockers: a Google client secret appears in historical Git content; a private SQL export also exists in history. No repository destination has been confirmed for this release, no hosted staging database has been provisioned, and real Google/OTP delivery/payment checkout on hosted MySQL remain unverified. See reports 09, 12 and 14. Current branch: codex/hostinger-mysql-preparation. Existing changes from earlier work remain uncommitted; no push or deployment occurred.
+
+Additional fixes from tracing actual routes: test submissions now persist their server-computed results atomically in MySQL; admin course/category/subject/chapter/question/test-series/faculty writes use the local application database with a superadmin gate. Legacy admin pages now attach their normal admin session to same-origin APIs. No real admin login was bypassed; signed-in owner acceptance remains required. Rich question/reference HTML is sanitized with DOMPurify. The React review preserved existing components/hooks while connecting their authenticated requests.

@@ -1,0 +1,19 @@
+{
+  "id": "/",
+  "name": "Pratyaksh Ayurveda",
+  "short_name": "Pratyaksh",
+  "description": "Your Ayurveda classroom: lectures, notes, tests and study progress.",
+  "lang": "en-IN",
+  "start_url": "/#/app",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f8f7f4",
+  "theme_color": "#f8f7f4",
+  "categories": ["education"],
+  "prefer_related_applications": false,
+  "icons": [
+    { "src": "/pwa/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/pwa/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/pwa/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

@@ -1,0 +1,625 @@
+:root {
+  --primary-saffron: var(--button-primary-bg);
+  --primary-hover: var(--button-primary-hover);
+  --primary-subtle: var(--brand-subtle);
+  --dark-navy: #181d1f;
+  --secondary-heading: #052c65;
+  /* --text-muted is owned by theme.css; do not override its light/dark accessibility token. */
+  --bg-light: #f8f9fa;
+  --border-color: #e5e9f2;
+  --success: #198754;
+  --danger: #dc3545;
+  --card-shadow: 0 8px 24px rgba(149, 157, 165, 0.12);
+  --hover-shadow: 0 12px 32px rgba(245, 113, 5, 0.18);
+}
+
+/* Base font defaults - theme.css provides data-theme colors */
+html, body {
+  margin: 0;
+  padding: 0;
+  max-width: 100vw;
+}
+
+/* Sanskrit & Hindi Typography */
+.sanskrit-text {
+  font-family: 'Noto Sans Devanagari', 'Roboto', serif;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Local Demo Banner */
+.demo-badge {
+  background: linear-gradient(135deg, #f57105, #ff8c2b);
+  color: #ffffff;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 8px rgba(245, 113, 5, 0.3);
+}
+
+/* Custom Navigation Styling */
+.header-nav {
+  background: #ffffff;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.top-bar-notice {
+  background: #181d1f;
+  color: #ffffff;
+  font-size: 0.85rem;
+  padding: 6px 0;
+}
+
+.top-bar-notice a {
+  color: #f57105;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.top-bar-notice a:hover {
+  text-decoration: underline;
+}
+
+/* Brand Button */
+.btn-ayur {
+  background-color: var(--primary-saffron);
+  color: #ffffff !important;
+  font-weight: 600;
+  border-radius: 6px;
+  padding: 10px 24px;
+  border: none;
+  transition: all 0.25s ease-in-out;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.btn-ayur:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(245, 113, 5, 0.35);
+  color: #ffffff;
+}
+
+.btn-ayur-outline {
+  border: 2px solid var(--primary-saffron);
+  color: var(--primary-saffron) !important;
+  font-weight: 600;
+  border-radius: 6px;
+  padding: 8px 22px;
+  background: transparent;
+  transition: all 0.25s ease-in-out;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.btn-ayur-outline:hover {
+  background-color: var(--primary-saffron);
+  color: #ffffff !important;
+}
+
+/* Card Styling */
+.ayur-card {
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+}
+
+.ayur-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--hover-shadow);
+  border-color: rgba(245, 113, 5, 0.3);
+}
+
+/* Counter Box */
+.stat-counter-box {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  border: 1px solid #edf0f5;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+}
+
+.stat-counter-number {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--primary-saffron);
+  margin-bottom: 4px;
+}
+
+/* 6 Samhita Pillars */
+.pillar-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid var(--border-color);
+  text-align: center;
+  transition: all 0.25s ease;
+}
+
+.pillar-card:hover {
+  border-color: var(--primary-saffron);
+  background: var(--primary-subtle);
+}
+
+.pillar-devanagari {
+  font-family: 'Noto Sans Devanagari', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--dark-navy);
+  margin-bottom: 8px;
+}
+
+/* Test Mock Exam Engine Styles */
+.exam-palette-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #dee2e6;
+  margin: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.exam-palette-btn.current {
+  outline: 3px solid #f57105;
+}
+
+.exam-palette-btn.answered {
+  background-color: #198754;
+  color: #fff;
+  border-color: #198754;
+}
+
+.exam-palette-btn.marked {
+  background-color: #6f42c1;
+  color: #fff;
+  border-color: #6f42c1;
+}
+
+.exam-palette-btn.unanswered {
+  background-color: #dc3545;
+  color: #fff;
+  border-color: #dc3545;
+}
+
+.exam-palette-btn.not-visited {
+  background-color: #f8f9fa;
+  color: #495057;
+}
+
+/* Floating WhatsApp / Help Widget */
+.floating-whatsapp {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background-color: #25d366;
+  color: white;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.4);
+  z-index: 999;
+  text-decoration: none;
+  transition: transform 0.2s ease;
+}
+
+.floating-whatsapp:hover {
+  transform: scale(1.1);
+  color: white;
+}
+
+/* ==========================================================
+   AUTHENTIC STUDENT DASHBOARD & LAYOUT STYLING
+   ========================================================== */
+
+/* Universal Bootstrap h-100 fix (prevent AdminBSB 100px clamp) */
+.h-100 {
+  height: 100% !important;
+}
+
+/* ==========================================================
+   LEGACY ADMIN & LEGACY PORTAL STYLING (ISOLATED)
+   Strictly scoped to prevent any collisions with Student V2 Shell
+   ========================================================== */
+
+/* Universal Bootstrap h-100 fix */
+.legacy-layout .h-100 {
+  height: 100%;
+}
+
+/* Scoped Legacy Header */
+.legacy-layout .main-header,
+.admin-portal .main-header {
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid #edf2f7;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 80px;
+  z-index: 999;
+}
+
+.legacy-layout .main-header .navbar,
+.admin-portal .main-header .navbar {
+  background-color: #ffffff;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.legacy-layout .main-header .logo-box,
+.admin-portal .main-header .logo-box {
+  background-color: #ffffff;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  border-right: 1px solid #edf2f7;
+}
+
+/* Scoped Legacy Left Sidebar */
+.legacy-layout .main-sidebar,
+.admin-portal .main-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 270px;
+  padding-top: 80px;
+  background-color: #ffffff;
+  border-right: 1px solid #edf2f7;
+  z-index: 810;
+  overflow-y: auto;
+  transition: transform 0.3s ease-in-out;
+}
+
+.legacy-layout .sidebar-menu,
+.admin-portal .sidebar-menu {
+  list-style: none;
+  margin: 0;
+  padding: 15px 0;
+}
+
+.legacy-layout .sidebar-menu li a,
+.admin-portal .sidebar-menu li a {
+  display: flex;
+  align-items: center;
+  padding: 13px 24px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #4b5563;
+  text-decoration: none;
+  border-left: 4px solid transparent;
+  transition: all 0.2s ease-in-out;
+}
+
+.legacy-layout .sidebar-menu li a i,
+.admin-portal .sidebar-menu li a i {
+  font-size: 1.15rem;
+  width: 26px;
+  margin-right: 14px;
+  text-align: center;
+  color: #94a3b8;
+  transition: color 0.2s;
+}
+
+.legacy-layout .sidebar-menu li a:hover,
+.legacy-layout .sidebar-menu li a.active,
+.admin-portal .sidebar-menu li a:hover,
+.admin-portal .sidebar-menu li a.active {
+  color: #f57105;
+  background-color: #fff7ed;
+  border-left-color: #f57105;
+}
+
+.legacy-layout .sidebar-menu li a:hover i,
+.legacy-layout .sidebar-menu li a.active i,
+.admin-portal .sidebar-menu li a:hover i,
+.admin-portal .sidebar-menu li a.active i {
+  color: #f57105;
+}
+
+.legacy-layout .sidebar-footer,
+.admin-portal .sidebar-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 270px;
+  background-color: #ffffff;
+  border-top: 1px solid #f1f5f9;
+  padding: 12px 20px;
+  z-index: 820;
+}
+
+/* Scoped Content Wrapper Offset (legacy only) */
+.legacy-layout .content-wrapper,
+.admin-portal .content-wrapper {
+  margin-left: 270px;
+  padding-top: 80px;
+  min-height: calc(100vh - 70px);
+  background-color: #fafbfe;
+  transition: margin-left 0.3s ease-in-out;
+}
+
+.legacy-layout .main-footer,
+.admin-portal .main-footer {
+  margin-left: 270px;
+  background-color: #ffffff;
+  border-top: 1px solid #edf2f7;
+  transition: margin-left 0.3s ease-in-out;
+}
+
+@media (max-width: 767px) {
+  .legacy-layout .main-sidebar,
+  .admin-portal .main-sidebar {
+    transform: translateX(-100%);
+  }
+  .legacy-layout.sidebar-open .main-sidebar,
+  .admin-portal.sidebar-open .main-sidebar {
+    transform: translateX(0);
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+  }
+  .legacy-layout .content-wrapper,
+  .admin-portal .content-wrapper {
+    margin-left: 0;
+    padding-top: 80px;
+  }
+  .legacy-layout .main-footer,
+  .admin-portal .main-footer {
+    margin-left: 0;
+  }
+  .legacy-layout .main-header .navbar,
+  .admin-portal .main-header .navbar {
+    margin-left: 0;
+  }
+}
+
+/* Category Cards on Dashboard (Decompiled Ivy Parity) */
+.box.bh {
+  min-height: 340px !important;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 10px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+  transition: transform 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+.box.bh:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 10px 24px rgba(245, 113, 5, 0.15) !important;
+  border-color: rgba(245, 113, 5, 0.3) !important;
+}
+
+.dashboardCard {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  flex-grow: 1 !important;
+  padding: 1.25rem !important;
+  text-align: center !important;
+}
+
+.dashboardCard img.img {
+  width: 120px !important;
+  height: 120px !important;
+  border-radius: 50% !important;
+  object-fit: contain !important;
+  margin: 8px auto 14px auto !important;
+  display: block !important;
+  cursor: pointer !important;
+  background: #fafafa !important;
+  padding: 8px !important;
+  border: 1px solid #edf2f7 !important;
+  transition: transform 0.25s ease-in-out !important;
+}
+
+.dashboardCard img.img:hover {
+  transform: scale(1.08) !important;
+}
+
+.dashboardCard .btn-primary {
+  background-color: #f57105 !important;
+  border-color: #f57105 !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  border-radius: 6px !important;
+  padding: 10px 18px !important;
+  font-size: 0.95rem !important;
+  transition: all 0.2s ease-in-out !important;
+}
+
+.dashboardCard .btn-primary:hover {
+  background-color: #dc6300 !important;
+  border-color: #dc6300 !important;
+  box-shadow: 0 4px 12px rgba(245, 113, 5, 0.35) !important;
+}
+
+/* ==========================================================
+   AUTHENTIC ADMIN PORTAL STYLING (AdminBSB Theme Parity)
+   ========================================================== */
+
+/* Admin Welcome Banner */
+.box.bg-primary-light.admin-welcome {
+  background-color: #f0f7ff !important;
+  border-radius: 10px;
+  border: 1px solid #e1effe;
+}
+
+/* Admin Dashboard Colorful Metric Cards */
+.course-count {
+  color: #fff;
+  border-radius: 10px;
+  text-align: center;
+  padding: 16px 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  min-height: 110px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.course-count:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.course-count h3 {
+  color: #ffffff !important;
+  font-size: 2.1rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.course-count span {
+  color: #ffffff !important;
+  font-size: 0.88rem;
+  font-weight: 500;
+  opacity: 0.95;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.color1 { background-color: #216cec !important; }
+.color2 { background-color: #de3163 !important; }
+.color3 { background-color: #e67e22 !important; }
+.color4 { background-color: #27ae60 !important; }
+.color5 { background-color: #8e44ad !important; }
+.color6 { background-color: #16a085 !important; }
+.color7 { background-color: #d35400 !important; }
+
+/* Admin Treeview Menu */
+.sidebar-menu .treeview > a {
+  cursor: pointer;
+  position: relative;
+}
+
+.sidebar-menu .treeview-menu {
+  list-style: none;
+  padding: 4px 0 6px 15px;
+  margin: 0;
+  background-color: #f8fafc;
+  border-left: 2px solid #edf2f7;
+}
+
+.sidebar-menu .treeview-menu li a {
+  padding: 9px 18px !important;
+  font-size: 0.88rem !important;
+  color: #64748b !important;
+}
+
+.sidebar-menu .treeview-menu li a:hover,
+.sidebar-menu .treeview-menu li a.active {
+  color: #f57105 !important;
+  background-color: #fff7ed !important;
+  font-weight: 600 !important;
+}
+
+.sidebar-menu .treeview-menu li a i {
+  font-size: 0.75rem !important;
+  margin-right: 10px !important;
+  width: 16px !important;
+}
+
+/* Admin Data Tables */
+.admin-table {
+  background: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #edf2f7;
+}
+
+.admin-table th {
+  background-color: #f8fafc;
+  color: #334155;
+  font-weight: 600;
+  font-size: 0.88rem;
+  padding: 12px 16px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.admin-table td {
+  padding: 12px 16px;
+  font-size: 0.88rem;
+  color: #475569;
+  vertical-align: middle;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.admin-table tr:hover td {
+  background-color: #fafbfe;
+}
+
+/* Universal width & layout fixes */
+.w-100 {
+  width: 100% !important;
+}
+
+.h-100 {
+  height: 100% !important;
+}
+
+/* Breadcrumb Divider Correction */
+.breadcrumb-item + .breadcrumb-item::before {
+  content: "/" !important;
+  padding: 0 0.5rem;
+  color: #6c757d;
+}
+
+/* Lecture Video Player Styling */
+.video-player-container {
+  width: 100% !important;
+  max-width: 100% !important;
+  aspect-ratio: 16 / 9;
+  position: relative;
+  background-color: #000000;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.video-player-container iframe,
+.video-player-container video {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  border: 0;
+}
+
+
+

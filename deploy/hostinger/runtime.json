@@ -1,0 +1,13 @@
+{
+  "applicationType": "nodejs",
+  "framework": "express",
+  "nodeVersion": "24.x",
+  "installCommand": "npm ci",
+  "buildCommand": "node deploy/hostinger/build.mjs",
+  "startCommand": "node deploy/hostinger/start.mjs",
+  "entryFile": "deploy/hostinger/start.mjs",
+  "outputDirectory": "dist",
+  "autoDeployProduction": false,
+  "schemaMigration": "npm run db:migrate",
+  "requiresPersistentStorageOutsideDeployment": true
+}

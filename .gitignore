@@ -1,0 +1,63 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build outputs
+dist/
+build/
+out/
+
+# Environment and Secrets
+.env
+.env.*
+!.env.example
+!deploy/hostinger/.env.production.example
+*.pem
+*.key
+*.cert
+*.pfx
+*.pkcs12
+
+# Database & Storage
+*.sqlite*
+database.sqlite*
+*.db
+*.dump
+*.sql
+!database/**/*.sql
+!deploy/**/*.sql
+
+# Logs & Temporary files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.DS_Store
+Thumbs.db
+.cache/
+.tmp/
+tmp/
+cloudflared.exe
+
+# Uploads / Media cache
+public/assets/upload/
+.local-tools/
+.local-content/
+audit/
+rea/
+temp_discovery/
+artifacts/
+audit_screenshots/
+localhost_screenshots/
+*.zip
+database/seed_data.sql
+database/import-output/
+public/assets/checkout-branding/
+
+# Editor & IDE settings
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace

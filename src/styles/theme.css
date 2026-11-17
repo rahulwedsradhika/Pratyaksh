@@ -1,0 +1,1130 @@
+/* ==========================================================================
+   PRATYAKSH AYURVEDA 2.0 — EDITORIAL DESIGN SYSTEM
+   Inspired by Claude's warm aesthetics & ChatGPT's clean simplicity
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Serif+Devanagari:wght@400;500;600;700&display=swap');
+
+/* ==========================================================================
+   1. SEMANTIC COLOR TOKENS
+   ========================================================================== */
+
+:root,
+[data-theme="light"] {
+  /* Surfaces & Canvas (Claude warm editorial light) */
+  --bg-canvas: #F8F7F4;
+  --bg-sidebar: #F4F1EB;
+  --bg-surface: #FFFEFC;
+  --bg-card: #FFFEFC;
+  --bg-elevated: #FFFFFF;
+  --bg-subtle: #F0EEE9;
+  --bg-subtle-hover: #E9E5DE;
+  --bg-accent-tint: #F8EEE9;
+  --bg-overlay: rgba(20, 18, 16, 0.55);
+
+  /* Accessible brand / control surfaces — Royal Blue */
+  --button-primary-bg: #1E40AF;
+  --button-primary-hover: #1D4ED8;
+  --button-primary-ink: #FFFFFF;
+  --nav-glass: rgba(255, 254, 252, 0.97);
+  --nav-shadow: 0 15px 44px rgba(48, 37, 27, 0.15), 0 3px 12px rgba(48,37,27,0.06);
+  --canvas-ambient: rgba(171, 109, 75, 0.07);
+
+  /* Brand Accent (Restrained Terracotta) */
+  --brand-terracotta: #A9442F;
+  --brand-hover: #913925;
+  --brand-active: #783020;
+  --brand-subtle: #F8E7E0;
+  --brand-focus-ring: rgba(169, 68, 47, 0.24);
+
+  /* Typography */
+  --text-primary: #211F1C;
+  --text-secondary: #504B46;
+  --text-muted: #625A52;
+  --text-inverse: #FFFFFF;
+  --text-accent: #913925;
+
+  /* Borders & Dividers */
+  --border-subtle: #E5E0D9;
+  --border-strong: #CFC8BE;
+  --border-focus: #A9442F;
+
+  /* Semantic Application Aliases */
+  --app-bg-canvas: #F8F7F4;
+  --app-bg-surface: #FFFEFC;
+  --app-bg-sidebar: #F4F1EB;
+  --app-bg-subtle: #F0EEE9;
+  --app-border-color: #E5E0D9;
+  --app-text-primary: #211F1C;
+  --app-text-secondary: #504B46;
+  --app-text-muted: #625A52;
+  --app-accent-warm: #A9442F;
+
+  /* Bootstrap Variable Alignments (Eliminates harsh #dee2e6 outlines) */
+  --bs-body-bg: #F8F7F4;
+  --bs-body-color: #211F1C;
+  --bs-border-color: #E5E0D9;
+  --bs-border-color-translucent: #E5E0D9;
+  --bs-secondary-color: #504B46;
+  --bs-tertiary-bg: #F0EEE9;
+  --bs-card-bg: #FFFEFC;
+  --bs-card-border-color: #E5E0D9;
+
+  /* Functional Status Colors */
+  --status-correct: #2D7A4D;
+  --status-correct-bg: #EBF5EF;
+  --status-correct-border: #B7E0C8;
+  --status-incorrect: #C24136;
+  --status-incorrect-bg: #FAEBEA;
+  --status-incorrect-border: #F3C2BF;
+  --status-review: #78528E;
+  --status-review-bg: #F4ECF7;
+  --status-review-border: #D8C2E5;
+  --status-unanswered: #C24136;
+  --status-not-visited: #69655F;
+
+  /* Soft Ambient Shadows */
+  --shadow-xs: 0 1px 2px rgba(32, 32, 32, 0.03);
+  --shadow-sm: 0 2px 6px rgba(32, 32, 32, 0.04);
+  --shadow-md: 0 4px 12px rgba(32, 32, 32, 0.06);
+  --shadow-lg: 0 10px 24px rgba(32, 32, 32, 0.08);
+  --shadow-dropdown: 0 8px 24px rgba(32, 32, 32, 0.10);
+}
+
+[data-theme="dark"] {
+  /* Surfaces & Canvas (Obsidian & Refined Charcoal) */
+  --bg-canvas: #151617;
+  --bg-sidebar: #1B1C1D;
+  --bg-surface: #222426;
+  --bg-card: #222426;
+  --bg-elevated: #2C2E30;
+  --bg-subtle: #2A2C2E;
+  --bg-subtle-hover: #343638;
+  --bg-accent-tint: #33231E;
+  --bg-overlay: rgba(0, 0, 0, 0.74);
+
+  /* Royal Cobalt CTA for dark mode */
+  --button-primary-bg: #2563EB;
+  --button-primary-hover: #3B82F6;
+  --button-primary-ink: #FFFFFF;
+  --nav-glass: rgba(34, 36, 38, 0.97);
+  --nav-shadow: 0 15px 48px rgba(0,0,0,0.45), 0 3px 16px rgba(0,0,0,0.25);
+  --canvas-ambient: rgba(202, 123, 83, 0.065);
+
+  /* Brand Accent (Luminous Warm Orange / Amber) */
+  --brand-terracotta: #F0A581;
+  --brand-hover: #F8BA96;
+  --brand-active: #FFD0AD;
+  --brand-subtle: #40291F;
+  --brand-focus-ring: rgba(240,165,129,0.35);
+
+  /* Typography */
+  --text-primary: #F8F6F2;
+  --text-secondary: #D5D0C7;
+  --text-muted: #BCB6AC;
+  --text-inverse: #1E1714;
+  --text-accent: #F0A581;
+
+  /* Borders & Dividers */
+  --border-subtle: #36383A;
+  --border-strong: #505254;
+  --border-focus: #F0A581;
+
+  /* Semantic Application Aliases */
+  --app-bg-canvas: #151617;
+  --app-bg-surface: #222426;
+  --app-bg-sidebar: #1B1C1D;
+  --app-bg-subtle: #2A2C2E;
+  --app-border-color: #36383A;
+  --app-text-primary: #F8F6F2;
+  --app-text-secondary: #D5D0C7;
+  --app-text-muted: #BCB6AC;
+  --app-accent-warm: #F0A581;
+
+  /* Bootstrap Variable Alignments (Eliminates harsh #dee2e6 outlines) */
+  --bs-body-bg: #151617;
+  --bs-body-color: #F8F6F2;
+  --bs-border-color: #36383A;
+  --bs-border-color-translucent: #36383A;
+  --bs-secondary-color: #D5D0C7;
+  --bs-tertiary-bg: #2A2C2E;
+  --bs-card-bg: #222426;
+  --bs-card-border-color: #36383A;
+
+  /* Functional Status Colors */
+  --status-correct: #4EAD73;
+  --status-correct-bg: #143322;
+  --status-correct-border: #235C3A;
+  --status-incorrect: #E56B6F;
+  --status-incorrect-bg: #38191B;
+  --status-incorrect-border: #692C30;
+  --status-review: #A579C2;
+  --status-review-bg: #2D1C3A;
+  --status-review-border: #56336E;
+  --status-unanswered: #E56B6F;
+  --status-not-visited: #AAA49B;
+
+  /* Soft Dark Shadows */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 10px 24px rgba(0, 0, 0, 0.7);
+  --shadow-dropdown: 0 8px 24px rgba(0, 0, 0, 0.75);
+}
+
+/* ==========================================================================
+   2. RESPONSIVE DIMENSION TOKENS
+   ========================================================================== */
+
+:root {
+  --app-header-height: 60px;
+  --app-sidebar-width: 240px;
+  --app-bottom-nav-height: 76px;
+}
+
+[data-sidebar="collapsed"] {
+  --app-sidebar-width: 72px;
+}
+
+@media (max-width: 1024px) {
+  :root,
+  [data-sidebar="expanded"],
+  [data-sidebar="collapsed"] {
+    --app-sidebar-width: 72px;
+  }
+}
+
+@media (max-width: 767px) {
+  :root,
+  [data-sidebar="expanded"],
+  [data-sidebar="collapsed"] {
+    --app-sidebar-width: 0px;
+    --app-header-height: 56px;
+  }
+}
+
+/* ==========================================================================
+   3. GLOBAL FOUNDATIONS & TYPOGRAPHY
+   ========================================================================== */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text-primary);
+  background-color: var(--bg-canvas);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  min-height: 100vh;
+}
+
+/* Sanskrit & Hindi Typography */
+.font-sanskrit,
+.sanskrit-text,
+.devanagari-text {
+  font-family: 'Noto Serif Devanagari', Georgia, serif;
+  font-weight: 500;
+  line-height: 1.7;
+  letter-spacing: 0.01em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+p {
+  color: var(--text-secondary);
+}
+
+a {
+  color: var(--brand-terracotta);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+a:hover {
+  color: var(--brand-hover);
+}
+
+/* Accessible focus ring */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--brand-terracotta);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   4. BOOTSTRAP OVERRIDES (ELIMINATES HARSH WIREFRAME WHITE BORDERS)
+   ========================================================================== */
+
+.border,
+.border-top,
+.border-bottom,
+.border-start,
+.border-end {
+  border-color: var(--border-subtle) !important;
+}
+
+.card {
+  background-color: var(--bg-surface) !important;
+  border-color: var(--border-subtle) !important;
+  color: var(--text-primary) !important;
+}
+
+.bg-white {
+  background-color: var(--bg-surface) !important;
+}
+
+.bg-light {
+  background-color: var(--bg-subtle) !important;
+}
+
+.text-dark {
+  color: var(--text-primary) !important;
+}
+
+.text-muted,
+.text-secondary {
+  color: var(--text-secondary) !important;
+}
+
+.table {
+  color: var(--text-primary) !important;
+  border-color: var(--border-subtle) !important;
+}
+
+.table > :not(caption) > * > * {
+  background-color: transparent !important;
+  color: inherit !important;
+  border-bottom-color: var(--border-subtle) !important;
+}
+
+.table-hover > tbody > tr:hover > * {
+  background-color: var(--bg-subtle-hover) !important;
+}
+
+.form-control,
+.form-select {
+  background-color: var(--bg-canvas) !important;
+  border-color: var(--border-subtle) !important;
+  color: var(--text-primary) !important;
+  border-radius: 8px !important;
+}
+
+.form-control:focus,
+.form-select:focus {
+  background-color: var(--bg-surface) !important;
+  border-color: var(--brand-terracotta) !important;
+  color: var(--text-primary) !important;
+  box-shadow: 0 0 0 3px var(--brand-focus-ring) !important;
+}
+
+.progress {
+  background-color: var(--border-subtle) !important;
+  border-radius: 9999px !important;
+  overflow: hidden !important;
+}
+
+/* ==========================================================================
+   5. ARCHITECTURAL V2 APP SHELL LAYOUT (FLEX SIBLING GUARANTEE)
+   ========================================================================== */
+
+.app-shell-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: transparent !important;
+  color: var(--text-primary);
+  position: relative;
+}
+
+.app-viewport {
+  background-color: transparent !important;
+}
+
+/* Fixed Header */
+.app-shell-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--app-header-height);
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-subtle);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.25rem;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Shell Body (Flex Container holding Sidebar + Main Content) */
+.app-shell-body {
+  display: flex;
+  width: 100%;
+  min-height: calc(100vh - var(--app-header-height));
+  margin-top: var(--app-header-height);
+  position: relative;
+}
+
+/* Desktop & Tablet Sidebar (Sticky Flex Sibling) */
+.app-shell-sidebar {
+  width: var(--app-sidebar-width);
+  min-width: var(--app-sidebar-width);
+  max-width: var(--app-sidebar-width);
+  flex-shrink: 0;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: sticky;
+  top: var(--app-header-height);
+  height: calc(100vh - var(--app-header-height));
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 1rem 0.65rem;
+  transition: width 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              min-width 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              max-width 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              background-color 0.2s ease,
+              border-color 0.2s ease;
+  z-index: 40;
+}
+
+/* When collapsed (Desktop collapsed or Tablet view) */
+[data-sidebar="collapsed"] .app-shell-sidebar .nav-text-label,
+[data-sidebar="collapsed"] .app-shell-sidebar .sidebar-heading,
+[data-sidebar="collapsed"] .app-shell-sidebar .sidebar-profile-text {
+  display: none !important;
+}
+
+[data-sidebar="collapsed"] .app-shell-sidebar .sidebar-nav-item {
+  justify-content: center;
+  padding: 0.65rem 0;
+}
+
+@media (max-width: 1024px) {
+  .app-shell-sidebar .nav-text-label,
+  .app-shell-sidebar .sidebar-heading,
+  .app-shell-sidebar .sidebar-profile-text {
+    display: none !important;
+  }
+  .app-shell-sidebar .sidebar-nav-item {
+    justify-content: center;
+    padding: 0.65rem 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .app-shell-sidebar {
+    display: none !important;
+  }
+}
+
+/* Main Content (Flex Sibling - Zero Overlap Guarantee) */
+.app-shell-main {
+  flex: 1;
+  min-width: 0;
+  background-color: var(--bg-canvas);
+  padding: 1.75rem 2rem 5rem 2rem;
+  transition: background-color 0.2s ease;
+}
+
+@media (max-width: 767px) {
+  .app-shell-main {
+    padding: 1rem 1rem 5.5rem 1rem;
+  }
+}
+
+/* Mobile Bottom Navigation */
+.app-shell-bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--app-bottom-nav-height);
+  background-color: var(--bg-surface);
+  border-top: 1px solid var(--border-subtle);
+  z-index: 90;
+  align-items: center;
+  justify-content: space-around;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+@media (max-width: 767px) {
+  .app-shell-bottom-nav {
+    display: flex;
+  }
+}
+
+/* Bottom Nav Item */
+.bottom-nav-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  height: 100%;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 500;
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px 0;
+  gap: 3px;
+  transition: color 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bottom-nav-btn:hover {
+  color: var(--text-secondary);
+}
+
+.bottom-nav-btn.active {
+  color: var(--brand-terracotta);
+  font-weight: 650;
+}
+
+/* Sidebar Nav Item */
+.sidebar-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  margin-bottom: 0.25rem;
+}
+
+.sidebar-nav-item:hover {
+  background-color: var(--bg-subtle);
+  color: var(--text-primary);
+}
+
+.sidebar-nav-item.active {
+  background-color: var(--bg-accent-tint);
+  color: var(--brand-terracotta);
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   6. REUSABLE PREMIUM EDITORIAL UI COMPONENTS
+   ========================================================================== */
+
+/* Clean Editorial Card */
+.editorial-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  box-shadow: var(--shadow-xs);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  overflow: hidden;
+}
+
+.editorial-card:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Soft Badges */
+.editorial-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background-color: var(--bg-subtle);
+  color: var(--text-secondary);
+}
+
+.editorial-badge-terracotta {
+  background-color: var(--brand-subtle);
+  color: var(--brand-terracotta);
+}
+
+.editorial-badge-success {
+  background-color: var(--status-correct-bg);
+  color: var(--status-correct);
+}
+
+/* Clean Editorial Buttons */
+.editorial-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.88rem;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-decoration: none;
+}
+
+.editorial-btn-primary {
+  background-color: var(--button-primary-bg);
+  color: var(--button-primary-ink) !important;
+}
+
+.editorial-btn-primary:hover {
+  background-color: var(--button-primary-hover);
+  transform: translateY(-1px);
+}
+
+.editorial-btn-secondary {
+  background-color: var(--bg-subtle);
+  color: var(--text-primary) !important;
+  border-color: var(--border-subtle);
+}
+
+.editorial-btn-secondary:hover {
+  background-color: var(--bg-subtle-hover);
+  border-color: var(--border-strong);
+}
+
+[data-theme="dark"] .editorial-btn-secondary {
+  background-color: #FFFFFF;
+  color: #0F172A !important;
+  border-color: #FFFFFF;
+  font-weight: 600;
+}
+
+[data-theme="dark"] .editorial-btn-secondary:hover {
+  background-color: #F8FAFC;
+  color: #020617 !important;
+  border-color: #E2E8F0;
+}
+
+.editorial-btn-outline {
+  background-color: transparent;
+  color: var(--brand-terracotta) !important;
+  border-color: var(--brand-terracotta);
+}
+
+.editorial-btn-outline:hover {
+  background-color: var(--brand-subtle);
+}
+
+/* Search Input Styling */
+.editorial-search-input {
+  width: 100%;
+  padding: 0.45rem 0.85rem 0.45rem 2.25rem;
+  border-radius: 20px;
+  border: 1px solid var(--border-subtle);
+  background-color: var(--bg-subtle);
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.editorial-search-input:focus {
+  border-color: var(--brand-terracotta);
+  background-color: var(--bg-surface);
+}
+
+/* Video Player Container */
+.video-player-container {
+  width: 100% !important;
+  max-width: 100% !important;
+  aspect-ratio: 16 / 9;
+  position: relative;
+  background-color: #000000;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.video-player-container iframe,
+.video-player-container video {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  border: 0;
+}
+
+
+/* ==========================================================================
+   7. STUDENT V3 — CROSS-DEVICE VISUAL REFINEMENT
+   Intentional, accessible surfaces and navigation. Avoid generic white borders.
+   ========================================================================== */
+
+html { color-scheme: light; }
+html[data-theme="dark"] { color-scheme: dark; }
+body { overflow-x: clip; }
+::selection { background: var(--brand-subtle); color: var(--text-primary); }
+
+/* Contrast: dark clay backgrounds for white CTA labels, brighter warm accents
+   exclusively for text, icons and decorative details on dark surfaces. */
+.editorial-btn-primary,
+.editorial-btn-primary:visited,
+.editorial-btn-primary:focus-visible {
+  background: var(--button-primary-bg);
+  color: var(--button-primary-ink) !important;
+  border-color: transparent;
+}
+.editorial-btn-primary:hover {
+  background: var(--button-primary-hover);
+  color: var(--button-primary-ink) !important;
+}
+.editorial-btn-outline:focus-visible,
+.editorial-btn-secondary:focus-visible { box-shadow: 0 0 0 3px var(--brand-focus-ring); }
+.editorial-badge-terracotta { background: var(--brand-subtle); color: var(--brand-terracotta); }
+.editorial-search-input::placeholder,
+.form-control::placeholder,
+input::placeholder { color: var(--text-muted); opacity: 1; }
+.editorial-search-input, .form-control, .form-select {
+  min-height: 42px;
+  color: var(--text-primary);
+}
+:focus-visible { scroll-margin-block: 90px; }
+button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
+button:disabled, .editorial-btn:disabled { cursor: not-allowed; opacity: 0.6; }
+
+.app-shell-header {
+  background: var(--bg-surface);
+  border-bottom-color: var(--border-subtle);
+  box-shadow: 0 1px 0 var(--border-subtle);
+}
+.app-shell-sidebar {
+  background: linear-gradient(165deg, var(--bg-sidebar), var(--bg-sidebar) 55%, var(--bg-subtle));
+  border-right-color: var(--border-subtle);
+}
+.app-shell-main {
+  background: radial-gradient(ellipse 760px 400px at 92% -8%, var(--canvas-ambient), transparent 75%), var(--bg-canvas);
+  min-height: calc(100vh - var(--app-header-height));
+}
+.editorial-card {
+  border-color: var(--border-subtle);
+  border-radius: 16px;
+  box-shadow: var(--shadow-xs);
+}
+.editorial-card:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-sm);
+}
+.sidebar-nav-item {
+  min-height: 43px;
+  border-radius: 12px;
+  color: var(--text-secondary);
+  letter-spacing: 0.005em;
+}
+.sidebar-nav-item svg { flex-shrink: 0; }
+.sidebar-nav-item.active {
+  color: var(--brand-terracotta);
+  background: var(--brand-subtle);
+  font-weight: 650;
+}
+.sidebar-nav-item:hover { background: var(--bg-subtle-hover); }
+.sidebar-nav-item.active:hover { background: var(--brand-subtle); }
+.sidebar-heading { color: var(--text-muted); }
+
+/* Modern mobile dock: anchored clear of the OS gesture indicator, with legible
+   icons, five predictable destinations and a contained active-icon capsule. */
+.app-shell-bottom-nav {
+  display: none;
+  bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+  left: 12px;
+  right: 12px;
+  width: auto;
+  height: var(--app-bottom-nav-height);
+  padding: 7px 6px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 22px;
+  background: var(--nav-glass);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  box-shadow: var(--nav-shadow);
+  gap: 2px;
+  z-index: 120;
+}
+.bottom-nav-btn {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 54px;
+  height: 100%;
+  border-radius: 16px;
+  gap: 1px;
+  padding: 2px 1px 4px;
+  color: var(--text-secondary);
+  font-size: 0.69rem;
+  font-weight: 650;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-align: center;
+}
+.bottom-nav-btn:hover { color: var(--text-primary); background: var(--bg-subtle); }
+.bottom-nav-btn.active { color: var(--brand-terracotta); font-weight: 750; }
+.bottom-nav-icon {
+  width: 39px;
+  height: 32px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 160ms ease, transform 160ms ease, color 160ms ease;
+}
+.bottom-nav-btn.active .bottom-nav-icon {
+  background: var(--brand-subtle);
+  transform: translateY(-1px);
+}
+.bottom-nav-btn:active .bottom-nav-icon { transform: scale(0.93); }
+.bottom-nav-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bottom-nav-btn:focus-visible { outline: 2px solid var(--brand-terracotta); outline-offset: -2px; }
+
+/* More drawer: clear hierarchy, generous touch targets, safe-area clearance. */
+.more-sheet-backdrop { position: fixed; inset: 0; z-index: 250; display: flex; justify-content: flex-end; flex-direction: column; background: var(--bg-overlay); }
+.more-sheet-panel {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border-radius: 26px 26px 0 0;
+  border-top: 1px solid var(--border-strong);
+  box-shadow: var(--nav-shadow);
+  max-height: min(85dvh, 790px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 12px 18px calc(24px + env(safe-area-inset-bottom, 0px));
+}
+.more-sheet-handle { width: 36px; height: 4px; background: var(--border-strong); border-radius: 999px; margin: 0 auto 16px; }
+.more-sheet-group-label { color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.09em; font-weight: 750; margin: 18px 8px 8px; }
+.more-sheet-link {
+  display: flex; align-items: center; gap: 14px; width: 100%;
+  min-height: 61px; padding: 10px 12px; border-radius: 14px;
+  border: 1px solid transparent; background: transparent; color: var(--text-primary);
+  text-decoration: none; text-align: left;
+}
+.more-sheet-link:hover, .more-sheet-link:focus-visible {
+  background: var(--bg-subtle);
+  border-color: var(--border-subtle);
+  color: var(--text-primary);
+}
+.more-sheet-link-icon { height: 38px; width: 38px; border-radius: 12px; flex: none; display: flex; justify-content: center; align-items: center; background: var(--bg-subtle); color: var(--brand-terracotta); }
+.more-sheet-link-title { color: var(--text-primary); font-weight: 650; font-size: 0.92rem; line-height: 1.2; }
+.more-sheet-link-desc { color: var(--text-secondary); font-size: 0.75rem; margin-top: 3px; line-height: 1.4; }
+
+/* Touch-safe practice controls and responsive academic content. */
+@media (max-width: 767px) {
+  .app-shell-bottom-nav { display: flex; }
+  .app-shell-main {
+    padding: 1rem 0.9rem calc(var(--app-bottom-nav-height) + 35px + env(safe-area-inset-bottom, 0px));
+  }
+  .app-shell-header { padding-inline: 0.85rem; }
+  .editorial-card { border-radius: 15px; }
+  .video-player-container { min-height: 0 !important; }
+}
+@media (max-width: 380px) {
+  .app-shell-bottom-nav { left: 8px; right: 8px; padding-inline: 3px; }
+  .bottom-nav-label { font-size: 0.65rem; }
+  .bottom-nav-icon { width: 36px; height: 30px; }
+}
+@media (min-width: 768px) and (max-width: 1024px) {
+  .app-shell-main { padding: 1.4rem 1.2rem 3rem; }
+  .app-shell-sidebar { padding-inline: 0.4rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bottom-nav-btn, .bottom-nav-icon, .editorial-btn, .editorial-card { transition: none; }
+  .app-shell-main, .app-shell-header, .app-shell-sidebar { transition: none; }
+}
+
+
+/* Desktop information architecture — calmer rhythm and a consistent icon rail. */
+.sidebar-nav-section { margin-bottom: 20px; }
+.sidebar-heading {
+  margin: 0 0 9px 12px;
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  font-weight: 750;
+  letter-spacing: 0.105em;
+  line-height: 1.5;
+}
+.sidebar-link-icon {
+  display: flex; width: 25px; height: 27px;
+  flex: none; align-items: center; justify-content: center;
+}
+.sidebar-bottom-section {
+  flex-shrink: 0; padding-top: 12px;
+  border-top: 1px solid var(--border-subtle);
+}
+.sidebar-bottom-section nav { margin-bottom: 10px; }
+.sidebar-collapse-button {
+  width: 100%; text-align: left;
+  border: 0; background: transparent;
+  cursor: pointer; border-top: 1px solid var(--border-subtle);
+  margin-top: 10px; padding-top: 13px;
+}
+.sidebar-collapse-button:hover { background: var(--bg-subtle); }
+.app-shell-sidebar .sidebar-nav-item.active .sidebar-link-icon {
+  color: var(--brand-terracotta);
+}
+@media (max-width: 1024px) {
+  .sidebar-heading { display: none; }
+  .sidebar-nav-section { margin-bottom: 12px; }
+  .app-shell-sidebar .sidebar-link-icon { width: 30px; }
+  .app-shell-sidebar .sidebar-collapse-button { justify-content: center; }
+}
+
+/* Classroom tabs: preserve text and content instead of squeezing three labels
+   into illegible widths on phones. */
+@media (max-width: 767px) {
+  .classroom-tab-list {
+    gap: 14px !important;
+    overflow-x: auto; max-width: 100%;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .classroom-tab-list::-webkit-scrollbar { display: none; }
+  .classroom-tab-list > button {
+    white-space: nowrap;
+    flex: 0 0 auto;
+    min-height: 46px;
+    font-size: 0.82rem !important;
+  }
+}
+
+/* Keep Hindi and Sanskrit readable in answer boxes and classroom materials. */
+.devanagari-text, .sanskrit-text, .font-sanskrit { line-height: 1.8; }
+.editorial-card :where(p, li) { overflow-wrap: anywhere; }
+.editorial-card img { max-width: 100%; }
+
+/* Respect keyboard and touch input in the new navigation surfaces. */
+@media (hover: none) {
+  .editorial-btn:hover { transform: none; }
+  .editorial-card:hover { box-shadow: var(--shadow-xs); }
+}
+
+/* Opt-in high-legibility preference (Settings). Applies across routes. */
+html[data-theme="light"][data-high-contrast="true"] {
+  --text-secondary: #37322E;
+  --text-muted: #3F3932;
+  --app-text-secondary: #37322E;
+  --app-text-muted: #3F3932;
+  --bs-secondary-color: #37322E;
+}
+html[data-theme="dark"][data-high-contrast="true"] {
+  --text-secondary: #F0ECE6;
+  --text-muted: #E1DCD4;
+  --app-text-secondary: #F0ECE6;
+  --app-text-muted: #E1DCD4;
+  --bs-secondary-color: #F0ECE6;
+}
+
+/* The classical Devanagari typography preference changes font styling only;
+   educational verses and questions remain visible in either setting. */
+html[data-deva-font="sans"] :where(.devanagari-text, .sanskrit-text, .font-sanskrit) {
+  font-family: 'Noto Sans Devanagari', 'Inter', sans-serif;
+  font-weight: 500;
+  line-height: 1.72;
+}
+
+/* ==========================================================================
+   IPAD PORTRAIT — MOBILE NAVIGATION, NOT DESKTOP SIDEBAR
+   iPad Mini/Air/Pro portrait widths commonly range from 768px to 1032px.
+   Keep landscape tablet/desktop layouts unchanged. Reacts to rotation
+   automatically, including in Add-to-Home-Screen standalone mode.
+   ========================================================================== */
+@media (min-width: 768px) and (max-width: 1100px) and (orientation: portrait) {
+  :root,
+  [data-sidebar="expanded"],
+  [data-sidebar="collapsed"] {
+    --app-sidebar-width: 0px;
+  }
+
+  .app-shell-sidebar {
+    display: none !important;
+  }
+
+  .app-shell-bottom-nav {
+    display: flex;
+  }
+
+  .app-shell-main {
+    width: 100%;
+    min-width: 0;
+    padding: 1.35rem 1.4rem calc(var(--app-bottom-nav-height) + 48px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+
+/* ==========================================================================
+   APPLE-STYLE MATERIALS — STUDENT SHELL V3.1
+   Subtle specular highlights, restrained translucency and accessibility-first
+   contrast; no excessive blur, glowing outlines or distracting animations.
+   ========================================================================== */
+:root,
+html[data-theme="light"] {
+  --glass-sidebar: rgba(246, 243, 238, 0.88);
+  --glass-dock: rgba(255, 254, 252, 0.89);
+  --glass-sheen: rgba(255, 255, 255, 0.55);
+  --glass-outline: rgba(255, 255, 255, 0.70);
+  --glass-dock-shadow: 0 12px 38px rgba(46, 34, 24, 0.14), 0 3px 12px rgba(46, 34, 24, 0.06);
+  --glass-sidebar-shadow: 3px 0 22px rgba(56, 45, 31, 0.04);
+  --glass-highlight-fill: rgba(169, 68, 47, 0.10);
+}
+html[data-theme="dark"] {
+  --glass-sidebar: rgba(29, 31, 33, 0.89);
+  --glass-dock: rgba(36, 38, 40, 0.90);
+  --glass-sheen: rgba(255, 255, 255, 0.035);
+  --glass-outline: rgba(255, 255, 255, 0.13);
+  --glass-dock-shadow: 0 12px 42px rgba(0, 0, 0, 0.42), 0 2px 14px rgba(0, 0, 0, 0.26);
+  --glass-sidebar-shadow: 3px 0 24px rgba(0, 0, 0, 0.12);
+  --glass-highlight-fill: rgba(240, 165, 129, 0.13);
+}
+
+/* Opaque fallback when a system/browser cannot render blur. */
+.app-shell-sidebar {
+  background: var(--bg-sidebar);
+  box-shadow: var(--glass-sidebar-shadow);
+  border-right: 1px solid var(--border-subtle);
+  isolation: isolate;
+}
+.app-shell-bottom-nav {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--glass-dock-shadow);
+  isolation: isolate;
+}
+.more-sheet-panel {
+  background: var(--bg-surface);
+}
+
+/* Blur is only applied when supported. Background opacity stays high enough
+   to preserve text legibility on busy classroom pages. */
+@supports ((-webkit-backdrop-filter: blur(12px)) or (backdrop-filter: blur(12px))) {
+  .app-shell-sidebar {
+    background: linear-gradient(145deg, var(--glass-sheen), transparent 42%), var(--glass-sidebar);
+    -webkit-backdrop-filter: saturate(145%) blur(20px);
+    backdrop-filter: saturate(145%) blur(20px);
+    box-shadow: var(--glass-sidebar-shadow), inset -1px 0 0 var(--glass-outline);
+  }
+  .app-shell-bottom-nav {
+    background: linear-gradient(155deg, var(--glass-sheen), transparent 54%), var(--glass-dock);
+    -webkit-backdrop-filter: saturate(155%) blur(24px);
+    backdrop-filter: saturate(155%) blur(24px);
+    border-color: var(--glass-outline);
+    box-shadow: var(--glass-dock-shadow), inset 0 1px 0 var(--glass-outline);
+  }
+  .more-sheet-panel {
+    background: linear-gradient(145deg, var(--glass-sheen), transparent 52%), var(--glass-dock);
+    -webkit-backdrop-filter: saturate(140%) blur(24px);
+    backdrop-filter: saturate(140%) blur(24px);
+  }
+}
+
+/* Floating dock with a quiet Apple-like icon capsule rather than loud glow. */
+.app-shell-bottom-nav {
+  border-radius: 24px;
+  padding: 7px 6px;
+}
+.bottom-nav-btn {
+  transition: background-color 180ms ease, color 180ms ease, transform 180ms ease;
+}
+.bottom-nav-btn.active {
+  color: var(--brand-terracotta);
+}
+.bottom-nav-btn.active .bottom-nav-icon {
+  background: var(--glass-highlight-fill);
+  box-shadow: inset 0 0 0 1px var(--border-subtle);
+  border-radius: 13px;
+}
+.sidebar-nav-item {
+  transition: background-color 180ms ease, color 180ms ease, transform 180ms ease;
+}
+.sidebar-nav-item.active {
+  background: var(--glass-highlight-fill);
+  box-shadow: inset 3px 0 0 var(--brand-terracotta);
+}
+.sidebar-nav-item.active:hover {
+  background: var(--glass-highlight-fill);
+}
+.sidebar-nav-item:focus-visible,
+.bottom-nav-btn:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: -2px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .bottom-nav-btn:not(.active):hover .bottom-nav-icon { transform: translateY(-2px); }
+  .sidebar-nav-item:not(.active):hover { transform: translateX(2px); }
+}
+
+/* Recovery row below the actual player: no overlays or buttons cover playback. */
+.lecture-video-support {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  min-height: 48px;
+  padding: 5px 0;
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+}
+.lecture-video-support--warning {
+  padding: 12px 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: 14px;
+  background: var(--bg-subtle);
+}
+.lecture-video-support__copy { flex: 1 1 230px; line-height: 1.5; }
+.lecture-video-support__actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.lecture-video-support__actions .editorial-btn {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+@media (max-width: 440px) {
+  .lecture-video-support__actions { width: 100%; }
+  .lecture-video-support__actions .editorial-btn { flex: 1; }
+}
+
+/* Reduced transparency and motion are first-class OS preferences. */
+@media (prefers-reduced-transparency: reduce) {
+  .app-shell-sidebar { background: var(--bg-sidebar) !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+  .app-shell-bottom-nav, .more-sheet-panel { background: var(--bg-surface) !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+}
+@media (prefers-contrast: more) {
+  .app-shell-sidebar, .app-shell-bottom-nav, .more-sheet-panel {
+    -webkit-backdrop-filter: none; backdrop-filter: none;
+    background: var(--bg-surface);
+    border-color: var(--border-strong);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bottom-nav-btn, .bottom-nav-icon, .sidebar-nav-item {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+/* Reading preferences apply across question and commentary views. */
+html[data-reading-size="large"] .learning-reading-content { font-size: 1.15rem !important; line-height: 1.85 !important; }
+html[data-reading-size="larger"] .learning-reading-content { font-size: 1.3rem !important; line-height: 1.9 !important; }
+html[data-reduce-motion="true"] *, html[data-reduce-motion="true"] *::before, html[data-reduce-motion="true"] *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
