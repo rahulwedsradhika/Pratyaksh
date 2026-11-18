@@ -502,7 +502,10 @@ export default function OnboardingPage() {
               })
             });
             const vData = await vRes.json();
-            if (vData.status) {
+            if (vData.status && vData.sandbox) {
+              await refreshStudentState();
+              navigate('/payment-status', {replace:true});
+            } else if (vData.status) {
               setPaymentSuccess(true);
               await refreshStudentState();
               setTimeout(() => {

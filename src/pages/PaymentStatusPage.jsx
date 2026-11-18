@@ -73,6 +73,7 @@ export default function PaymentStatusPage() {
             });
             const confirmation = await readApiResponse(verified);
             if (!verified.ok || !confirmation.status) throw new Error(confirmation.message || 'Payment confirmation is pending. Refresh the status or contact support.');
+            if(confirmation.sandbox)setNotice(confirmation.message);
             await refresh();
           } catch (e) { setError(e.message); }
           finally { setPaying(false); }
@@ -92,7 +93,7 @@ export default function PaymentStatusPage() {
   const order = data?.order;
   const failed = ['failed', 'cancelled', 'refunded'].includes(order?.status);
   const completed = order?.status === 'completed';
-  const title = data?.suspended ? 'Account requires review' : failed ? 'Payment unsuccessful' : completed ? 'Membership requires review' : order ? 'Payment confirmation pending' : 'Membership payment required';
+  const title = order?.status==='sandbox_verified'?'Test payment verified':data?.suspended ? 'Account requires review' : failed ? 'Payment unsuccessful' : completed ? 'Membership requires review' : order ? 'Payment confirmation pending' : 'Membership payment required';
   return <main className="v3-public-root recovery-page editorial-auth-page">
     <section className="editorial-auth-container">
       <header className="editorial-auth-header"><Link to="/"><img src="/assets/website-assets/img/logo.svg" alt="Pratyaksh Ayurveda" style={{ height: 40 }} /></Link></header>
@@ -102,6 +103,7 @@ export default function PaymentStatusPage() {
           <h2>{title}</h2>
           <p className="editorial-auth-card-sub">Classroom access is available after your payment is confirmed and membership is active.</p>
         </div>
+        {data?.gateway?.mode==='test' && <p role="status" style={{padding:12,border:'1px solid var(--border-subtle)',borderRadius:10,color:'var(--text-primary)'}}>Test mode · No real money is charged. Test payments do not activate live membership access. You can retry checkout.</p>}
         <p style={{ color: 'var(--text-secondary)', fontSize: 14 }}>{user.email}</p>
         {order && <div style={{ border: '1px solid var(--border-subtle)', borderRadius: 12, padding: 16, marginBottom: 20, color: 'var(--text-primary)' }}>
           <div style={{ textTransform: 'capitalize', marginBottom: 8 }}><strong>Status:</strong> {order.status.replaceAll('_', ' ')}</div>

@@ -255,7 +255,7 @@ export function AuthProvider({ children }) {
     const data = await readApiResponse(res);
     if (data.status) {
       await refreshStudentState();
-      return { success: true, status: true, membership: data.membership };
+      return { success: true, status: true, membership: data.membership, sandbox: Boolean(data.sandbox), message: data.message };
     }
     return { success: false, status: false, error: data.message };
   };

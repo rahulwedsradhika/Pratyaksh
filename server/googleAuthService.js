@@ -296,32 +296,32 @@ export async function verifyGoogleIdToken(idToken, options = {}) {
 /**
  * Resolves or safely links a verified Google profile with an authentic student record
  */
-export async function resolveGoogleStudent(googleProfile, ipAddress = '127.0.0.1') {
+export async function resolveGoogleStudent(googleProfile, ipAddress = '127.0.0.1', {database = db, logActivity = logAuthActivity} = {}) {
   const now = new Date().toISOString();
   const { sub, email, fullName, picture, phone = '' } = googleProfile;
   const cleanPhone = String(phone || '').replace(/[\s()-]/g, '').replace(/^\+?91/, '');
   const normalizedPhone = /^[6-9][0-9]{9}$/.test(cleanPhone) ? `+91${cleanPhone}` : '';
 
   // 1. Look up existing identity link by Google Subject ID
-  const existingIdentity = await db.prepare(`
+  const existingIdentity = await database.prepare(`
     SELECT * FROM user_auth_identities 
     WHERE provider = 'google' AND provider_subject = ?
   `).get(sub);
 
   if (existingIdentity) {
     // Update last login timestamp
-    await db.prepare(`
+    await database.prepare(`
       UPDATE user_auth_identities 
       SET last_login_at = ?, avatar_url = COALESCE(?, avatar_url)
       WHERE id = ?
     `).run(now, picture, existingIdentity.id);
 
-    const student = await db.prepare(`SELECT * FROM students WHERE id = ?`).get(existingIdentity.student_id);
+    const student = await database.prepare(`SELECT * FROM students WHERE id = ?`).get(existingIdentity.student_id);
     if (!student) {
       throw new Error('Linked student record not found in system database.');
     }
 
-    await logAuthActivity({
+    await logActivity({
       userType: 'student',
       userId: student.id,
       email: student.email,
@@ -333,10 +333,10 @@ export async function resolveGoogleStudent(googleProfile, ipAddress = '127.0.0.1
     });
 
     const updatedStudent = normalizedPhone ?
-    (async () => {
-      await db.prepare("UPDATE students SET phone = CASE WHEN COALESCE(phone, '') = '' THEN ? ELSE phone END, updated_at = ? WHERE id = ?").
+    await (async () => {
+      await database.prepare("UPDATE students SET phone = CASE WHEN COALESCE(phone, '') = '' THEN ? ELSE phone END, updated_at = ? WHERE id = ?").
       run(normalizedPhone, now, student.id);
-      return await db.prepare('SELECT * FROM students WHERE id = ?').get(student.id);
+      return await database.prepare('SELECT * FROM students WHERE id = ?').get(student.id);
     })() :
     student;
 
@@ -348,19 +348,19 @@ export async function resolveGoogleStudent(googleProfile, ipAddress = '127.0.0.1
   }
 
   // 2. Check if a student with this email address already exists
-  const existingStudentByEmail = await db.prepare(`SELECT * FROM students WHERE email = ?`).get(email);
+  const existingStudentByEmail = await database.prepare(`SELECT * FROM students WHERE email = ?`).get(email);
 
   if (existingStudentByEmail) {
     // Link Google Subject ID to existing student
     const identityId = `ident_goog_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
-    await db.prepare(`
+    await database.prepare(`
       INSERT INTO user_auth_identities 
       (id, student_id, provider, provider_subject, provider_email, avatar_url, linked_at, last_login_at)
       VALUES (?, ?, 'google', ?, ?, ?, ?, ?)
     `).run(identityId, existingStudentByEmail.id, sub, email, picture, now, now);
 
     // If student did not have avatar or name, update them
-    await db.prepare(`
+    await database.prepare(`
       UPDATE students 
       SET email_verified = 1, 
           avatar_url = COALESCE(avatar_url, ?),
@@ -368,7 +368,7 @@ export async function resolveGoogleStudent(googleProfile, ipAddress = '127.0.0.1
       WHERE id = ?
     `).run(picture, now, existingStudentByEmail.id);
 
-    await logAuthActivity({
+    await logActivity({
       userType: 'student',
       userId: existingStudentByEmail.id,
       email: existingStudentByEmail.email,
@@ -380,10 +380,10 @@ export async function resolveGoogleStudent(googleProfile, ipAddress = '127.0.0.1
     });
 
     const updatedStudent = normalizedPhone ?
-    (async () => {
-      await db.prepare("UPDATE students SET phone = CASE WHEN COALESCE(phone, '') = '' THEN ? ELSE phone END, updated_at = ? WHERE id = ?").
+    await (async () => {
+      await database.prepare("UPDATE students SET phone = CASE WHEN COALESCE(phone, '') = '' THEN ? ELSE phone END, updated_at = ? WHERE id = ?").
       run(normalizedPhone, now, existingStudentByEmail.id);
-      return await db.prepare('SELECT * FROM students WHERE id = ?').get(existingStudentByEmail.id);
+      return await database.prepare('SELECT * FROM students WHERE id = ?').get(existingStudentByEmail.id);
     })() :
     existingStudentByEmail;
 
@@ -396,7 +396,7 @@ export async function resolveGoogleStudent(googleProfile, ipAddress = '127.0.0.1
 
   // 3. Create new standard student record (NOT a Pro membership)
   const newStudentId = `student_goog_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
-  await db.prepare(`
+  await database.prepare(`
     INSERT INTO students (
       id, email, password_hash, full_name, phone, academic_status, exam_goal,
       auth_provider, email_verified, onboarding_state, role, avatar_url, created_at, updated_at
@@ -404,15 +404,15 @@ export async function resolveGoogleStudent(googleProfile, ipAddress = '127.0.0.1
   `).run(newStudentId, email, fullName, normalizedPhone, picture, now, now);
 
   const identityId = `ident_goog_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
-  await db.prepare(`
+  await database.prepare(`
     INSERT INTO user_auth_identities 
     (id, student_id, provider, provider_subject, provider_email, avatar_url, linked_at, last_login_at)
     VALUES (?, ?, 'google', ?, ?, ?, ?, ?)
   `).run(identityId, newStudentId, sub, email, picture, now, now);
 
-  const newStudent = await db.prepare(`SELECT * FROM students WHERE id = ?`).get(newStudentId);
+  const newStudent = await database.prepare(`SELECT * FROM students WHERE id = ?`).get(newStudentId);
 
-  await logAuthActivity({
+  await logActivity({
     userType: 'student',
     userId: newStudentId,
     email,

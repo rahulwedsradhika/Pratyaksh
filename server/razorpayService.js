@@ -1,3 +1,4 @@
+import {isProductionSandbox,isSandboxOrder,recordSandboxPayment} from './sandboxPayments.js';
 import { decodeGatewayWebhook } from './gatewayWebhookValidation.js';
 import { readGateway } from './gatewayConfiguration.js';
 import { reserveCoupon, consumeCoupon, positiveInteger } from './membershipPricing.js';
@@ -151,6 +152,11 @@ async function createCheckedRazorpayOrder({ student, planId, couponCode, reqIp }
     if (order.status === 'awaiting_verification' || order.student_submitted_utr) {
       throw new Error('Your earlier payment is awaiting bank confirmation. Please contact the helpline before paying again.');
     }
+    // Sandbox attempts never represent a real debit and must not block retries.
+    if(isSandboxOrder(order)){
+      await db.prepare("UPDATE coupon_reservations SET state='released' WHERE order_id=? AND state='reserved'").run(order.id);
+      continue;
+    }
     if (order.razorpay_order_id) {
       const { client } = await getRazorpayClient(JSON.parse(order.metadata || '{}').gatewayMode);
       let payments;
@@ -268,10 +274,11 @@ export async function verifyRazorpayPayment({
   if (!order) {
     throw new Error('Order record not found or does not belong to the authenticated scholar.');
   }
-  assertPaymentEnvironment(JSON.parse(order.metadata || '{}').gatewayMode || 'test');
+  const productionSandbox=isProductionSandbox(JSON.parse(order.metadata || '{}').gatewayMode || 'test');
+  if(!productionSandbox)assertPaymentEnvironment(JSON.parse(order.metadata || '{}').gatewayMode || 'test');
 
   // Idempotency check: Already fulfilled
-  if (order.status === 'completed') {
+  if (order.status === 'completed' && !productionSandbox) {
     const existingMembership = await db.prepare('SELECT * FROM memberships WHERE order_ref = ? AND student_id = ?').get(order.id, student.id);
     return {
       status: true,
@@ -283,7 +290,6 @@ export async function verifyRazorpayPayment({
   }
 
   const settings = await getGatewaySettings(JSON.parse(order.metadata || '{}').gatewayMode);
-  assertPaymentEnvironment(settings.mode);
   const effectiveOrderId = order.razorpay_order_id;
   assertCheckoutSignature(order, { razorpayOrderId, razorpayPaymentId, razorpaySignature }, settings.keySecret);
 
@@ -293,6 +299,8 @@ export async function verifyRazorpayPayment({
   try {rzpPayment = await client.payments.fetch(razorpayPaymentId);}
   catch {throw new Error('Payment confirmation is temporarily unavailable. Please check payment status before retrying.');}
   assertCapturedPayment(order, rzpPayment);
+  if(productionSandbox)return recordSandboxPayment(db,order,rzpPayment,razorpaySignature);
+  assertPaymentEnvironment(settings.mode);
   const completedDuringVerification = await db.prepare('SELECT status FROM payment_orders WHERE id = ?').get(order.id);
   if (completedDuringVerification?.status === 'completed') {
     return { status: true, alreadyFulfilled: true, orderId: order.id, membership: await db.prepare('SELECT * FROM memberships WHERE order_ref = ? AND student_id = ?').get(order.id, student.id) };
@@ -441,6 +449,7 @@ export async function processRazorpayWebhook(rawBody, signatureHeader, mode) {
     if (razorpayOrderId) {
       const internalOrder = await db.prepare('SELECT * FROM payment_orders WHERE razorpay_order_id = ?').get(razorpayOrderId);
       if (internalOrder && JSON.parse(internalOrder.metadata || '{}').gatewayMode && JSON.parse(internalOrder.metadata).gatewayMode !== settings.mode) throw Error('Webhook environment does not match the order.');
+      if(internalOrder && isProductionSandbox(settings.mode))return recordSandboxPayment(db,internalOrder,paymentEntity);
       if (internalOrder && internalOrder.status !== 'completed' && settings.autoActivate) {
         assertPaymentEnvironment(settings.mode);
         assertCapturedPayment(internalOrder, paymentEntity);

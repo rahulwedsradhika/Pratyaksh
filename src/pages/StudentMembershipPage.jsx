@@ -65,8 +65,8 @@ export default function StudentMembershipPage() {
         handler:async result=>{
           verifying=true;setNotice('Confirming your payment. Please wait…');
           try {
-            await json('/api/payment/razorpay/verify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({orderId:order.orderId,razorpayOrderId:result.razorpay_order_id,razorpayPaymentId:result.razorpay_payment_id,razorpaySignature:result.razorpay_signature})});
-            await refreshStudentState();await load();setReviewPlan(null);setNotice('Payment verified. Your membership is active.');
+            const confirmation=await json('/api/payment/razorpay/verify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({orderId:order.orderId,razorpayOrderId:result.razorpay_order_id,razorpayPaymentId:result.razorpay_payment_id,razorpaySignature:result.razorpay_signature})});
+            await refreshStudentState();await load();setReviewPlan(null);setNotice(confirmation.sandbox?confirmation.message:'Payment verified. Your membership is active.');
           }catch(error){setNotice('');setError(`${error.message} If money was deducted, refresh your membership status or contact support before paying again.`)}finally{release()}
         },modal:{ondismiss:()=>{if(!verifying){release();setNotice('Checkout closed. Refresh your status if you completed a payment.')}}}
       });

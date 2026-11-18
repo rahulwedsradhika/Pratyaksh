@@ -60,6 +60,7 @@ function getSessionSecret() {
 }
 
 async function createStudentSessionToken(studentId) {
+  if(typeof studentId!=='string' || !studentId.trim())throw Error('Your student account could not be loaded. Please sign in again.');
   const now = Math.floor(Date.now() / 1000);
   const header = Buffer.from(JSON.stringify({ alg: 'HS256', typ: 'JWT' })).toString('base64url');
   const payload = Buffer.from(JSON.stringify({ sub: studentId, jti:crypto.randomUUID(), iat: now, exp: now + 60 * 60 * 12 })).toString('base64url');
@@ -2694,7 +2695,7 @@ app.post('/api/auth/google', async (req, res) => {
 });
 
 // 7. Get Authenticated Student Profile & Membership State
-app.get('/api/student/payment-status',createPaymentStatusHandler({db,authenticate:getAuthenticatedStudent,findActiveMembership,hasAdminAccess:hasAdminClassroomAccess}));
+app.get('/api/student/payment-status',createPaymentStatusHandler({db,authenticate:getAuthenticatedStudent,findActiveMembership,hasAdminAccess:hasAdminClassroomAccess,getGateway:getGatewaySettings}));
 app.get('/api/student/me', async (req, res) => {
   try {
     const student = await getAuthenticatedStudent(req);
