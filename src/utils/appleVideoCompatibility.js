@@ -52,10 +52,10 @@ export function getCompatibleBunnyEmbedUrl(url, { appleTouch = false } = {}) {
     parsed.searchParams.set('autoplay', 'false');
     parsed.searchParams.set('playsinline', 'true');
     if (appleTouch) {
-      // The current Bunny player supports WebKit's native HLS stack, including
-      // desktop-mode iPadOS. The legacy iframe host predates these controls.
+      // Match the provider URL verified in Safari. Forcing native HLS in a
+      // nested WebKit iframe can select a different path than the working player.
       parsed.hostname = 'player.mediadelivery.net';
-      parsed.searchParams.set('nativeHls', 'safari');
+      parsed.searchParams.set('nativeHls', 'off');
       parsed.searchParams.set('preload', 'false');
       // WebKit partitions/restricts third-party storage. Playback must not
       // depend on preferences saved inside the cross-origin player frame.
