@@ -84,9 +84,19 @@ export function interpolateTextVariables(templateStr, vars = {}) {
   });
 }
 
+const OTP_TEMPLATE_KEYS = new Set(['email_verification_otp','login_otp','admin_login_otp','password_recovery_otp']);
+
+// Also covers saved templates created before notification subjects included codes.
+// Actual SMTP subjects contain the requested code; stored email logs remain redacted.
+export function authenticationEmailSubject(templateKey, subject, code) {
+  if (!OTP_TEMPLATE_KEYS.has(templateKey)) return subject;
+  if (!/^\d{6}$/.test(String(code))) throw new Error('A valid six-digit authentication code is required.');
+  return subject.startsWith(String(code)) ? subject : `${code} - ${subject}`;
+}
+
 /** Render the current admin-managed template so auth mail stays in sync with Email Center edits. */
-export async function renderEmailTemplate(templateKey, variables = {}) {
-  const template = await db.prepare(`
+export async function renderEmailTemplate(templateKey, variables = {}, database = db) {
+  const template = await database.prepare(`
     SELECT template_key, subject, html_body, text_body, enabled
     FROM email_templates
     WHERE template_key = ?
@@ -97,7 +107,7 @@ export async function renderEmailTemplate(templateKey, variables = {}) {
 
   const values = { ...variables, ...emailBrandVariables() };
   const rendered = {
-    subject: interpolateTextVariables(template.subject, values),
+    subject: authenticationEmailSubject(templateKey, interpolateTextVariables(template.subject, values), values.otp_code),
     html: interpolateVariables(template.html_body, values),
     text: interpolateTextVariables(template.text_body, values)
   };

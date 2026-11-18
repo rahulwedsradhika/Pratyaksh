@@ -1,3 +1,4 @@
+import {validateRetryCoupon,createRetryCheckoutOrder} from '../services/paymentRetryCheckout';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { Clock, Phone, RefreshCw, ShieldAlert, CreditCard, Layers } from 'lucide-react';
@@ -18,6 +19,20 @@ export default function PaymentStatusPage() {
   const [changePlan, setChangePlan] = useState(false);
   const [paying, setPaying] = useState(false);
   const [notice, setNotice] = useState('');
+  const [couponCode, setCouponCode] = useState('');
+  const [coupon, setCoupon] = useState(null);
+  const [couponBusy, setCouponBusy] = useState(false);
+  const [couponError, setCouponError] = useState('');
+  const clearCoupon = () => {setCouponCode('');setCoupon(null);setCouponError('');};
+  const applyCoupon = async () => {
+    if (!planId || !couponCode.trim() || couponBusy || paying) return;
+    setCouponBusy(true);setCouponError('');setCoupon(null);
+    try {
+      const validated=await validateRetryCoupon({planId,code:couponCode});
+      setCoupon(validated);setCouponCode(validated.code);
+    } catch(error) {setCouponError(error.message);}
+    finally {setCouponBusy(false);}
+  };
   const refresh = useCallback(async () => {
     setBusy(true); setError('');
     try {
@@ -50,15 +65,12 @@ export default function PaymentStatusPage() {
   }, [plans, data]);
 
   const retryPayment = async () => {
-    if (paying || !planId) return;
+    if (paying || couponBusy || !planId) return;
+    if (couponCode.trim() && !coupon) {setCouponError('Apply your coupon or remove it before continuing.');return;}
     setPaying(true); setError(''); setNotice('');
     try {
       await loadRazorpayCheckout();
-      const response = await studentFetch('/api/payment/razorpay/create-order', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ planId })
-      });
-      const orderData = await readApiResponse(response);
-      if (!response.ok || !orderData.status) throw new Error(orderData.message || 'Unable to retry payment.');
+      const orderData=await createRetryCheckoutOrder({planId,couponCode:coupon?.code});
       const checkout = new window.Razorpay({
         key: orderData.keyId, order_id: orderData.razorpayOrderId,
         amount: orderData.amountPaise, currency: orderData.currency,
@@ -115,14 +127,27 @@ export default function PaymentStatusPage() {
           <div style={{ fontWeight: 650, color: 'var(--text-primary)', marginBottom: 10 }}>{plans.find(plan => plan.id === planId)?.name || 'Choose your membership'}</div>
           {changePlan && <label style={{ display: 'grid', gap: 8, marginBottom: 14, color: 'var(--text-primary)', fontSize: 14 }}>
             Membership plan
-            <select value={planId} onChange={event => setPlanId(event.target.value)} disabled={paying} className="editorial-input" style={{ width: '100%' }}>
+            <select value={planId} onChange={event => {setPlanId(event.target.value);clearCoupon();}} disabled={paying || couponBusy} className="editorial-input" style={{ width: '100%' }}>
               {plans.map(plan => <option key={plan.id} value={plan.id}>{plan.name} — {new Intl.NumberFormat('en-IN', { style: 'currency', currency: plan.currency || 'INR', maximumFractionDigits: 0 }).format(plan.price)}</option>)}
             </select>
           </label>}
           {!changePlan && <p style={{ color: 'var(--text-secondary)', fontSize: 14 }}>{plans.find(plan => plan.id === planId) && new Intl.NumberFormat('en-IN', { style: 'currency', currency: plans.find(plan => plan.id === planId).currency || 'INR' }).format(plans.find(plan => plan.id === planId).price)}</p>}
+          <div style={{marginBottom:16}}>
+            <label htmlFor="retry-coupon" style={{display:'block',marginBottom:8,color:'var(--text-primary)'}}>Coupon code</label>
+            <div style={{display:'flex',flexWrap:'wrap',gap:8}}>
+              <input id="retry-coupon" className="editorial-input" style={{flex:'1 1 180px',minWidth:0,width:'100%'}} value={couponCode} maxLength={40} autoCapitalize="characters" autoComplete="off" placeholder="Enter a coupon code" disabled={paying || couponBusy} onChange={event=>{setCouponCode(event.target.value);setCoupon(null);setCouponError('');}} />
+              <button type="button" className="editorial-btn editorial-btn-secondary" style={{flex:'0 0 auto'}} onClick={applyCoupon} disabled={paying || couponBusy || !planId || !couponCode.trim()}>{couponBusy?'Checking…':'Apply coupon'}</button>
+              {couponCode && <button type="button" className="editorial-btn editorial-btn-secondary" onClick={clearCoupon} disabled={paying || couponBusy}>Remove</button>}
+            </div>
+            {couponError && <p role="alert" style={{color:'#c24136',margin:'8px 0'}}>{couponError}</p>}
+            {coupon && <div role="status" style={{marginTop:12,color:'var(--text-primary)'}}>
+              <p style={{margin:'0 0 6px'}}>Coupon {coupon.code} applied · Save {new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR'}).format(coupon.discountAmount)}</p>
+              <strong>Payable: {new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR'}).format(coupon.finalAmount)}</strong>
+            </div>}
+          </div>
           <div style={{ display: 'grid', gap: 10 }}>
-            <button className="editorial-btn" onClick={retryPayment} disabled={paying || busy || !planId}><CreditCard size={16} />{paying ? 'Payment in progress…' : order ? 'Retry payment' : 'Pay for membership'}</button>
-            <button className="editorial-btn" onClick={() => setChangePlan(value => !value)} disabled={paying || !plans.length} style={{ background: 'var(--bg-card)', color: 'var(--text-primary)', border: '1px solid var(--border-subtle)' }}><Layers size={16} />{changePlan ? 'Keep selected plan' : 'Choose a different plan'}</button>
+            <button className="editorial-btn" onClick={retryPayment} disabled={paying || busy || couponBusy || !planId}><CreditCard size={16} />{paying ? 'Payment in progress…' : order ? 'Retry payment' : 'Pay for membership'}</button>
+            <button className="editorial-btn" onClick={() => setChangePlan(value => !value)} disabled={paying || couponBusy || !plans.length} style={{ background: 'var(--bg-card)', color: 'var(--text-primary)', border: '1px solid var(--border-subtle)' }}><Layers size={16} />{changePlan ? 'Keep selected plan' : 'Choose a different plan'}</button>
           </div>
         </section>}
         {notice && <p role="status" style={{ color: 'var(--text-secondary)', fontSize: 14 }}>{notice}</p>}
