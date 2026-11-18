@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { contentSourceHeaders } from './contentSourceAuth.js';
 import {storageDirectory} from './persistentStorage.js';
+import {storeVerifiedNote} from './noteStorage.js';
 
 export function noteSourcePath(value) {
   let relative = String(value || '');
@@ -15,7 +16,7 @@ export function noteSourcePath(value) {
   return relative.slice('upload/'.length);
 }
 
-export function installNoteFiles(app, db, authenticate, { fetchImpl = globalThis.fetch, root = storageDirectory('notes') } = {}) {
+export function installNoteFiles(app, db, authenticate, { fetchImpl = globalThis.fetch, root = storageDirectory('notes'), allowUpstream = process.env.NOTES_ALLOW_UPSTREAM_FALLBACK !== 'false' } = {}) {
   app.get('/api/student/notes/:id/file', async (req, res) => {
     if (!(await authenticate(req))) return res.status(401).json({ status: false, message: 'Sign in to open notes.' });
     const note = await db.prepare('SELECT title, doc_path FROM notes WHERE id = ?').get(req.params.id);
@@ -38,6 +39,7 @@ export function installNoteFiles(app, db, authenticate, { fetchImpl = globalThis
         try{await handle.read(head,0,5,0);}finally{await handle.close();}
         if(head.toString()!=='%PDF-')return res.status(415).json({status:false,message:'The stored file is not a valid PDF.'});
         setHeaders();
+        res.setHeader('X-Notes-Storage','permanent');
         // sendFile streams and supports HTTP Range requests used by Safari's PDF viewer.
         await new Promise((resolve,reject)=>res.sendFile(local,{dotfiles:'allow',cacheControl:false},error=>error?reject(error):resolve()));
         return;
@@ -45,9 +47,9 @@ export function installNoteFiles(app, db, authenticate, { fetchImpl = globalThis
         if (!['ENOENT', 'ENOTDIR'].includes(error.code)) throw error;
       }
       if (!data) {
-        if(process.env.NOTES_ALLOW_UPSTREAM_FALLBACK==='false')return res.status(503).json({status:false,message:'These notes have not yet been transferred to permanent storage.'});
+        if(!allowUpstream)return res.status(503).json({status:false,message:'These notes have not yet been transferred to permanent storage.'});
         const url = 'https://portal.pratyakshayurveda.in/upload/' + relative.split('/').map(encodeURIComponent).join('/');
-        const response = await fetchImpl(url, { headers: { ...contentSourceHeaders(process.env.PRATYAKSH_CONTENT_TOKEN), Accept: 'application/pdf' }, redirect: 'error', signal: AbortSignal.timeout(15000) });
+        const response = await fetchImpl(url, { headers: { ...contentSourceHeaders(process.env.PRATYAKSH_CONTENT_TOKEN), Accept: 'application/pdf' }, redirect: 'error', signal: AbortSignal.timeout(60000) });
         if (!response.ok) return res.status([401, 403, 404].includes(response.status) ? response.status : 502).json({ status: false, message: 'This PDF is unavailable from the notes provider. Please try again later.' });
         if (Number(response.headers.get('content-length')) > maxBytes) return res.status(413).json({ status: false, message: 'This PDF is too large.' });
         const chunks=[];let bytes=0;const reader=response.body.getReader();
@@ -55,6 +57,13 @@ export function installNoteFiles(app, db, authenticate, { fetchImpl = globalThis
         data = Buffer.concat(chunks);
       }
       if (data.length > maxBytes || data.subarray(0, 5).toString() !== '%PDF-') return res.status(415).json({ status: false, message: 'The notes provider did not return a valid PDF.' });
+      try {
+        await storeVerifiedNote(root,relative,data);
+        res.setHeader('X-Notes-Storage','permanent-cached');
+      } catch (error) {
+        res.setHeader('X-Notes-Storage','upstream');
+        console.warn('[NOTES CACHE] Private storage write failed:', error.code || 'invalid-path');
+      }
       setHeaders();
       return res.send(data);
     } catch {
