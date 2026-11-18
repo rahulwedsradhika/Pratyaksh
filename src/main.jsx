@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+import './styles/bootstrap.css';
+import './styles/fonts.css';
 import './index.css';
 import './styles/theme.css';
 import './styles/authForms.css';

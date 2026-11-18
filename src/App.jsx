@@ -1,3 +1,4 @@
+import PortalStyleGate from './components/PortalStyleGate';
 const AdminLiveClassesPage = lazy(() => import('./pages/admin/AdminLiveClassesPage'));
 import React, { useEffect, lazy, Suspense } from 'react';
 import { HashRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
@@ -73,6 +74,7 @@ export default function App() {
           <CrumpledPaperBackground />
           <div className="app-viewport min-vh-100 d-flex flex-column" style={{ backgroundColor: 'transparent', position: 'relative', zIndex: 1 }}>
             <main className="flex-grow-1">
+              <PortalStyleGate>
               <Suspense fallback={<div role="status" style={{padding: '3rem 1.5rem', textAlign: 'center', color: 'var(--text-primary)'}}>Opening your page…</div>}>
               <Routes>
                 {/* ==========================================================
@@ -203,6 +205,7 @@ export default function App() {
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
               </Suspense>
+              </PortalStyleGate>
             </main>
             <Toast />
           </div>

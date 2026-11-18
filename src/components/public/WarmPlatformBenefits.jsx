@@ -20,13 +20,13 @@ export default function WarmPlatformBenefits() {
 
   const pillars = [
     {
-      img: '/assets/website-assets/img/ayur-mortar-emblem.png',
+      img: '/assets/home/ayur-mortar-emblem.webp',
       badge: 'Samhita Authenticity',
       title: 'Classical Brihattrayi Vault',
       description: 'Systematic, chapter-by-chapter clinical video lectures decoding Charaka, Sushruta, and Vagbhata with authentic commentary and clinical shloka pronunciation.'
     },
     {
-      img: '/assets/website-assets/img/aiapget-seal.png',
+      img: '/assets/home/aiapget-seal.webp',
       badge: 'National Testing Standard',
       title: 'AIAPGET NTA Mock Simulations',
       description: 'Extensive 10,000+ question bank structured with official negative marking (-1 / +4), percentile ranking algorithms, and instant shloka rationales.'
@@ -60,7 +60,9 @@ export default function WarmPlatformBenefits() {
             <div className="v3-yukti-image-col">
               <div className="v3-doctor-image-wrapper">
                 <img
-                  src="/assets/website-assets/img/doctor-laptop.png"
+                  src="/assets/home/doctor-laptop.webp"
+                srcSet="/assets/home/doctor-laptop-320.webp 320w, /assets/home/doctor-laptop.webp 640w"
+                sizes="(max-width: 767px) calc(100vw - 64px), 380px"
                   width="954" height="914" loading="lazy" decoding="async"
                   alt="Ayurvedic Doctor Working on Modern Laptop"
                   className="v3-doctor-image v3-floating-gentle"
@@ -89,7 +91,7 @@ export default function WarmPlatformBenefits() {
               {/* Shloka Graphic Banner with Glow */}
               <div className="v3-shloka-banner-wrapper">
                 <img
-                  src="/assets/website-assets/img/shloka-banner.jpg" loading="lazy" decoding="async"
+                  src="/assets/home/shloka-banner.webp" width="800" height="205" loading="lazy" decoding="async"
                   alt="The Future of Ayurveda is: तिष्ठत्युपरि युक्तिज्ञो द्रव्यज्ञानवतां सदा ॥"
                   className="v3-shloka-banner-img"
                 />

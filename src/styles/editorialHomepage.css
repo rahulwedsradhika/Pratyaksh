@@ -1747,7 +1747,7 @@
 }
 
 .v3-hero-shloka-text {
-  font-family: 'Noto Serif Devanagari', 'Martel', Georgia, serif;
+  font-family: 'Pratyaksh Hero', 'Noto Serif Devanagari', Georgia, serif;
   font-size: clamp(2rem, 5.2vw, 3.8rem); /* Grand BIG Text */
   font-weight: 800;
   line-height: 2 !important; /* Extremely generous clearance completely prevents upper Devanagari matras cutting off */
@@ -3111,3 +3111,10 @@
 
 
 
+
+/* Touch scrolling uses static decoration. */
+@media(max-width:600px) {
+ .v3-public-root :is(.v3-header-pill,.v3-doctor-badge-floating) { backdrop-filter:none; -webkit-backdrop-filter:none; }
+ .v3-public-root :is(.v3-scholar-image,.v3-doctor-image) { filter:none; }
+ .v3-public-root .v3-hero-shloka-text { animation:none; }
+}

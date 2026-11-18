@@ -179,7 +179,9 @@ export default function WarmHeroSection() {
           <div className="v3-scholar-card">
             <div className="v3-scholar-image-wrapper">
               <img
-                src="/assets/website-assets/img/scholar-student.png"
+                src="/assets/home/scholar-student.webp"
+                srcSet="/assets/home/scholar-student-320.webp 320w, /assets/home/scholar-student.webp 640w"
+                sizes="(max-width: 767px) calc(100vw - 64px), 380px"
                 width="872" height="842" fetchPriority="high" decoding="async"
                 alt="Ayurveda Scholar Student Thinking"
                 className="v3-scholar-image v3-floating-gentle"
@@ -565,7 +567,7 @@ export default function WarmHeroSection() {
         <div className="v3-trust-ribbon">
           <div className="v3-trust-item">
             <img
-              src="/assets/website-assets/img/aiapget-seal.png"
+              src="/assets/home/aiapget-seal.webp"
               width="114" height="114" loading="lazy" decoding="async"
               alt="Official AIAPGET Entrance Emblem"
               className="v3-trust-seal-img"
@@ -580,7 +582,7 @@ export default function WarmHeroSection() {
 
           <div className="v3-trust-item">
             <img
-              src="/assets/website-assets/img/ayur-mortar-emblem.png"
+              src="/assets/home/ayur-mortar-emblem.webp"
               width="114" height="100" loading="lazy" decoding="async"
               alt="Ayurveda Khalva Yantra Mortar"
               className="v3-trust-seal-img v3-spin-slow"
