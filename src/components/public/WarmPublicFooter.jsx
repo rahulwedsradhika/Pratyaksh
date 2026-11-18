@@ -19,7 +19,7 @@ export default function WarmPublicFooter() {
           <div className="v3-footer-brand-col">
             <Link to="/" style={{ textDecoration: 'none', display: 'inline-block', marginBottom: '0.9rem' }}>
               <img
-                src="/assets/website-assets/img/logo.svg"
+                src="/assets/website-assets/img/logo.svg" width="240" height="60" loading="lazy" decoding="async"
                 alt="Pratyaksh Ayurveda"
                 className="v3-footer-logo"
                 onError={(e) => {

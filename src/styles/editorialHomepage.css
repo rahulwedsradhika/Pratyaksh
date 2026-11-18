@@ -2120,6 +2120,17 @@
   border: 0;
 }
 
+.v3-video-load-button { position:absolute; inset:0; width:100%; height:100%; border:0; padding:1.5rem; display:flex; flex-direction:column; gap:.75rem; align-items:center; justify-content:center; background:linear-gradient(135deg,#182640,#12171e); color:#fff; cursor:pointer; }
+.v3-video-load-button strong { font-size:1.05rem; }
+.v3-video-load-button span { font-size:.85rem; line-height:1.5; max-width:30rem; }
+.v3-video-load-button:focus-visible { outline:3px solid #f59e0b; outline-offset:-5px; }
+
+@media(prefers-reduced-motion:reduce), (max-width:600px) {
+  .v3-public-root :is(.v3-floating-gentle,.v3-spin-slow,.v3-hero-pretitle,.v3-hero-shloka-text,.v3-player-border-glow),
+  .v3-public-root .v3-header-pill::before,
+  .v3-public-root .v3-btn-primary::before { animation:none !important; }
+}
+
 /* Animated Border Glow around Video */
 .v3-player-border-glow {
   position: absolute;

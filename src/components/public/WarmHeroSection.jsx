@@ -127,7 +127,7 @@ const FEATURED_LECTURES = [
 
 export default function WarmHeroSection() {
   const [activeLecture, setActiveLecture] = useState(FEATURED_LECTURES[0]);
-  const [showInteractivePlayer, setShowInteractivePlayer] = useState(true);
+  const [showInteractivePlayer, setShowInteractivePlayer] = useState(false);
   const [activeTab, setActiveTab] = useState('lecture'); // 'lecture' | 'samhita' | 'quiz'
   const [quizAnswer, setQuizAnswer] = useState(null);
 
@@ -136,7 +136,7 @@ export default function WarmHeroSection() {
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const bunnyEmbedUrl = `https://iframe.mediadelivery.net/embed/330113/${activeLecture.id}?autoplay=false&loop=false&muted=false&preload=true&responsive=true`;
+  const bunnyEmbedUrl = `https://iframe.mediadelivery.net/embed/330113/${activeLecture.id}?autoplay=false&loop=false&muted=false&preload=false&responsive=true`;
   const bunnyDirectUrl = `https://player.mediadelivery.net/play/330113/${activeLecture.id}`;
 
   return (
@@ -180,6 +180,7 @@ export default function WarmHeroSection() {
             <div className="v3-scholar-image-wrapper">
               <img
                 src="/assets/website-assets/img/scholar-student.png"
+                width="872" height="842" fetchPriority="high" decoding="async"
                 alt="Ayurveda Scholar Student Thinking"
                 className="v3-scholar-image v3-floating-gentle"
                 onError={(e) => {
@@ -306,6 +307,7 @@ export default function WarmHeroSection() {
                           className={`v3-playlist-btn ${activeLecture.id === lec.id ? 'active' : ''}`}
                           onClick={() => {
                             setActiveLecture(lec);
+                            setShowInteractivePlayer(false);
                             setQuizAnswer(null);
                           }}
                         >
@@ -318,7 +320,7 @@ export default function WarmHeroSection() {
 
                   {/* Responsive Iframe Container for Genuine Bunny Stream with no-referrer */}
                   <div className="v3-bunny-iframe-wrapper">
-                    <iframe
+                    {showInteractivePlayer ? <iframe
                       src={bunnyEmbedUrl}
                       title={activeLecture.title}
                       loading="lazy"
@@ -326,7 +328,7 @@ export default function WarmHeroSection() {
                       allow="accelerometer;gyroscope;autoplay;encrypted-media;picture-in-picture;"
                       allowFullScreen={true}
                       referrerPolicy="no-referrer"
-                    />
+                    /> : <button type="button" className="v3-video-load-button" onClick={() => setShowInteractivePlayer(true)} aria-label={`Load demo lecture: ${activeLecture.title}`}><Play size={36} aria-hidden="true" /><strong>Watch a free lecture</strong><span>{activeLecture.title}</span></button>}
 
                     {/* Luminous Animated Border Beam */}
                     <div className="v3-player-border-glow" aria-hidden="true" />
@@ -465,6 +467,7 @@ export default function WarmHeroSection() {
                           className={`v3-playlist-btn ${activeLecture.id === lec.id ? 'active' : ''}`}
                           onClick={() => {
                             setActiveLecture(lec);
+                            setShowInteractivePlayer(false);
                             setQuizAnswer(null);
                           }}
                         >
@@ -563,6 +566,7 @@ export default function WarmHeroSection() {
           <div className="v3-trust-item">
             <img
               src="/assets/website-assets/img/aiapget-seal.png"
+              width="114" height="114" loading="lazy" decoding="async"
               alt="Official AIAPGET Entrance Emblem"
               className="v3-trust-seal-img"
             />
@@ -577,6 +581,7 @@ export default function WarmHeroSection() {
           <div className="v3-trust-item">
             <img
               src="/assets/website-assets/img/ayur-mortar-emblem.png"
+              width="114" height="100" loading="lazy" decoding="async"
               alt="Ayurveda Khalva Yantra Mortar"
               className="v3-trust-seal-img v3-spin-slow"
             />

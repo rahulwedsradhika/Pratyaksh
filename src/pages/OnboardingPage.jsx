@@ -1,3 +1,4 @@
+import {useGoogleButtonWidth} from '../components/auth/useGoogleButtonWidth';
 import MembershipCheckout from '../components/MembershipCheckout';
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
@@ -60,6 +61,7 @@ export default function OnboardingPage() {
   const [examGoal, setExamGoal] = useState('AIAPGET & BAMS Complete');
   const [googleConfig, setGoogleConfig] = useState({ enabled: false, clientId: null });
   const [gisLoaded, setGisLoaded] = useState(false);
+  const googleButtonWidth=useGoogleButtonWidth('onboarding-google-signin-slot',step===3 && googleConfig.enabled && Boolean(googleConfig.clientId));
   const googleLoginRef = useRef(loginWithGoogle);
   const profileRef = useRef({});
   googleLoginRef.current = loginWithGoogle;
@@ -103,7 +105,7 @@ export default function OnboardingPage() {
   }, [googleConfig]);
 
   useEffect(() => {
-    if (step !== 3 || !gisLoaded || !googleConfig.enabled || !googleConfig.clientId || !window.google?.accounts?.id) return;
+    if (!googleButtonWidth || step !== 3 || !gisLoaded || !googleConfig.enabled || !googleConfig.clientId || !window.google?.accounts?.id) return;
     try {
       window.google.accounts.id.initialize({
         client_id: googleConfig.clientId,
@@ -126,7 +128,7 @@ export default function OnboardingPage() {
       const slot = document.getElementById('onboarding-google-signin-slot');
       if (slot) {
         slot.innerHTML = '';
-        const buttonWidth = Math.min(376, Math.max(180, slot.clientWidth || 376));
+        const buttonWidth = googleButtonWidth;
         window.google.accounts.id.renderButton(slot, {
           theme: resolvedTheme === 'dark' ? 'filled_black' : 'outline',
           size: 'large',
@@ -140,7 +142,7 @@ export default function OnboardingPage() {
       setOtpError('Google sign-in could not be initialized. Please try email verification.');
       console.error('[GoogleGIS] Onboarding initialization error:', error);
     }
-  }, [gisLoaded, googleConfig, resolvedTheme, step]);
+  }, [gisLoaded, googleConfig, resolvedTheme, step, googleButtonWidth]);
 
   // Payment State
   const [pendingOrder, setPendingOrder] = useState(null);
@@ -537,7 +539,7 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className="v3-public-root" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div className="v3-public-root auth-form-page" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       {/* Top Header */}
       <header style={{ padding: '1.25rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-subtle)', background: 'var(--bg-surface)' }}>
         <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', textDecoration: 'none' }}>
@@ -586,7 +588,7 @@ export default function OnboardingPage() {
 
       {/* Main Container */}
       <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2.5rem 1rem' }}>
-        <div className={step===4?'onboarding-checkout-shell':undefined} style={{ maxWidth: step === 4 ? '1080px' : step === 1 ? '980px' : '520px', width: '100%', background: 'var(--bg-surface)', border: '1px solid var(--border-subtle)', borderRadius: '20px', padding: '2.5rem 2rem', boxShadow: '0 16px 44px rgba(33, 31, 28, 0.06)' }}>
+        <div className={step===4?'auth-form-card onboarding-checkout-shell':'auth-form-card'} style={{ maxWidth: step === 4 ? '1080px' : step === 1 ? '980px' : '520px', width: '100%', background: 'var(--bg-surface)', border: '1px solid var(--border-subtle)', borderRadius: '20px', padding: '2.5rem 2rem', boxShadow: '0 16px 44px rgba(33, 31, 28, 0.06)' }}>
 
           {/* Complete Logo for Membership Funnel */}
           <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
@@ -874,7 +876,7 @@ export default function OnboardingPage() {
                     </div>
 
                     {/* 6 Digit Numeric Inputs */}
-                    <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', marginBottom: '1.25rem' }}>
+                    <div className="auth-otp-digits" style={{ display: 'flex', gap: '8px', justifyContent: 'center', marginBottom: '1.25rem' }}>
                       {otpCode.map((digit, i) => (
                         <input
                           key={i}

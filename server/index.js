@@ -1,3 +1,4 @@
+import {setStaticCacheHeaders} from './staticCache.js';
 import { asyncMap } from "./asyncCollections.js";import { membershipQuote, reserveCoupon } from './membershipPricing.js';
 import 'dotenv/config';
 import { installStudentActivity } from './studentActivity.js';
@@ -12,6 +13,8 @@ import { storageDirectory } from './persistentStorage.js';
 import {protectPrivateDocuments} from './publicAssetAccess.js';
 import {consumeOneTimeCode} from './oneTimeCodes.js';
 import {paperQuestions} from './paperQuestions.js';
+import {apiErrorHandler} from './apiErrors.js';
+import {createPaymentStatusHandler} from './paymentStatus.js';
 import {createCourseDetailHandler, subjectSummary} from './subjectCatalog.js';
 import cors from 'cors';
 import fs from 'fs';
@@ -192,7 +195,7 @@ app.get('/api/health', async (req, res) => {
 // Serve built frontend if dist exists
 app.use(protectPrivateDocuments);
 if (fs.existsSync(path.resolve('dist'))) {
-  app.use(express.static(path.resolve('dist')));
+  app.use(express.static(path.resolve('dist'), {setHeaders:setStaticCacheHeaders}));
 }
 
 // Read-only live public uploads precede static snapshots so new/updated artwork is visible.
@@ -201,8 +204,8 @@ app.use('/upload', createLiveUploadMiddleware());
 // Serve static assets from public/ as well
 app.use('/assets/checkout-branding',express.static(storageDirectory('branding')));
 app.use('/upload',express.static(storageDirectory('uploads')));
-app.use(express.static(path.resolve('public')));
-app.use('/assets', express.static(path.resolve('public/assets')));
+app.use(express.static(path.resolve('public'), {setHeaders:setStaticCacheHeaders}));
+app.use('/assets', express.static(path.resolve('public/assets'), {setHeaders:setStaticCacheHeaders}));
 app.use('/upload', express.static(path.resolve('public/assets/upload')));
 
 // On-the-fly fallback cache for portal upload images
@@ -2691,17 +2694,7 @@ app.post('/api/auth/google', async (req, res) => {
 });
 
 // 7. Get Authenticated Student Profile & Membership State
-app.get('/api/student/payment-status', async (req, res) => {
-  const student = await getAuthenticatedStudent(req);
-  if (!student) return res.status(401).json({ status: false, message: 'Sign in to view your payment status.' });
-  const membership = await findActiveMembership(student.email);
-  const order = await db.prepare(`SELECT id, plan_id, amount, currency, status, created_at, updated_at FROM payment_orders
-    WHERE student_id = ? ORDER BY created_at DESC, rowid DESC LIMIT 1`).get(student.id);
-  res.set('Cache-Control', 'no-store');
-  res.json({ status: true, hasActiveMembership: Boolean(membership) && !student.is_suspended && Boolean(student.email_verified), classroomAccess: await hasAdminClassroomAccess(student),
-    suspended: Boolean(student.is_suspended), order: order || null,
-    helplines: [{ label: 'Admissions & payment support', phone: '+918795776006', display: '+91 8795776006' }] });
-});
+app.get('/api/student/payment-status',createPaymentStatusHandler({db,authenticate:getAuthenticatedStudent,findActiveMembership,hasAdminAccess:hasAdminClassroomAccess}));
 app.get('/api/student/me', async (req, res) => {
   try {
     const student = await getAuthenticatedStudent(req);
@@ -3231,6 +3224,7 @@ app.post('/api/auth/logout', async (req, res) => {
 
 
 // SPA Fallback: send index.html for any frontend route
+app.use(apiErrorHandler);
 app.use((req, res) => {
   if (req.path.startsWith('/api') || req.path.startsWith('/upload')) {
     return res.status(404).json({ status: false, message: 'Not Found' });

@@ -61,6 +61,7 @@ export default function WarmPlatformBenefits() {
               <div className="v3-doctor-image-wrapper">
                 <img
                   src="/assets/website-assets/img/doctor-laptop.png"
+                  width="954" height="914" loading="lazy" decoding="async"
                   alt="Ayurvedic Doctor Working on Modern Laptop"
                   className="v3-doctor-image v3-floating-gentle"
                   onError={(e) => {
@@ -88,7 +89,7 @@ export default function WarmPlatformBenefits() {
               {/* Shloka Graphic Banner with Glow */}
               <div className="v3-shloka-banner-wrapper">
                 <img
-                  src="/assets/website-assets/img/shloka-banner.jpg"
+                  src="/assets/website-assets/img/shloka-banner.jpg" loading="lazy" decoding="async"
                   alt="The Future of Ayurveda is: तिष्ठत्युपरि युक्तिज्ञो द्रव्यज्ञानवतां सदा ॥"
                   className="v3-shloka-banner-img"
                 />
@@ -141,7 +142,7 @@ export default function WarmPlatformBenefits() {
               <div className="v3-pillar-top-row">
                 <div className="v3-pillar-icon-box">
                   {item.img ? (
-                    <img src={item.img} alt={item.title} className="v3-pillar-emblem-img" />
+                    <img loading="lazy" decoding="async" width="64" height="64" src={item.img} alt={item.title} className="v3-pillar-emblem-img" />
                   ) : (
                     item.icon
                   )}

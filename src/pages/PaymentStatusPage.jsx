@@ -4,6 +4,7 @@ import { Clock, Phone, RefreshCw, ShieldAlert, CreditCard, Layers } from 'lucide
 import { useAuth } from '../context/AuthContext';
 import { studentFetch } from '../services/studentFetch';
 import { loadRazorpayCheckout } from '../services/razorpayCheckout';
+import {readApiResponse} from '../services/apiResponse';
 import '../styles/passwordRecovery.css';
 
 export default function PaymentStatusPage() {
@@ -21,7 +22,7 @@ export default function PaymentStatusPage() {
     setBusy(true); setError('');
     try {
       const response = await studentFetch('/api/student/payment-status', { cache: 'no-store' });
-      const result = await response.json();
+      const result = await readApiResponse(response);
       if (!response.ok) throw new Error(result.message || 'Unable to check payment status.');
       setData(result);
       if (result.hasActiveMembership || result.classroomAccess) { await refreshStudentState(); navigate('/app', { replace: true }); }
@@ -56,7 +57,7 @@ export default function PaymentStatusPage() {
       const response = await studentFetch('/api/payment/razorpay/create-order', {
         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ planId })
       });
-      const orderData = await response.json();
+      const orderData = await readApiResponse(response);
       if (!response.ok || !orderData.status) throw new Error(orderData.message || 'Unable to retry payment.');
       const checkout = new window.Razorpay({
         key: orderData.keyId, order_id: orderData.razorpayOrderId,
@@ -70,7 +71,7 @@ export default function PaymentStatusPage() {
               body: JSON.stringify({ orderId: orderData.orderId, razorpayOrderId: result.razorpay_order_id,
                 razorpayPaymentId: result.razorpay_payment_id, razorpaySignature: result.razorpay_signature })
             });
-            const confirmation = await verified.json();
+            const confirmation = await readApiResponse(verified);
             if (!verified.ok || !confirmation.status) throw new Error(confirmation.message || 'Payment confirmation is pending. Refresh the status or contact support.');
             await refresh();
           } catch (e) { setError(e.message); }

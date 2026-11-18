@@ -1,0 +1,37 @@
+/* Auth forms share the current theme even when legacy styles or autofill apply. */
+:is(.auth-form-page,.recovery-page) :is(input:not([type="checkbox"]):not([type="radio"]),select,textarea) {
+  background: var(--bg-card) !important;
+  color: var(--text-primary) !important;
+  -webkit-text-fill-color: var(--text-primary) !important;
+  caret-color: var(--text-primary);
+  border-color: var(--border-subtle) !important;
+  color-scheme: light;
+}
+[data-theme="dark"] :is(.auth-form-page,.recovery-page) :is(input,select,textarea) { color-scheme: dark; }
+:is(.auth-form-page,.recovery-page) input::placeholder,
+:is(.auth-form-page,.recovery-page) textarea::placeholder {
+  color: var(--text-muted) !important;
+  -webkit-text-fill-color: var(--text-muted) !important;
+  opacity: 1;
+}
+:is(.auth-form-page,.recovery-page) input:-webkit-autofill,
+:is(.auth-form-page,.recovery-page) input:-webkit-autofill:hover,
+:is(.auth-form-page,.recovery-page) input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px var(--bg-card) inset !important;
+  -webkit-text-fill-color: var(--text-primary) !important;
+  caret-color: var(--text-primary);
+}
+
+.auth-form-page .auth-form-card { min-width: 0; }
+.auth-form-page :is(#google-student-signin-slot,#onboarding-google-signin-slot) { min-width: 0; max-width: 100%; }
+.auth-form-page :is(.v3-btn-primary,.v3-btn-secondary) { min-width: 0; white-space: normal !important; height: auto; min-height: 44px; }
+.auth-form-page .auth-otp-digits { display: grid !important; grid-template-columns: repeat(6,minmax(0,1fr)); }
+.auth-form-page .auth-otp-digits input { width: 100% !important; min-width: 0; padding: 0 !important; }
+@media(max-width: 480px) {
+  .auth-form-page > header { padding: 1rem !important; }
+  .auth-form-page .auth-form-card { padding: 1.5rem 1rem !important; }
+  .auth-form-page .auth-form-card img { max-width: 100% !important; }
+  .auth-form-page input { font-size: 16px !important; }
+  .auth-form-page .auth-email-row { flex-direction: column; }
+  .auth-form-page .auth-email-row button { width: 100%; }
+}

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { supabase } from '../services/supabaseClient';
+import {readApiResponse} from '../services/apiResponse';
 
 const AuthContext = createContext();
 
@@ -42,9 +43,10 @@ export function AuthProvider({ children }) {
 
     try {
       const res = await fetch('/api/student/me', {
+        signal: AbortSignal.timeout(15000),
         headers: { Authorization: `Bearer ${token}` }
       });
-      const data = await res.json();
+      const data = await readApiResponse(res);
       if (data.status && data.student) {
         setUser(data.student);
         setMembership(data.membership || null);
@@ -111,15 +113,16 @@ export function AuthProvider({ children }) {
 
     setError(null);
     setLoading(true);
-    const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password, authProvider });
-    if (authError) {
-      setError(authError.message);
-      setLoading(false);
-      return { success: false, error: authError.message };
-    }
-    const synced = await refreshStudentState();
-    setLoading(false);
-    return { success: true, data: synced };
+    try {
+      const { error: authError } = await supabase.auth.signInWithPassword({ email, password, authProvider });
+      if (authError) throw authError;
+      const synced = await refreshStudentState();
+      return { success: true, data: synced };
+    } catch (error) {
+      const message=error.message || 'Could not sign in. Please try again.';
+      setError(message);
+      return {success:false,error:message};
+    } finally { setLoading(false); }
   };
 
   // Send Email OTP Code
@@ -152,20 +155,23 @@ export function AuthProvider({ children }) {
 
     setError(null);
     setLoading(true);
-    const { data, error: verifyError } = await supabase.auth.verifyOtp({
+    try {
+    const { error: verifyError } = await supabase.auth.verifyOtp({
       email,
       token: code,
       type: metadata.type || 'email',
       options: { data: metadata }
     });
     if (verifyError) {
-      setError(verifyError.message);
-      setLoading(false);
-      return { success: false, error: verifyError.message };
+      throw verifyError;
     }
     const synced = await refreshStudentState();
-    setLoading(false);
     return { success: true, data: synced };
+    } catch(error) {
+      const message=error.message || 'Could not verify your code. Please try again.';
+      setError(message);
+      return {success:false,error:message};
+    } finally { setLoading(false); }
   };
 
   // Google OAuth / GIS Sign In
@@ -178,11 +184,12 @@ export function AuthProvider({ children }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ credential, profile })
       });
-      const data = await res.json();
+      const data = await readApiResponse(res);
       if (!data.status) {
-        setError(data.message || 'Google authentication failed');
+        const message=data.message || data.error || 'Google authentication failed';
+        setError(message);
         setLoading(false);
-        return { success: false, error: data.message };
+        return { success: false, error: message };
       }
       localStorage.setItem('ayur_auth_token', data.token);
       localStorage.setItem('ayur_local_learner', JSON.stringify(data.student));
@@ -207,7 +214,7 @@ export function AuthProvider({ children }) {
       },
       body: JSON.stringify(fields)
     });
-    const data = await res.json();
+    const data = await readApiResponse(res);
     if (data.status) {
       await refreshStudentState();
       return { success: true, student: data.student };
@@ -226,7 +233,7 @@ export function AuthProvider({ children }) {
       },
       body: JSON.stringify({ planId, idempotencyKey: `idem_${Date.now()}` })
     });
-    const data = await res.json();
+    const data = await readApiResponse(res);
     return {
       ...data,
       success: !!data.status,
@@ -245,7 +252,7 @@ export function AuthProvider({ children }) {
       },
       body: JSON.stringify({ orderId, providerPaymentId })
     });
-    const data = await res.json();
+    const data = await readApiResponse(res);
     if (data.status) {
       await refreshStudentState();
       return { success: true, status: true, membership: data.membership };

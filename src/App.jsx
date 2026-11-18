@@ -1,5 +1,5 @@
-import AdminLiveClassesPage from './pages/admin/AdminLiveClassesPage';
-import React, { useEffect } from 'react';
+const AdminLiveClassesPage = lazy(() => import('./pages/admin/AdminLiveClassesPage'));
+import React, { useEffect, lazy, Suspense } from 'react';
 import { HashRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { AppProvider } from './context/AppContext';
 import { AuthProvider } from './context/AuthContext';
@@ -8,51 +8,51 @@ import Toast from './components/Toast';
 
 // Public Experience & Auth Pages (V3 Warm Editorial)
 import PublicHomePage from './pages/PublicHomePage';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-import OnboardingPage from './pages/OnboardingPage';
-import ForgotPasswordPage from './pages/ForgotPasswordPage';
-import ResetPasswordPage from './pages/ResetPasswordPage';
+const LoginPage = lazy(() => import('./pages/LoginPage'));
+const RegisterPage = lazy(() => import('./pages/RegisterPage'));
+const OnboardingPage = lazy(() => import('./pages/OnboardingPage'));
+const ForgotPasswordPage = lazy(() => import('./pages/ForgotPasswordPage'));
+const ResetPasswordPage = lazy(() => import('./pages/ResetPasswordPage'));
 import ProtectedRoute from './components/auth/ProtectedRoute';
-import PaymentStatusPage from './pages/PaymentStatusPage';
+const PaymentStatusPage = lazy(() => import('./pages/PaymentStatusPage'));
 import EnrollmentGate from './components/auth/EnrollmentGate';
 
 // Admin System Pages (V3 Premium Management)
-import AdminProtectedLayout from './components/admin/AdminProtectedLayout';
-import AdminLoginPage from './pages/admin/AdminLoginPage';
-import AdminOnboardingPage from './pages/admin/AdminOnboardingPage';
-import AdminAccessPage from './pages/admin/AdminAccessPage';
-import AdminDashboardOverview from './pages/admin/AdminDashboardOverview';
-import AdminStudentDirectory from './pages/admin/AdminStudentDirectory';
-import AdminMembershipPlans from './pages/admin/AdminMembershipPlans';
-import AdminPaymentSettings from './pages/admin/AdminPaymentSettings';
-import AdminPaymentReconciliation from './pages/admin/AdminPaymentReconciliation';
-import AdminPaymentGateway from './pages/admin/AdminPaymentGateway';
-import AdminSupabaseDiagnostics from './pages/admin/AdminSupabaseDiagnostics';
-import AdminReportsAndExports from './pages/admin/AdminReportsAndExports';
-import AdminEmailCenter from './pages/admin/AdminEmailCenter';
-import AdminGoogleLoginSettings from './pages/admin/AdminGoogleLoginSettings';
+const AdminProtectedLayout = lazy(() => import('./components/admin/AdminProtectedLayout'));
+const AdminLoginPage = lazy(() => import('./pages/admin/AdminLoginPage'));
+const AdminOnboardingPage = lazy(() => import('./pages/admin/AdminOnboardingPage'));
+const AdminAccessPage = lazy(() => import('./pages/admin/AdminAccessPage'));
+const AdminDashboardOverview = lazy(() => import('./pages/admin/AdminDashboardOverview'));
+const AdminStudentDirectory = lazy(() => import('./pages/admin/AdminStudentDirectory'));
+const AdminMembershipPlans = lazy(() => import('./pages/admin/AdminMembershipPlans'));
+const AdminPaymentSettings = lazy(() => import('./pages/admin/AdminPaymentSettings'));
+const AdminPaymentReconciliation = lazy(() => import('./pages/admin/AdminPaymentReconciliation'));
+const AdminPaymentGateway = lazy(() => import('./pages/admin/AdminPaymentGateway'));
+const AdminSupabaseDiagnostics = lazy(() => import('./pages/admin/AdminSupabaseDiagnostics'));
+const AdminReportsAndExports = lazy(() => import('./pages/admin/AdminReportsAndExports'));
+const AdminEmailCenter = lazy(() => import('./pages/admin/AdminEmailCenter'));
+const AdminGoogleLoginSettings = lazy(() => import('./pages/admin/AdminGoogleLoginSettings'));
 
 // Student Educational Pages
-import DashboardPage from './pages/DashboardPage';
-import CoursesPage from './pages/CoursesPage';
-import CourseDetailPage from './pages/CourseDetailPage';
-import CourseCategoryPage from './pages/CourseCategoryPage';
-import SubjectModulesPage from './pages/SubjectModulesPage';
-import ChapterLessonsPage from './pages/ChapterLessonsPage';
-import LessonViewPage from './pages/LessonViewPage';
-import StudentTestSeriesPage from './pages/StudentTestSeriesPage';
-import StudentTestPapersPage from './pages/StudentTestPapersPage';
-import ExamEnginePage from './pages/ExamEnginePage';
-import TestResultPage from './pages/TestResultPage';
-import PerformancePage from './pages/PerformancePage';
-import BookmarksPage from './pages/BookmarksPage';
-import MorePage from './pages/MorePage';
-import StudentTasksPage from './pages/StudentTasksPage';
-import LearnLivePage from './pages/LearnLivePage';
-import StudentProfilePage from './pages/StudentProfilePage';
-import StudentMembershipPage from './pages/StudentMembershipPage';
-import SettingsPage from './pages/SettingsPage';
+const DashboardPage = lazy(() => import('./pages/DashboardPage'));
+const CoursesPage = lazy(() => import('./pages/CoursesPage'));
+const CourseDetailPage = lazy(() => import('./pages/CourseDetailPage'));
+const CourseCategoryPage = lazy(() => import('./pages/CourseCategoryPage'));
+const SubjectModulesPage = lazy(() => import('./pages/SubjectModulesPage'));
+const ChapterLessonsPage = lazy(() => import('./pages/ChapterLessonsPage'));
+const LessonViewPage = lazy(() => import('./pages/LessonViewPage'));
+const StudentTestSeriesPage = lazy(() => import('./pages/StudentTestSeriesPage'));
+const StudentTestPapersPage = lazy(() => import('./pages/StudentTestPapersPage'));
+const ExamEnginePage = lazy(() => import('./pages/ExamEnginePage'));
+const TestResultPage = lazy(() => import('./pages/TestResultPage'));
+const PerformancePage = lazy(() => import('./pages/PerformancePage'));
+const BookmarksPage = lazy(() => import('./pages/BookmarksPage'));
+const MorePage = lazy(() => import('./pages/MorePage'));
+const StudentTasksPage = lazy(() => import('./pages/StudentTasksPage'));
+const LearnLivePage = lazy(() => import('./pages/LearnLivePage'));
+const StudentProfilePage = lazy(() => import('./pages/StudentProfilePage'));
+const StudentMembershipPage = lazy(() => import('./pages/StudentMembershipPage'));
+const SettingsPage = lazy(() => import('./pages/SettingsPage'));
 import CrumpledPaperBackground from './components/canvas/CrumpledPaperBackground';
 
 function ScrollToTop() {
@@ -73,6 +73,7 @@ export default function App() {
           <CrumpledPaperBackground />
           <div className="app-viewport min-vh-100 d-flex flex-column" style={{ backgroundColor: 'transparent', position: 'relative', zIndex: 1 }}>
             <main className="flex-grow-1">
+              <Suspense fallback={<div role="status" style={{padding: '3rem 1.5rem', textAlign: 'center', color: 'var(--text-primary)'}}>Opening your page…</div>}>
               <Routes>
                 {/* ==========================================================
                     1. PUBLIC WEBSITE & AUTH EXPERIENCES (V3 WARM EDITORIAL)
@@ -201,6 +202,7 @@ export default function App() {
                 {/* Fallback to Public Homepage */}
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
+              </Suspense>
             </main>
             <Toast />
           </div>

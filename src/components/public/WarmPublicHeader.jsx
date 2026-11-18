@@ -13,7 +13,9 @@ export default function WarmPublicHeader() {
   const [activeSection, setActiveSection] = useState('hero');
 
   useEffect(() => {
-    const handleScroll = () => {
+    let frame=0;
+    const updateScroll = () => {
+      frame=0;
       const currentScrollY = window.scrollY;
       setScrolled(currentScrollY > 20);
 
@@ -31,9 +33,10 @@ export default function WarmPublicHeader() {
       }
     };
 
+    const handleScroll=()=>{ if(!frame) frame=requestAnimationFrame(updateScroll); };
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => { window.removeEventListener('scroll', handleScroll); cancelAnimationFrame(frame); };
   }, []);
 
   // Lock background body scroll when mobile menu is open
@@ -67,7 +70,7 @@ export default function WarmPublicHeader() {
           {/* Authentic Brand Lockup with Round Cropped Logo Mark */}
           <Link to="/" className="v3-brand-link" aria-label="Pratyaksh Ayurveda Homepage">
             <img
-              src="/assets/website-assets/img/logo-round.svg"
+              src="/assets/website-assets/img/logo-round.svg" width="48" height="48"
               alt="Pratyaksh Ayurveda"
               className="v3-brand-logo-round"
               onError={(e) => {
@@ -170,7 +173,7 @@ export default function WarmPublicHeader() {
             <div className="v3-mobile-drawer-header">
               <Link to="/" onClick={() => setMobileMenuOpen(false)} className="v3-drawer-brand">
                 <img
-                  src="/assets/website-assets/img/logo-round.svg"
+                  src="/assets/website-assets/img/logo-round.svg" width="48" height="48"
                   alt="Pratyaksh Ayurveda"
                   className="v3-drawer-logo-round"
                   onError={(e) => {

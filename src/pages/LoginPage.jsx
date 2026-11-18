@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import {useGoogleButtonWidth} from '../components/auth/useGoogleButtonWidth';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { 
   ArrowLeft, 
@@ -48,6 +49,8 @@ export default function LoginPage() {
   // Google Identity Services (GIS) State
   const [googleConfig, setGoogleConfig] = useState({ enabled: false, clientId: null });
   const [gisLoaded, setGisLoaded] = useState(false);
+  const googleButtonWidth=useGoogleButtonWidth('google-student-signin-slot',googleConfig.enabled && Boolean(googleConfig.clientId));
+  const googleLoginRef=useRef(loginWithGoogle);googleLoginRef.current=loginWithGoogle;
 
   // Fetch Public Authentication Providers Configuration
   useEffect(() => {
@@ -77,7 +80,7 @@ export default function LoginPage() {
 
   // Render Official Google Sign-In Button when Enabled
   useEffect(() => {
-    if (!gisLoaded || !googleConfig.enabled || !googleConfig.clientId || !window.google?.accounts?.id) {
+    if (!googleButtonWidth || !gisLoaded || !googleConfig.enabled || !googleConfig.clientId || !window.google?.accounts?.id) {
       return;
     }
 
@@ -88,7 +91,7 @@ export default function LoginPage() {
           if (!response?.credential) return;
           setLoading(true);
           setStatusMessage({ type: '', text: '' });
-          const res = await loginWithGoogle(response.credential);
+          const res = await googleLoginRef.current(response.credential);
           if (res.success) {
             setStatusMessage({ type: 'success', text: 'Welcome! Signed in with Google. Entering classroom...' });
             setTimeout(() => navigate(returnTo, { replace: true }), 400);
@@ -109,13 +112,13 @@ export default function LoginPage() {
           text: 'continue_with',
           shape: 'rectangular',
           logo_alignment: 'left',
-          width: 376
+          width: googleButtonWidth
         });
       }
     } catch (err) {
       console.error('[GoogleGIS] Initialization error:', err);
     }
-  }, [gisLoaded, googleConfig, resolvedTheme, navigate, loginWithGoogle]);
+  }, [gisLoaded, googleConfig, resolvedTheme, navigate, returnTo, googleButtonWidth]);
 
   // Password Login State
   const [email, setEmail] = useState('');
@@ -267,7 +270,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="v3-public-root" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: 'transparent' }}>
+    <div className="v3-public-root auth-form-page" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: 'transparent' }}>
       {/* Mini Header */}
       <header style={{ padding: '1.25rem 2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-subtle)', background: 'var(--bg-surface)' }}>
         <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none', color: 'var(--text-primary)', fontSize: '0.86rem', fontWeight: 500 }}>
@@ -289,7 +292,7 @@ export default function LoginPage() {
 
       {/* Main Content Area */}
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2.5rem 1.5rem' }}>
-        <div style={{ width: '100%', maxWidth: '440px', background: 'var(--bg-surface)', border: '1px solid var(--border-subtle)', borderRadius: '18px', padding: '2.25rem 2rem', boxShadow: '0 16px 40px rgba(33, 31, 28, 0.06)' }}>
+        <div className="auth-form-card" style={{ width: '100%', maxWidth: '440px', background: 'var(--bg-surface)', border: '1px solid var(--border-subtle)', borderRadius: '18px', padding: '2.25rem 2rem', boxShadow: '0 16px 40px rgba(33, 31, 28, 0.06)' }}>
           {/* Logo & Headline */}
           <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
             <Link to="/" style={{ display: 'inline-block', marginBottom: '1.25rem', textDecoration: 'none' }} title="Return to Homepage">
@@ -507,8 +510,8 @@ export default function LoginPage() {
                 <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.4rem' }}>
                   Registered Email Address
                 </label>
-                <div style={{ display: 'flex', gap: '0.5rem' }}>
-                  <div style={{ position: 'relative', flex: 1 }}>
+                <div className="auth-email-row" style={{ display: 'flex', gap: '0.5rem' }}>
+                  <div style={{ position: 'relative', flex: 1, minWidth: 0 }}>
                     <Mail size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
                     <input
                       type="email"
@@ -565,7 +568,7 @@ export default function LoginPage() {
                     </button>
                   </div>
 
-                  <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', margin: '0.75rem 0' }}>
+                  <div className="auth-otp-digits" style={{ display: 'flex', gap: '8px', justifyContent: 'center', margin: '0.75rem 0' }}>
                     {otpDigits.map((digit, idx) => (
                       <input
                         key={idx}

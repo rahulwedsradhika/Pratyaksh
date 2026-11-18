@@ -2,6 +2,8 @@
  * Compatibility wrapper for the app's first-party server auth endpoints.
  * Despite the historic name, this app does not authenticate with Supabase.
  */
+import {readApiResponse} from './apiResponse';
+
 class LocalSupabaseAuthProxy {
   constructor() {
     this._listeners = [];
@@ -58,7 +60,7 @@ class LocalSupabaseAuthProxy {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password, authProvider })
     });
-    const data = await res.json();
+    const data = await readApiResponse(res);
     if (!data.status) {
       return { data: null, error: new Error(data.message || 'Login failed') };
     }
@@ -74,9 +76,9 @@ class LocalSupabaseAuthProxy {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, purpose: options.data?.purpose || 'registration' })
     });
-    const data = await res.json();
+    const data = await readApiResponse(res);
     if (!data.status) {
-      const error = new Error(data.message || 'Failed to dispatch code');
+      const error = new Error(data.message || data.error || 'Failed to dispatch code');
       error.code = data.code;
       return { data: null, error };
     }
@@ -97,7 +99,7 @@ class LocalSupabaseAuthProxy {
         planId: options.data?.plan_id
       })
     });
-    const data = await res.json();
+    const data = await readApiResponse(res);
     if (!data.status) {
       return { data: null, error: new Error(data.message || 'Invalid verification code') };
     }
@@ -123,7 +125,7 @@ class LocalSupabaseAuthProxy {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email })
     });
-    const data = await res.json();
+    const data = await readApiResponse(res);
     return { data: { message: data.message }, error: data.status ? null : new Error(data.message) };
   }
 
@@ -133,7 +135,7 @@ class LocalSupabaseAuthProxy {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ newPassword: password })
     });
-    const data = await res.json();
+    const data = await readApiResponse(res);
     return { data: { user: null }, error: data.status ? null : new Error(data.message) };
   }
 
