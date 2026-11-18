@@ -15,12 +15,14 @@ function render(navigator,props={}) {
   return renderToStaticMarkup(React.createElement(module.exports.default,{bunnyId:'6a9fae50-0ff8-46e1-a13e-53df04f8349e',title:'Fixture lecture',noteId:'fixture-note',...props}));
 }
 
-test('iPhone and iPad open the correct lecture through an explicit no-referrer browser link',()=>{
+test('iPhone and iPad open the correct lecture through a same-tab native no-referrer browser link',()=>{
   for(const navigator of [{userAgent:'iPhone',platform:'iPhone'},{userAgent:'Macintosh',platform:'MacIntel',maxTouchPoints:5}]){
     const html=render(navigator);
     const url='https://iframe.mediadelivery.net/embed/330113/6a9fae50-0ff8-46e1-a13e-53df04f8349e?autoplay=false&amp;playsinline=true';
     assert.ok(!html.includes('<iframe'));
     assert.ok(html.includes('Play lecture in browser'));
+    assert.ok(html.includes('target="_self"'));
+    assert.ok(!html.includes('target="_blank"'));
     assert.ok(html.includes(`href="${url}"`));
     assert.ok(html.match(/<a[^>]+rel="noopener noreferrer"[^>]+referrerPolicy="no-referrer"/));
     assert.ok(html.includes('View'));assert.ok(html.includes('Download'));

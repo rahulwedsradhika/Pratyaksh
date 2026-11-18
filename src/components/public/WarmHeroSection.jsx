@@ -324,7 +324,7 @@ export default function WarmHeroSection() {
 
                   {/* Responsive Iframe Container for Genuine Bunny Stream with no-referrer */}
                   <div className="v3-bunny-iframe-wrapper">
-                    {appleTouch ? <a href={bunnyDirectUrl} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer" className="v3-video-load-button" aria-label={`Watch demo lecture in browser: ${activeLecture.title}`}><Play size={36} aria-hidden="true" /><strong>Watch a free lecture</strong><span>Opens the video player in your browser</span></a> : showInteractivePlayer ? <iframe
+                    {appleTouch ? <a href={bunnyDirectUrl} target="_self" rel="noopener noreferrer" referrerPolicy="no-referrer" className="v3-video-load-button" aria-label={`Watch demo lecture in browser: ${activeLecture.title}`}><Play size={36} aria-hidden="true" /><strong>Watch a free lecture</strong><span>Opens the video player in your browser</span></a> : showInteractivePlayer ? <iframe
                       src={bunnyEmbedUrl}
                       title={activeLecture.title}
                       loading="lazy"
@@ -356,7 +356,7 @@ export default function WarmHeroSection() {
                     <a
                       href={bunnyDirectUrl}
                       referrerPolicy="no-referrer"
-                      target="_blank"
+                      target={appleTouch ? "_self" : "_blank"}
                       rel="noopener noreferrer"
                       className="v3-direct-player-link"
                       title="Open full-screen Direct Player"

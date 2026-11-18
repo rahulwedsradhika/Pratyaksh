@@ -144,10 +144,9 @@ export default function VideoPlayer({
         style={{ width: '100%', maxWidth: '100%', aspectRatio: '16/9', minHeight: externalPlaybackUrl ? 210 : 0, backgroundColor: '#0c0d10' }}>
         {externalPlaybackUrl ? (
           <div className="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column align-items-center justify-content-center p-3 text-center" style={{color:'#f5f3ef',gap:12}}>
-            <a href={externalPlaybackUrl} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer"
-              className="editorial-btn editorial-btn-primary" aria-label={'Play lecture in browser: '+title}
-              onClick={()=>playbackRef.current?.()}>Play lecture in browser</a>
-            <p style={{color:'#d0cac2',fontSize:14,margin:0,maxWidth:420}}>Open this lecture in your browser. Return here for your notes and next lesson.</p>
+            <a href={externalPlaybackUrl} target="_self" rel="noopener noreferrer" referrerPolicy="no-referrer"
+              className="editorial-btn editorial-btn-primary" aria-label={'Play lecture in browser: '+title}>Play lecture in browser</a>
+            <p style={{color:'#d0cac2',fontSize:14,margin:0,maxWidth:420}}>Opens this lecture in the current browser tab. Use Back to return to your notes and next lesson.</p>
           </div>
         ) : normalized.type === 'embed' && embeddedUrl ? (
           <iframe
