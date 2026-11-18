@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   isAppleTouchDevice, isStandaloneWebApp, isSignedVideoUrl,
-  getCompatibleBunnyEmbedUrl, getTrustedStandaloneBunnyUrl
+  getCompatibleBunnyEmbedUrl, getTrustedStandaloneBunnyUrl, getAppleLectureLaunchUrl
 } from '../src/utils/appleVideoCompatibility.js';
 
 const original = 'https://iframe.mediadelivery.net/embed/330113/58d65542-883a-4fdb-971f-51bc7eea7581?autoplay=false';
@@ -14,6 +14,16 @@ test('detect iPadOS Safari, desktop-mode iPadOS, and installed Home Screen app',
   assert.equal(isAppleTouchDevice({platform:'MacIntel',maxTouchPoints:0}),false);
   assert.equal(isStandaloneWebApp({standalone:true}),true);
   assert.equal(isStandaloneWebApp({}, ()=>({matches:true})),true);
+});
+
+test('iOS lecture launch requests autoplay on a validated top-level provider page',()=>{
+  assert.equal(isAppleTouchDevice({platform:'iPad',userAgent:'Mozilla/5.0 (Macintosh; Intel Mac OS X)'}),true);
+  assert.equal(isAppleTouchDevice({platform:'Linux armv8',userAgent:'Android',maxTouchPoints:5}),false);
+  const url=new URL(getAppleLectureLaunchUrl({bunnyId:'6a9fae50-0ff8-46e1-a13e-53df04f8349e'}));
+  assert.equal(url.origin,'https://player.mediadelivery.net');assert.equal(url.pathname,'/play/330113/6a9fae50-0ff8-46e1-a13e-53df04f8349e');
+  assert.equal(url.searchParams.get('autoplay'),'true');assert.equal(url.searchParams.get('nativeHls'),'off');
+  assert.equal(getAppleLectureLaunchUrl({secureEmbedUrl:original+'&token=abc%2Bdef&expires=1920000000'}),original+'&token=abc%2Bdef&expires=1920000000');
+  for(const source of ['javascript:alert(1)','https://evil.example/embed/330113/6a9fae50-0ff8-46e1-a13e-53df04f8349e','https://player.mediadelivery.net/play/999/6a9fae50-0ff8-46e1-a13e-53df04f8349e','https://user:secret@player.mediadelivery.net/play/330113/6a9fae50-0ff8-46e1-a13e-53df04f8349e'])assert.equal(getAppleLectureLaunchUrl({src:source}),'');
 });
 
 test('disable autoplay and use inline Bunny player controls on iPad', () => {

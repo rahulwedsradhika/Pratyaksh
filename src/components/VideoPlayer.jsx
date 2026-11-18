@@ -6,17 +6,15 @@ import {
 } from '../utils/videoSourceNormalization';
 import {
   isAppleTouchDevice,
+  getAppleLectureLaunchUrl,
   getCompatibleBunnyEmbedUrl,
   getTrustedStandaloneBunnyUrl
 } from '../utils/appleVideoCompatibility';
 import { readBunnyPlayerEvent, canOpenVideoInBrowser } from '../utils/embeddedVideoHealth';
 
 /**
- * The embedded provider player is mounted as soon as a lecture is selected.
- * Students tap Play within Bunny's own controls, keeping the video in the
- * classroom on desktop, iPad Safari and installed Home Screen web apps.
- * No thumbnail gate or forced autoplay. An optional trusted Bunny direct-player
- * link is available to every browser, whether embedding succeeds or fails.
+ * Android and desktop use the embedded player. iPhone and iPad open the trusted
+ * standalone provider player on an explicit tap, keeping notes in the classroom.
  */
 export default function VideoPlayer({
   src = '',
@@ -57,6 +55,7 @@ export default function VideoPlayer({
     normalized.bunnyId || bunnyId || '', BUNNY_STREAM_LIBRARY_ID);
   // The external-player action is always available when the current lecture
   // has a validated Bunny URL, independent of browser or player load status.
+  const externalPlaybackUrl=appleTouch?getAppleLectureLaunchUrl({secureEmbedUrl,src,directPlayUrl,bunnyId:normalized.bunnyId||bunnyId,libraryId:BUNNY_STREAM_LIBRARY_ID}):'';
   const canOpenBrowser = canOpenVideoInBrowser(directPlayerUrl);
 
   useEffect(() => {
@@ -146,8 +145,13 @@ export default function VideoPlayer({
   return (
     <div className="d-flex flex-column gap-3 w-100" style={{ width: '100%', maxWidth: '100%' }}>
       <div className="position-relative rounded-3 overflow-hidden w-100 video-player-container"
-        style={{ width: '100%', maxWidth: '100%', aspectRatio: '16/9', minHeight: 0, backgroundColor: '#0c0d10' }}>
-        {normalized.type === 'embed' && embeddedUrl ? (
+        style={{ width: '100%', maxWidth: '100%', aspectRatio: '16/9', minHeight: externalPlaybackUrl?210:0, backgroundColor: '#0c0d10' }}>
+        {externalPlaybackUrl ? (
+          <div className="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column align-items-center justify-content-center p-3 text-center" style={{color:'#f5f3ef',gap:12}}>
+            <a href={externalPlaybackUrl} target="_blank" rel="noopener noreferrer" className="editorial-btn editorial-btn-primary" aria-label={'Play lecture in browser: '+title} onClick={()=>playbackRef.current?.()}>Play lecture in browser</a>
+            <p style={{color:'#d0cac2',fontSize:14,margin:0,maxWidth:420}}>On iPhone and iPad, lectures open in the video provider’s player. Return here for your notes.</p>
+          </div>
+        ) : normalized.type === 'embed' && embeddedUrl ? (
           <iframe
             ref={iframeRef}
             key={lessonId + '-' + embeddedUrl + '-' + reloadCount}
@@ -192,7 +196,7 @@ export default function VideoPlayer({
         )}
       </div>
 
-      {(normalized.type === 'embed' || normalized.type === 'native') && (
+      {!externalPlaybackUrl && (normalized.type === 'embed' || normalized.type === 'native') && (
         <div className={`lecture-video-support ${playerStatus === 'failed' || playerStatus === 'timeout' ? 'lecture-video-support--warning' : ''}`}
           role={playerStatus === 'failed' || playerStatus === 'timeout' ? 'status' : undefined}>
           <div className="lecture-video-support__copy">

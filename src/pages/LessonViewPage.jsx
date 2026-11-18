@@ -1,3 +1,4 @@
+import {isAppleTouchDevice,getAppleLectureLaunchUrl} from '../utils/appleVideoCompatibility';
 import NoteActions from '../components/NoteActions';
 import { notesForLecture } from '../services/lectureNotes';
 import '../styles/classroom.css';
@@ -92,17 +93,18 @@ export default function LessonViewPage() {
     };
   }, [chapterId, requestedLecture]);
 
+  const appleTouch = typeof navigator !== 'undefined' && isAppleTouchDevice(navigator);
   const activeLesson = activeLessonIndex === null ? null : lessons[activeLessonIndex];
   const activeNotes = notesForLecture(activeLesson, notes, lessons);
   const activeLectureId = activeLesson?._id;
   useEffect(() => {
-    if (loading || !activeLectureId) return;
+    if (loading || !activeLectureId || appleTouch) return;
     let active = true;
     setHistoryError('');
     saveLectureHistory({ chapterId, lectureId: activeLectureId })
       .catch(error => { if (active) setHistoryError(error.message); });
     return () => { active = false; };
-  }, [loading, chapterId, activeLectureId]);
+  }, [loading, chapterId, activeLectureId, appleTouch]);
 
 
   return (
@@ -259,11 +261,17 @@ export default function LessonViewPage() {
                     ) : lessons.length > 0 ? (
                       <div className="classroom-lecture-list">
                         <div className="classroom-list-heading"><h2>Available lectures</h2><p>Choose a lecture to start learning.</p></div>
-                        {lessons.map((lesson, index) => <button type="button" className="classroom-lecture-row" key={lesson._id} onClick={() => setActiveLessonIndex(index)}>
+                        {lessons.map((lesson, index) => {
+                          const launchUrl=appleTouch?getAppleLectureLaunchUrl({secureEmbedUrl:lesson.secureEmbedUrl,src:lesson.videoUrl,directPlayUrl:lesson.directPlayUrl,bunnyId:lesson.bunnyID||lesson.bunny_id}):'';
+                          const LectureAction=launchUrl?'a':'button';
+                          return <LectureAction {...(launchUrl?{href:launchUrl,target:'_blank',rel:'noopener noreferrer'}:{type:'button'})} className="classroom-lecture-row" key={lesson._id} onClick={() => {
+                            setActiveLessonIndex(index);
+                            if(launchUrl)saveLectureHistory({chapterId,lectureId:lesson._id}).catch(error=>setHistoryError(error.message));
+                          }}>
                           <span className="classroom-lecture-number">{index + 1}</span>
                           <span className="classroom-lecture-label"><strong>{lesson.title || `Lecture ${index + 1}`}</strong>{lesson.duration && <small><Clock size={13}/>{lesson.duration}</small>}</span>
                           <span className="classroom-lecture-play"><Play size={18}/><span>Watch</span></span>
-                        </button>)}
+                        </LectureAction>;})}
                       </div>
                     ) : (
                       <div className="text-center py-5 text-muted">

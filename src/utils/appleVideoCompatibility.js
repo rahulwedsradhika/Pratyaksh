@@ -10,8 +10,8 @@ const AUTH_KEYS = new Set(['token', 'expires', 'signature', 'token_path', 'secur
 export function isAppleTouchDevice(navigatorLike = {}) {
   const ua = navigatorLike.userAgent || '';
   const platform = navigatorLike.platform || '';
-  return /iPad|iPhone|iPod/i.test(ua) ||
-    (/Mac/i.test(platform) && Number(navigatorLike.maxTouchPoints || 0) > 1);
+  return /iPad|iPhone|iPod/i.test(ua + ' ' + platform) ||
+    (/Mac/i.test(platform + ' ' + ua) && Number(navigatorLike.maxTouchPoints || 0) > 1);
 }
 
 export function isStandaloneWebApp(navigatorLike = {}, matchMediaFn) {
@@ -76,7 +76,7 @@ export function getTrustedStandaloneBunnyUrl(candidate, bunnyId = '', libraryId 
     if (typeof source !== 'string' || !source.trim()) continue;
     try {
       const url = new URL(source.trim());
-      if (url.protocol !== 'https:' || url.hostname !== 'player.mediadelivery.net') continue;
+      if (url.protocol !== 'https:' || url.username || url.password || url.hostname !== 'player.mediadelivery.net') continue;
       const match = url.pathname.match(/^\/play\/(\d+)\/([0-9a-fA-F-]{16,})\/?$/);
       if (!match || match[1] !== String(libraryId) || !UUID.test(match[2])) continue;
       return url.href;
@@ -85,4 +85,30 @@ export function getTrustedStandaloneBunnyUrl(candidate, bunnyId = '', libraryId 
     }
   }
   return '';
+}
+
+
+// Open the same official top-level player verified by the student in Safari.
+// Signed provider URLs retain every byte; never manufacture or strip tokens.
+export function getAppleLectureLaunchUrl({secureEmbedUrl='',src='',directPlayUrl='',bunnyId='',libraryId='330113'}={}) {
+  let identifiedId=UUID.test(bunnyId)?bunnyId:'';
+  for(const candidate of [secureEmbedUrl,src,directPlayUrl]) {
+    if(typeof candidate!=='string'||!candidate)continue;
+    try {
+      const url=new URL(candidate);
+      const match=url.pathname.match(/^\/(embed|play)\/(\d+)\/([0-9a-fA-F-]+)\/?$/);
+      if(url.protocol!=='https:'||url.username||url.password||!['iframe.mediadelivery.net','player.mediadelivery.net'].includes(url.hostname)||!match||match[2]!==String(libraryId)||!UUID.test(match[3]))continue;
+      if(isSignedVideoUrl(candidate))return candidate;
+      if(!identifiedId)identifiedId=match[3];
+    } catch {}
+  }
+  if(!identifiedId)return '';
+  const direct=getTrustedStandaloneBunnyUrl(directPlayUrl,identifiedId,libraryId);
+  if(!direct)return '';
+  const url=new URL(direct);
+  url.searchParams.set('autoplay','true');
+  url.searchParams.set('playsinline','true');
+  url.searchParams.set('nativeHls','off');
+  url.searchParams.set('rememberSettings','false');
+  return url.href;
 }
