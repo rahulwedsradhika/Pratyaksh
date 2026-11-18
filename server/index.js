@@ -12,6 +12,7 @@ import { storageDirectory } from './persistentStorage.js';
 import {protectPrivateDocuments} from './publicAssetAccess.js';
 import {consumeOneTimeCode} from './oneTimeCodes.js';
 import {paperQuestions} from './paperQuestions.js';
+import {createCourseDetailHandler, subjectSummary} from './subjectCatalog.js';
 import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
@@ -403,42 +404,7 @@ app.get('/api/course/category/:catId', async (req, res) => {
   }
 });
 
-app.get(['/api/course/:id', '/api/course/allData/:id'], async (req, res) => {
-  try {
-    const { id } = req.params;
-    const course = await db.prepare('SELECT * FROM courses WHERE id = ?').get(id);
-    if (!course) {
-      return res.status(404).json({ status: false, message: 'Course not found' });
-    }
-    const subjects = await db.prepare('SELECT * FROM subjects WHERE course_id = ? AND is_active=1').all(id);
-    res.json({
-      status: true,
-      message: 'Course retrieved successfully',
-      data: {
-        _id: course.id,
-        name: course.name,
-        detail: course.detail,
-        img: course.img,
-        price: course.price,
-        discount_price: course.discount_price,
-        categoryID: {
-          _id: course.category_id,
-          name: course.category_name
-        },
-        rating: course.rating,
-        studentCount: course.student_count,
-        subjects: subjects.map((s) => ({
-          _id: s.id,
-          name: s.name,
-          detail: s.detail,
-          icon: s.icon
-        }))
-      }
-    });
-  } catch (err) {
-    res.status(500).json({ status: false, error: err.message });
-  }
-});
+app.get(['/api/course/:id', '/api/course/allData/:id'], createCourseDetailHandler(db));
 
 // Subjects (Authentic 2026 Student Hierarchy & Course Catalog)
 app.get([
@@ -465,28 +431,8 @@ async (req, res) => {
       if (s.name.includes('Purvardha')) count = 85;
       if (s.name.includes('Uttarardha')) count = 53;
 
-      const defaultImgs = {
-        'Charaka Samhita (Purvardha)': 'upload/1777645267248_19.png',
-        'Charaka Samhita (Uttarardha)': 'upload/1777645288643_20.png',
-        'Sushruta Samhita': 'upload/1777645309862_21.png',
-        'Ayurveda Subjects': 'upload/1777645328255_23.png',
-        'Modern Subjects': 'upload/1777645360704_24.png',
-        'Other Samhita': 'upload/1777645458643_22.png',
-        'Revision Classes': 'upload/1777645372906_26.png',
-        'Discussion Sessions': 'upload/1777645399621_25.png',
-        'NExT Classes': 'upload/1777645442262_27.png'
-      };
-
       return {
-        _id: s.id,
-        id: s.id,
-        courseID: s.course_id,
-        name: s.name,
-        detail: s.detail,
-        icon: s.icon,
-        img: s.img || defaultImgs[s.name] || 'upload/1777645267248_19.png',
-        chapterCount: count,
-        chaptersCount: count,
+        ...subjectSummary(s, count),
         expireDays: 201,
         status: s.is_active ? 'Live' : 'Upcoming'
       };

@@ -4,6 +4,7 @@ import { useParams, Link } from 'react-router-dom';
 import { BookOpen, ChevronRight, ArrowLeft, ArrowRight, Layers } from 'lucide-react';
 import StudentAppShell from '../components/StudentAppShell';
 import PageContainer from '../components/shell/PageContainer';
+import SubjectArtwork from '../components/SubjectArtwork';
 
 export default function SubjectModulesPage() {
   const { id } = useParams();
@@ -96,10 +97,6 @@ export default function SubjectModulesPage() {
         ) : (
           <div className="row g-4">
             {subjects.map((sub) => {
-              const imgUrl = sub.img 
-                ? (sub.img.startsWith('http') ? sub.img : `/${sub.img}`)
-                : '/upload/1777645267248_19.png';
-              
               const chapCount = sub.chapterCount || sub.chaptersCount || (sub.name?.includes('Purvardha') ? 85 : sub.name?.includes('Uttarardha') ? 53 : 0);
               const subId = sub._id || sub.id;
 
@@ -108,15 +105,7 @@ export default function SubjectModulesPage() {
                   <div className="editorial-card h-100 d-flex flex-column justify-content-between">
                     {/* Subject Artwork Thumbnail */}
                     <div style={{ width: '100%', aspectRatio: '16/9', overflow: 'hidden', backgroundColor: 'var(--bg-subtle)', position: 'relative' }}>
-                      <img
-                        src={imgUrl}
-                        alt={sub.name}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = '/upload/1777645267248_19.png';
-                        }}
-                      />
+                      <SubjectArtwork subject={sub} />
                       {chapCount > 0 && (
                         <span 
                           className="editorial-badge" 
