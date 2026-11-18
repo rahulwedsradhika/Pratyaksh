@@ -15,17 +15,29 @@ function render(navigator,props={}) {
   return renderToStaticMarkup(React.createElement(module.exports.default,{bunnyId:'6a9fae50-0ff8-46e1-a13e-53df04f8349e',title:'Fixture lecture',noteId:'fixture-note',...props}));
 }
 
-test('iPhone and desktop-mode iPad render an explicit external play link and keep lecture notes',()=>{
-  for(const navigator of [{userAgent:'iPhone',platform:'iPhone'},{userAgent:'Macintosh',platform:'MacIntel',maxTouchPoints:5}]){
+test('iPhone, iPad and Android embed the requested lecture with no referrer and preserve notes',()=>{
+  for(const navigator of [{userAgent:'iPhone',platform:'iPhone'},{userAgent:'Macintosh',platform:'MacIntel',maxTouchPoints:5},{userAgent:'Android',platform:'Linux'}]){
     const html=render(navigator);
-    assert.ok(!html.includes('<iframe'));assert.ok(html.includes('Play lecture in browser'));assert.ok(html.includes('target="_blank"'));assert.ok(html.includes('noopener noreferrer'));
-    assert.ok(html.includes('/play/330113/6a9fae50-0ff8-46e1-a13e-53df04f8349e?autoplay=true'));assert.ok(html.includes('View'));assert.ok(html.includes('Download'));
+    const url='https://iframe.mediadelivery.net/embed/330113/6a9fae50-0ff8-46e1-a13e-53df04f8349e?autoplay=false&amp;playsinline=true';
+    assert.ok(html.includes('<iframe'));
+    assert.ok(html.includes(`src="${url}"`));
+    assert.ok(html.includes(`href="${url}"`));
+    assert.ok(html.match(/<iframe[^>]+referrerPolicy="no-referrer"/));
+    assert.ok(html.match(/<a[^>]+rel="noopener noreferrer"[^>]+referrerPolicy="no-referrer"/));
+    assert.ok(html.includes('View'));assert.ok(html.includes('Download'));
   }
 });
 
-test('Android retains embedded playback and Apple signed links are preserved in the external action',()=>{
-  assert.ok(render({userAgent:'Android',platform:'Linux',maxTouchPoints:5}).includes('<iframe'));
+test('signed Apple embeds and browser URLs preserve authorization byte for byte',()=>{
   const signed='https://iframe.mediadelivery.net/embed/330113/6a9fae50-0ff8-46e1-a13e-53df04f8349e?token=fixture%2Btoken&expires=1920000000';
   const html=render({userAgent:'iPad'},{secureEmbedUrl:signed});
-  assert.ok(html.includes(signed.replaceAll('&','&amp;')));assert.ok(!html.includes('<iframe'));
+  const escaped=signed.replaceAll('&','&amp;');
+  assert.ok(html.includes(`src="${escaped}"`));assert.ok(html.includes(`href="${escaped}"`));
+});
+
+test('each lecture uses its own ID rather than the example lecture',()=>{
+  const id='093dd15c-bf4e-4ce0-9e29-63369b2a31d4';
+  const html=render({userAgent:'iPhone'},{bunnyId:id});
+  assert.ok(html.includes(`/embed/330113/${id}?autoplay=false&amp;playsinline=true`));
+  assert.ok(!html.includes('6a9fae50-0ff8-46e1-a13e-53df04f8349e'));
 });

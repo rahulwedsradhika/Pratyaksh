@@ -16,12 +16,12 @@ test('detect iPadOS Safari, desktop-mode iPadOS, and installed Home Screen app',
   assert.equal(isStandaloneWebApp({}, ()=>({matches:true})),true);
 });
 
-test('iOS lecture launch requests autoplay on a validated top-level provider page',()=>{
+test('lecture browser URLs use the requested legacy embed format',()=>{
   assert.equal(isAppleTouchDevice({platform:'iPad',userAgent:'Mozilla/5.0 (Macintosh; Intel Mac OS X)'}),true);
   assert.equal(isAppleTouchDevice({platform:'Linux armv8',userAgent:'Android',maxTouchPoints:5}),false);
   const url=new URL(getAppleLectureLaunchUrl({bunnyId:'6a9fae50-0ff8-46e1-a13e-53df04f8349e'}));
-  assert.equal(url.origin,'https://player.mediadelivery.net');assert.equal(url.pathname,'/play/330113/6a9fae50-0ff8-46e1-a13e-53df04f8349e');
-  assert.equal(url.searchParams.get('autoplay'),'true');assert.equal(url.searchParams.get('nativeHls'),'off');
+  assert.equal(url.origin,'https://iframe.mediadelivery.net');assert.equal(url.pathname,'/embed/330113/6a9fae50-0ff8-46e1-a13e-53df04f8349e');
+  assert.equal(url.searchParams.get('autoplay'),'false');assert.equal(url.searchParams.get('playsinline'),'true');
   assert.equal(getAppleLectureLaunchUrl({secureEmbedUrl:original+'&token=abc%2Bdef&expires=1920000000'}),original+'&token=abc%2Bdef&expires=1920000000');
   for(const source of ['javascript:alert(1)','https://evil.example/embed/330113/6a9fae50-0ff8-46e1-a13e-53df04f8349e','https://player.mediadelivery.net/play/999/6a9fae50-0ff8-46e1-a13e-53df04f8349e','https://user:secret@player.mediadelivery.net/play/330113/6a9fae50-0ff8-46e1-a13e-53df04f8349e'])assert.equal(getAppleLectureLaunchUrl({src:source}),'');
 });
@@ -30,10 +30,10 @@ test('disable autoplay and use inline Bunny player controls on iPad', () => {
   const out = new URL(getCompatibleBunnyEmbedUrl(original,{appleTouch:true}));
   assert.equal(out.searchParams.get('autoplay'),'false');
   assert.equal(out.searchParams.get('playsinline'),'true');
-  assert.equal(out.hostname,'player.mediadelivery.net');
-  assert.equal(out.searchParams.get('nativeHls'),'off');
-  assert.equal(out.searchParams.get('preload'),'false');
-  assert.equal(out.searchParams.get('rememberSettings'),'false');
+  assert.equal(out.hostname,'iframe.mediadelivery.net');
+  assert.equal(out.searchParams.has('nativeHls'),false);
+  assert.equal(out.searchParams.has('preload'),false);
+  assert.equal(out.searchParams.has('rememberSettings'),false);
 });
 
 test('desktop also uses explicit tap in embedded player', () => {
@@ -52,8 +52,8 @@ test('preserves signed video URLs byte for byte',()=>{
 });
 
 test('only allows valid trusted direct play links',()=>{
-  assert.equal(getTrustedStandaloneBunnyUrl(direct),direct);
-  assert.equal(getTrustedStandaloneBunnyUrl('https://example.com/test','58d65542-883a-4fdb-971f-51bc7eea7581'),direct);
+  assert.equal(getTrustedStandaloneBunnyUrl(direct),original+'&playsinline=true');
+  assert.equal(getTrustedStandaloneBunnyUrl('https://example.com/test','58d65542-883a-4fdb-971f-51bc7eea7581'),original+'&playsinline=true');
   assert.equal(getTrustedStandaloneBunnyUrl('javascript:alert(1)'), '');
   assert.equal(getTrustedStandaloneBunnyUrl('https://player.mediadelivery.net.evil.example/play/330113/58d65542-883a-4fdb-971f-51bc7eea7581'),'');
   assert.equal(getTrustedStandaloneBunnyUrl('https://player.mediadelivery.net/play/111/58d65542-883a-4fdb-971f-51bc7eea7581'),'');
@@ -62,7 +62,7 @@ test('only allows valid trusted direct play links',()=>{
 
 test('Apple embeds match the Safari-verified player URL without losing lecture parameters',()=>{
   const source='https://iframe.mediadelivery.net/embed/330113/a332cfc3-37f5-4e1b-a558-5d7c14ad167f?autoplay=false';
-  assert.equal(getCompatibleBunnyEmbedUrl(source,{appleTouch:true}),'https://player.mediadelivery.net/embed/330113/a332cfc3-37f5-4e1b-a558-5d7c14ad167f?autoplay=false&playsinline=true&nativeHls=off&preload=false&rememberSettings=false');
+  assert.equal(getCompatibleBunnyEmbedUrl(source,{appleTouch:true}),'https://iframe.mediadelivery.net/embed/330113/a332cfc3-37f5-4e1b-a558-5d7c14ad167f?autoplay=false&playsinline=true');
   const existing=new URL(getCompatibleBunnyEmbedUrl(source+'&t=120&captions=en&nativeHls=safari',{appleTouch:true}));
-  assert.equal(existing.searchParams.get('t'),'120');assert.equal(existing.searchParams.get('captions'),'en');assert.equal(existing.searchParams.get('nativeHls'),'off');
+  assert.equal(existing.searchParams.get('t'),'120');assert.equal(existing.searchParams.get('captions'),'en');assert.equal(existing.searchParams.get('nativeHls'),'safari');
 });

@@ -5,16 +5,13 @@ import {
   BUNNY_STREAM_LIBRARY_ID
 } from '../utils/videoSourceNormalization';
 import {
-  isAppleTouchDevice,
   getAppleLectureLaunchUrl,
   getCompatibleBunnyEmbedUrl,
-  getTrustedStandaloneBunnyUrl
 } from '../utils/appleVideoCompatibility';
 import { readBunnyPlayerEvent, canOpenVideoInBrowser } from '../utils/embeddedVideoHealth';
 
 /**
- * Android and desktop use the embedded player. iPhone and iPad open the trusted
- * standalone provider player on an explicit tap, keeping notes in the classroom.
+ * Use the same no-referrer embedded player on all devices, with a browser fallback.
  */
 export default function VideoPlayer({
   src = '',
@@ -40,7 +37,6 @@ export default function VideoPlayer({
   playbackRef.current = onPlayback;
   const lastActivityRef = useRef(0);
   const [playerStatus, setPlayerStatus] = useState('loading');
-  const appleTouch = typeof navigator !== 'undefined' && isAppleTouchDevice(navigator);
   const normalized = normalizeVideoSource({
     secureEmbedUrl,
     directPlayUrl,
@@ -49,13 +45,10 @@ export default function VideoPlayer({
     libraryId: BUNNY_STREAM_LIBRARY_ID
   });
   const embeddedUrl = normalized.type === 'embed'
-    ? getCompatibleBunnyEmbedUrl(normalized.url, { appleTouch })
+    ? getCompatibleBunnyEmbedUrl(normalized.url)
     : '';
-  const directPlayerUrl = getTrustedStandaloneBunnyUrl(normalized.directPlayUrl || directPlayUrl,
-    normalized.bunnyId || bunnyId || '', BUNNY_STREAM_LIBRARY_ID);
-  // The external-player action is always available when the current lecture
-  // has a validated Bunny URL, independent of browser or player load status.
-  const externalPlaybackUrl=appleTouch?getAppleLectureLaunchUrl({secureEmbedUrl,src,directPlayUrl,bunnyId:normalized.bunnyId||bunnyId,libraryId:BUNNY_STREAM_LIBRARY_ID}):'';
+  const directPlayerUrl = getAppleLectureLaunchUrl({secureEmbedUrl, src,
+    directPlayUrl, bunnyId: normalized.bunnyId || bunnyId, libraryId: BUNNY_STREAM_LIBRARY_ID});
   const canOpenBrowser = canOpenVideoInBrowser(directPlayerUrl);
 
   useEffect(() => {
@@ -145,13 +138,8 @@ export default function VideoPlayer({
   return (
     <div className="d-flex flex-column gap-3 w-100" style={{ width: '100%', maxWidth: '100%' }}>
       <div className="position-relative rounded-3 overflow-hidden w-100 video-player-container"
-        style={{ width: '100%', maxWidth: '100%', aspectRatio: '16/9', minHeight: externalPlaybackUrl?210:0, backgroundColor: '#0c0d10' }}>
-        {externalPlaybackUrl ? (
-          <div className="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column align-items-center justify-content-center p-3 text-center" style={{color:'#f5f3ef',gap:12}}>
-            <a href={externalPlaybackUrl} target="_blank" rel="noopener noreferrer" className="editorial-btn editorial-btn-primary" aria-label={'Play lecture in browser: '+title} onClick={()=>playbackRef.current?.()}>Play lecture in browser</a>
-            <p style={{color:'#d0cac2',fontSize:14,margin:0,maxWidth:420}}>On iPhone and iPad, lectures open in the video provider’s player. Return here for your notes.</p>
-          </div>
-        ) : normalized.type === 'embed' && embeddedUrl ? (
+        style={{ width: '100%', maxWidth: '100%', aspectRatio: '16/9', backgroundColor: '#0c0d10' }}>
+        { normalized.type === 'embed' && embeddedUrl ? (
           <iframe
             ref={iframeRef}
             key={lessonId + '-' + embeddedUrl + '-' + reloadCount}
@@ -196,7 +184,7 @@ export default function VideoPlayer({
         )}
       </div>
 
-      {!externalPlaybackUrl && (normalized.type === 'embed' || normalized.type === 'native') && (
+      {(normalized.type === 'embed' || normalized.type === 'native') && (
         <div className={`lecture-video-support ${playerStatus === 'failed' || playerStatus === 'timeout' ? 'lecture-video-support--warning' : ''}`}
           role={playerStatus === 'failed' || playerStatus === 'timeout' ? 'status' : undefined}>
           <div className="lecture-video-support__copy">
@@ -216,7 +204,7 @@ export default function VideoPlayer({
             </button>
             {canOpenBrowser && (
               <a className="editorial-btn editorial-btn-primary"
-                href={directPlayerUrl} target="_blank" rel="noopener noreferrer"
+                href={directPlayerUrl} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer"
                 aria-label={'Open lecture in browser: ' + title}>
                 <i className="fa-solid fa-arrow-up-right-from-square" aria-hidden="true" />
                 Open Video in Browser

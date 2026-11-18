@@ -33,82 +33,47 @@ export function isSignedVideoUrl(url) {
   }
 }
 
-export function getCompatibleBunnyEmbedUrl(url, { appleTouch = false } = {}) {
-  if (!url || typeof url !== 'string') return '';
+// Validate provider destinations before using them for embeds or browser links.
+function parseBunnyUrl(candidate, libraryId) {
+  if (typeof candidate !== 'string' || !candidate) return null;
   try {
-    const parsed = new URL(url);
-    if (parsed.protocol !== 'https:' ||
-        !['iframe.mediadelivery.net', 'player.mediadelivery.net'].includes(parsed.hostname.toLowerCase()) ||
-        !/^\/embed\/\d+\/[0-9a-fA-F-]{16,}$/.test(parsed.pathname)) {
-      return url;
-    }
-    // Signed embed URLs must remain intact. Appending parameters can invalidate
-    // the provider signature or authorization rules.
-    if (isSignedVideoUrl(url)) return url;
+    const url = new URL(candidate);
+    const match = url.pathname.match(/^\/(embed|play)\/(\d+)\/([0-9a-fA-F-]+)\/?$/);
+    if (url.protocol !== 'https:' || url.username || url.password ||
+        !['iframe.mediadelivery.net', 'player.mediadelivery.net'].includes(url.hostname) ||
+        !match || !UUID.test(match[3]) || (libraryId && match[2] !== String(libraryId))) return null;
+    return {url, libraryId: match[2], videoId: match[3]};
+  } catch { return null; }
+}
 
-    // Mount the actual provider player from the beginning. Playback starts
-    // only when the learner taps the Play control INSIDE the iframe, which is
-    // compatible with iPadOS gesture requirements and other browsers.
-    parsed.searchParams.set('autoplay', 'false');
-    parsed.searchParams.set('playsinline', 'true');
-    if (appleTouch) {
-      // Match the provider URL verified in Safari. Forcing native HLS in a
-      // nested WebKit iframe can select a different path than the working player.
-      parsed.hostname = 'player.mediadelivery.net';
-      parsed.searchParams.set('nativeHls', 'off');
-      parsed.searchParams.set('preload', 'false');
-      // WebKit partitions/restricts third-party storage. Playback must not
-      // depend on preferences saved inside the cross-origin player frame.
-      parsed.searchParams.set('rememberSettings', 'false');
-    }
-    return parsed.toString();
-  } catch {
-    return url;
-  }
+function legacyEmbedUrl(libraryId, videoId) {
+  return `https://iframe.mediadelivery.net/embed/${libraryId}/${videoId}?autoplay=false&playsinline=true`;
+}
+
+export function getCompatibleBunnyEmbedUrl(candidate) {
+  const parsed = parseBunnyUrl(candidate);
+  if (!parsed || parsed.url.pathname.startsWith('/play/')) return candidate || '';
+  // Never rewrite a signed URL: its host, path and parameters may be authenticated.
+  if (isSignedVideoUrl(candidate)) return candidate;
+  parsed.url.hostname = 'iframe.mediadelivery.net';
+  parsed.url.searchParams.set('autoplay', 'false');
+  parsed.url.searchParams.set('playsinline', 'true');
+  return parsed.url.href;
 }
 
 export function getTrustedStandaloneBunnyUrl(candidate, bunnyId = '', libraryId = '330113') {
-  const sources = [candidate];
-  if (UUID.test(bunnyId)) {
-    sources.push('https://player.mediadelivery.net/play/' + libraryId + '/' + bunnyId);
+  const parsed = parseBunnyUrl(candidate, libraryId);
+  if (parsed) {
+    if (isSignedVideoUrl(candidate)) return candidate;
+    return legacyEmbedUrl(parsed.libraryId, parsed.videoId);
   }
-  for (const source of sources) {
-    if (typeof source !== 'string' || !source.trim()) continue;
-    try {
-      const url = new URL(source.trim());
-      if (url.protocol !== 'https:' || url.username || url.password || url.hostname !== 'player.mediadelivery.net') continue;
-      const match = url.pathname.match(/^\/play\/(\d+)\/([0-9a-fA-F-]{16,})\/?$/);
-      if (!match || match[1] !== String(libraryId) || !UUID.test(match[2])) continue;
-      return url.href;
-    } catch {
-      // Ignore invalid or untrusted destination.
-    }
-  }
-  return '';
+  return UUID.test(bunnyId) && /^\d+$/.test(String(libraryId)) ? legacyEmbedUrl(libraryId, bunnyId) : '';
 }
 
-
-// Open the same official top-level player verified by the student in Safari.
-// Signed provider URLs retain every byte; never manufacture or strip tokens.
+// Shared by embedded and external playback; each lecture retains its own ID.
 export function getAppleLectureLaunchUrl({secureEmbedUrl='',src='',directPlayUrl='',bunnyId='',libraryId='330113'}={}) {
-  let identifiedId=UUID.test(bunnyId)?bunnyId:'';
-  for(const candidate of [secureEmbedUrl,src,directPlayUrl]) {
-    if(typeof candidate!=='string'||!candidate)continue;
-    try {
-      const url=new URL(candidate);
-      const match=url.pathname.match(/^\/(embed|play)\/(\d+)\/([0-9a-fA-F-]+)\/?$/);
-      if(url.protocol!=='https:'||url.username||url.password||!['iframe.mediadelivery.net','player.mediadelivery.net'].includes(url.hostname)||!match||match[2]!==String(libraryId)||!UUID.test(match[3]))continue;
-      if(isSignedVideoUrl(candidate))return candidate;
-      if(!identifiedId)identifiedId=match[3];
-    } catch {}
+  for (const candidate of [secureEmbedUrl, src, directPlayUrl]) {
+    if (parseBunnyUrl(candidate, libraryId)) return getTrustedStandaloneBunnyUrl(candidate, '', libraryId);
   }
-  if(!identifiedId)return '';
-  const direct=getTrustedStandaloneBunnyUrl(directPlayUrl,identifiedId,libraryId);
-  if(!direct)return '';
-  const url=new URL(direct);
-  url.searchParams.set('autoplay','true');
-  url.searchParams.set('playsinline','true');
-  url.searchParams.set('nativeHls','off');
-  url.searchParams.set('rememberSettings','false');
-  return url.href;
+  return getTrustedStandaloneBunnyUrl('', bunnyId, libraryId);
 }
