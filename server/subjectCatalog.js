@@ -1,3 +1,15 @@
+import artwork from './data/subjectArtwork.json' with {type:'json'};
+
+export function subjectArtworkPath(subject) {
+  const stored = typeof subject.img === 'string' ? subject.img.trim() : '';
+  const original = artwork[subject.id];
+  // Exact identity and parent matching: never borrow another subject's banner.
+  if (!original || original.courseId !== subject.course_id || original.name.trim() !== String(subject.name || '').trim()) return stored;
+  // An administrator's replacement always takes precedence over the snapshot.
+  if (stored && stored.replace(/^\/+/, '') !== original.originalPath) return stored;
+  return original.assetPath;
+}
+
 export function subjectSummary(subject, chapterCount) {
   return {
     _id: subject.id,
@@ -6,7 +18,7 @@ export function subjectSummary(subject, chapterCount) {
     name: subject.name,
     detail: subject.detail,
     icon: subject.icon,
-    img: typeof subject.img === 'string' ? subject.img : '',
+    img: subjectArtworkPath(subject),
     ...(chapterCount === undefined ? {} : { chapterCount, chaptersCount: chapterCount })
   };
 }

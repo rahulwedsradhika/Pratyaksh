@@ -1,0 +1,583 @@
+{
+  "6374587dab8725670aed2a70": {
+    "courseId": "6374568eab8725670aed2a66",
+    "name": "General Studies",
+    "originalPath": "upload/GS 1.jpg",
+    "assetPath": "/assets/curriculum/subject-6374587dab8725670aed2a70.jpg",
+    "sha256": "7b93cb8521c179a24ed66349d9e5459425d7f5f6d4de5c7a2fe467c07de59667"
+  },
+  "63941adfca2a31226968c02f": {
+    "courseId": "6374568eab8725670aed2a66",
+    "name": "Charak Samhita (Purvardha) for Prayag Sangam",
+    "originalPath": "upload/1670650590884_CS.jpg",
+    "assetPath": "/assets/curriculum/subject-63941adfca2a31226968c02f.jpg",
+    "sha256": "2a156ead602123b90f6e3b9fcfd02b41e45faf1857b99f640d29139b1c35a20f"
+  },
+  "63941b3bca2a31226968c035": {
+    "courseId": "6374568eab8725670aed2a66",
+    "name": "Charak Samhita (Uttarardha) for Prayag Sangam",
+    "originalPath": "upload/1670650682665_CS.jpg",
+    "assetPath": "/assets/curriculum/subject-63941b3bca2a31226968c035.jpg",
+    "sha256": "2a156ead602123b90f6e3b9fcfd02b41e45faf1857b99f640d29139b1c35a20f"
+  },
+  "6396d7caca2a31226968d07b": {
+    "courseId": "6374568eab8725670aed2a66",
+    "name": " Sushruta Samhita for Prayag Sangam",
+    "originalPath": "upload/1670830026111_sushrut.jpg",
+    "assetPath": "/assets/curriculum/subject-6396d7caca2a31226968d07b.jpg",
+    "sha256": "ae29723234a5d08b22e1baf11b8cd3a7afc148cf163dc1382f94571f90fba77d"
+  },
+  "639a07deb6e97a66c11c93b7": {
+    "courseId": "6374568eab8725670aed2a66",
+    "name": "Other Subjects",
+    "originalPath": "upload/1671038941822_other.JPG",
+    "assetPath": "/assets/curriculum/subject-639a07deb6e97a66c11c93b7.jpg",
+    "sha256": "9b86552e67159f4dbff80e99bae2472d4d58dec7bed777149961ac7c74045539"
+  },
+  "63ca2f6588c0ba613ecdcae6": {
+    "courseId": "63ca2d6f88c0ba613ecdcae0",
+    "name": "Cardio-Vascular System",
+    "originalPath": "upload/1674194789404_CVS.jpg",
+    "assetPath": "/assets/curriculum/subject-63ca2f6588c0ba613ecdcae6.jpg",
+    "sha256": "3b147045b29ab9f11d748ee7a83470158137ecae66c14f323c33d5106a895ed0"
+  },
+  "63ea2a01a08622037984ef57": {
+    "courseId": "63ea24fda08622037984eedd",
+    "name": "Charaka Samhita (Purvardha)",
+    "originalPath": "upload/1676293025232_Slide2.JPG",
+    "assetPath": "/assets/curriculum/subject-63ea2a01a08622037984ef57.jpg",
+    "sha256": "46ff81f17b5035be030c8f18e8af4c5e770fb62c70ddd3ab7949d38f67950ec0"
+  },
+  "63ea2a71a08622037984ef66": {
+    "courseId": "63ea24fda08622037984eedd",
+    "name": "Charak Samhita (Uttarardha)",
+    "originalPath": "upload/1676293279942_Slide3.JPG",
+    "assetPath": "/assets/curriculum/subject-63ea2a71a08622037984ef66.jpg",
+    "sha256": "33e5e01b9cdc9977f3c6139ecd103a7466b509c9fa646352fd89a6760f1343b8"
+  },
+  "63ea2afea08622037984ef72": {
+    "courseId": "63ea24fda08622037984eedd",
+    "name": "Sushruta Samhita",
+    "originalPath": "upload/1676293293704_Slide4.JPG",
+    "assetPath": "/assets/curriculum/subject-63ea2afea08622037984ef72.jpg",
+    "sha256": "7c0bbe3127f9688aa316893ee2c4d87924b510495e9d7c07d4560609366d67d4"
+  },
+  "63eb1bea095de164e0174fc7": {
+    "courseId": "63ea24fda08622037984eedd",
+    "name": "Other Subjects",
+    "originalPath": "upload/1676352490436_subjects.jpg",
+    "assetPath": "/assets/curriculum/subject-63eb1bea095de164e0174fc7.jpg",
+    "sha256": "f7a939de5a714ad86d3e72777385f2744b4de2c722a3ddfe9349030979a8119e"
+  },
+  "6404d8f3ffc4c86e2d1308c2": {
+    "courseId": "6404b1b6ffc4c86e2d13027f",
+    "name": "Charaka Samhita (Purvardha)",
+    "originalPath": "upload/1678039283202_charak purvardh bams.jpg",
+    "assetPath": "/assets/curriculum/subject-6404d8f3ffc4c86e2d1308c2.jpg",
+    "sha256": "5dde0225c9fbdcab2c692e79f6249e0cb6c9e71ae890829ba6889f5907a0bb40"
+  },
+  "6404d9deffc4c86e2d1308d9": {
+    "courseId": "651806284fe0d11d7cbee01f",
+    "name": "Charaka Samhita (Uttarardha)",
+    "originalPath": "upload/1678039518142_charak uttarardh bams.jpg",
+    "assetPath": "/assets/curriculum/subject-6404d9deffc4c86e2d1308d9.jpg",
+    "sha256": "ae47bf105ed28a2f1afd2d2fda2c85b695f7bde1203226695885a1a5a768a9f0"
+  },
+  "643c145c632c6415afe540f3": {
+    "courseId": "641ff70fdbedd362a40fb136",
+    "name": "Charaka Samhita (Purvardha)",
+    "originalPath": "upload/1729956207444_Slide7.JPG",
+    "assetPath": "/assets/curriculum/subject-643c145c632c6415afe540f3.jpg",
+    "sha256": "67736c9c4b8e4b95a9f92d9c7f47b6d131b5b51910b985adcfd96402e9666b14"
+  },
+  "64418a89632c6415afe6b27e": {
+    "courseId": "641ff70fdbedd362a40fb136",
+    "name": "Sushruta Samhita",
+    "originalPath": "upload/1729956244430_Slide9.JPG",
+    "assetPath": "/assets/curriculum/subject-64418a89632c6415afe6b27e.jpg",
+    "sha256": "9ee661ea8e1397e10418dcd16ce207b386e0190ecb999c468b1629fee6d04a0a"
+  },
+  "64c7e20545dc6c5300f31fe1": {
+    "courseId": "641ff70fdbedd362a40fb136",
+    "name": "Charaka Samhita (Uttarardha)",
+    "originalPath": "upload/1729956188817_Slide5.JPG",
+    "assetPath": "/assets/curriculum/subject-64c7e20545dc6c5300f31fe1.jpg",
+    "sha256": "280fe5c0aa5159cc704cb86c0100c8040622e8307e7365aaad5f783ca018111a"
+  },
+  "657aabbc6affe70f030136a4": {
+    "courseId": "670f585fdb08935a4eb6b625",
+    "name": "Practice tests",
+    "originalPath": "upload/1729062795582_practice test.jpg",
+    "assetPath": "/assets/curriculum/subject-657aabbc6affe70f030136a4.jpg",
+    "sha256": "70c8532ea8936f91175c2a4a27882cda4bc1e275c961f37b6bb5a7d14a4616b7"
+  },
+  "65ad19e6a27b295e1ac4ff33": {
+    "courseId": "641ff70fdbedd362a40fb136",
+    "name": "Other Samhita",
+    "originalPath": "upload/1729956147430_Slide1.JPG",
+    "assetPath": "/assets/curriculum/subject-65ad19e6a27b295e1ac4ff33.jpg",
+    "sha256": "7196e85a6479c259953786ca86995e5e67cf3181469482fc61efa53338172cd0"
+  },
+  "65add3b9a27b295e1ac527a0": {
+    "courseId": "641ff70fdbedd362a40fb136",
+    "name": "Ayurveda Subjects",
+    "originalPath": "upload/1729956129475_Slide2.JPG",
+    "assetPath": "/assets/curriculum/subject-65add3b9a27b295e1ac527a0.jpg",
+    "sha256": "e4e0967c838eb6908b3f96ef074e1b2255fb73d2df93360875dde1b9473b69c6"
+  },
+  "65add424a27b295e1ac527a9": {
+    "courseId": "641ff70fdbedd362a40fb136",
+    "name": "Modern Subjects",
+    "originalPath": "upload/1729956111823_Slide3.JPG",
+    "assetPath": "/assets/curriculum/subject-65add424a27b295e1ac527a9.jpg",
+    "sha256": "7e4d0a8be8a5ef5a8fcf73dc160b58ee4fd0156a89c34831895fa9be4706419e"
+  },
+  "666294fdc3c96566bba7ac51": {
+    "courseId": "66628c97c3c96566bba7a3c4",
+    "name": "Charaka Samhita (Purvardha)",
+    "originalPath": "upload/1717736700519_purvardha.jpg",
+    "assetPath": "/assets/curriculum/subject-666294fdc3c96566bba7ac51.jpg",
+    "sha256": "f424c600497cc6ee563abb9b8225758dcf0963b955278d17bb481375bf0ec58c"
+  },
+  "6662955ac3c96566bba7aca7": {
+    "courseId": "66628c97c3c96566bba7a3c4",
+    "name": "Charaka Samhita (Uttarardha)",
+    "originalPath": "upload/1717736794114_uttarardha.jpg",
+    "assetPath": "/assets/curriculum/subject-6662955ac3c96566bba7aca7.jpg",
+    "sha256": "09820aeffa9cddf75d3552fb03f70396e3ed7b48b09c21577b85fdad6bcb6390"
+  },
+  "666295b8c3c96566bba7ad3f": {
+    "courseId": "66628c97c3c96566bba7a3c4",
+    "name": "Sushruta Samhita",
+    "originalPath": "upload/1717736888546_sushruta.jpg",
+    "assetPath": "/assets/curriculum/subject-666295b8c3c96566bba7ad3f.jpg",
+    "sha256": "486df711a0046bb3118abeeaf765a260ab2eb2b741c7520408a1718d52eebd21"
+  },
+  "66629631c3c96566bba7add3": {
+    "courseId": "66628c97c3c96566bba7a3c4",
+    "name": "Other Samhita",
+    "originalPath": "upload/1729186524855_Other Samhita.jpg",
+    "assetPath": "/assets/curriculum/subject-66629631c3c96566bba7add3.jpg",
+    "sha256": "7196e85a6479c259953786ca86995e5e67cf3181469482fc61efa53338172cd0"
+  },
+  "6662968fc3c96566bba7ae27": {
+    "courseId": "66628c97c3c96566bba7a3c4",
+    "name": "Ayurveda Subjects",
+    "originalPath": "upload/1729186681063_Ayurveda Subjects.jpg",
+    "assetPath": "/assets/curriculum/subject-6662968fc3c96566bba7ae27.jpg",
+    "sha256": "e4e0967c838eb6908b3f96ef074e1b2255fb73d2df93360875dde1b9473b69c6"
+  },
+  "666297fac3c96566bba7af32": {
+    "courseId": "66628c97c3c96566bba7a3c4",
+    "name": "Modern Subjects",
+    "originalPath": "upload/1729186440549_Modern Subjects.jpg",
+    "assetPath": "/assets/curriculum/subject-666297fac3c96566bba7af32.jpg",
+    "sha256": "7e4d0a8be8a5ef5a8fcf73dc160b58ee4fd0156a89c34831895fa9be4706419e"
+  },
+  "66cf2a62ddf5693e7bb491df": {
+    "courseId": "6404b23dffc4c86e2d1306c9",
+    "name": "Kayachikitsa",
+    "originalPath": "upload/1724852834060_logo tansparent.png",
+    "assetPath": "/assets/curriculum/subject-66cf2a62ddf5693e7bb491df.png",
+    "sha256": "78d107dd40a1687e783131542029f733b009486a56fb6c245b4aa6dacd33cf9d"
+  },
+  "66cf3048ddf5693e7bb497fc": {
+    "courseId": "6404b23dffc4c86e2d1306c9",
+    "name": "Shalya Tantra",
+    "originalPath": "upload/1724854344539_logo tansparent.png",
+    "assetPath": "/assets/curriculum/subject-66cf3048ddf5693e7bb497fc.png",
+    "sha256": "78d107dd40a1687e783131542029f733b009486a56fb6c245b4aa6dacd33cf9d"
+  },
+  "66cf33bbddf5693e7bb49cc3": {
+    "courseId": "6404b23dffc4c86e2d1306c9",
+    "name": "Shalakya Tantra",
+    "originalPath": "upload/1724855227152_logo tansparent.png",
+    "assetPath": "/assets/curriculum/subject-66cf33bbddf5693e7bb49cc3.png",
+    "sha256": "78d107dd40a1687e783131542029f733b009486a56fb6c245b4aa6dacd33cf9d"
+  },
+  "66cf3792ddf5693e7bb4a11d": {
+    "courseId": "6404b23dffc4c86e2d1306c9",
+    "name": "Panchkarma",
+    "originalPath": "upload/1724856210367_logo tansparent.png",
+    "assetPath": "/assets/curriculum/subject-66cf3792ddf5693e7bb4a11d.png",
+    "sha256": "78d107dd40a1687e783131542029f733b009486a56fb6c245b4aa6dacd33cf9d"
+  },
+  "66cf3b94ddf5693e7bb4a440": {
+    "courseId": "6404b23dffc4c86e2d1306c9",
+    "name": "Research Methodology and Medical Statistics",
+    "originalPath": "upload/1724857236323_pratyaksh logo.jpg",
+    "assetPath": "/assets/curriculum/subject-66cf3b94ddf5693e7bb4a440.jpg",
+    "sha256": "726b17dfd64d8a57211abf0475bb616996915aef86f77f60e71b842ed3777f7f"
+  },
+  "66cfe1c2c2cf8b55abc172c8": {
+    "courseId": "651806284fe0d11d7cbee01f",
+    "name": "Agad Tantra",
+    "originalPath": "upload/1724899778450_logo tansparent.png",
+    "assetPath": "/assets/curriculum/subject-66cfe1c2c2cf8b55abc172c8.png",
+    "sha256": "78d107dd40a1687e783131542029f733b009486a56fb6c245b4aa6dacd33cf9d"
+  },
+  "66cfe670c2cf8b55abc17592": {
+    "courseId": "651806284fe0d11d7cbee01f",
+    "name": "Swasthavritta",
+    "originalPath": "upload/1724900976349_logo tansparent.png",
+    "assetPath": "/assets/curriculum/subject-66cfe670c2cf8b55abc17592.png",
+    "sha256": "78d107dd40a1687e783131542029f733b009486a56fb6c245b4aa6dacd33cf9d"
+  },
+  "66cffd69c2cf8b55abc183bb": {
+    "courseId": "651806284fe0d11d7cbee01f",
+    "name": "Prasuti Tantra Evum Stri Roga ",
+    "originalPath": "upload/1724906857156_logo tansparent.png",
+    "assetPath": "/assets/curriculum/subject-66cffd69c2cf8b55abc183bb.png",
+    "sha256": "78d107dd40a1687e783131542029f733b009486a56fb6c245b4aa6dacd33cf9d"
+  },
+  "66d00159c2cf8b55abc187b7": {
+    "courseId": "651806284fe0d11d7cbee01f",
+    "name": "Kaumarbhritya",
+    "originalPath": "upload/1724907865653_logo tansparent.png",
+    "assetPath": "/assets/curriculum/subject-66d00159c2cf8b55abc187b7.png",
+    "sha256": "78d107dd40a1687e783131542029f733b009486a56fb6c245b4aa6dacd33cf9d"
+  },
+  "66d13536c2cf8b55abc23474": {
+    "courseId": "6404b1b6ffc4c86e2d13027f",
+    "name": "Dravyaguna",
+    "originalPath": "upload/1724986677723_Logo PNG.png",
+    "assetPath": "/assets/curriculum/subject-66d13536c2cf8b55abc23474.png",
+    "sha256": "96dbd4ac0864d02d9e158f3098b4268d00c1a9734c1af2b51c56beb92235ab08"
+  },
+  "66d14292c2cf8b55abc23d65": {
+    "courseId": "6404b1b6ffc4c86e2d13027f",
+    "name": "Rasashastra",
+    "originalPath": "upload/1724990098061_Logo PNG.png",
+    "assetPath": "/assets/curriculum/subject-66d14292c2cf8b55abc23d65.png",
+    "sha256": "96dbd4ac0864d02d9e158f3098b4268d00c1a9734c1af2b51c56beb92235ab08"
+  },
+  "66d1514fc2cf8b55abc24b17": {
+    "courseId": "6404b1b6ffc4c86e2d13027f",
+    "name": "Roga Nidana",
+    "originalPath": "upload/1724993871177_Logo PNG.png",
+    "assetPath": "/assets/curriculum/subject-66d1514fc2cf8b55abc24b17.png",
+    "sha256": "96dbd4ac0864d02d9e158f3098b4268d00c1a9734c1af2b51c56beb92235ab08"
+  },
+  "67ea663fb946037b8f551696": {
+    "courseId": "67ea6278b946037b8f551213",
+    "name": "Charaka Samhita (Purvardha)",
+    "originalPath": "upload/1743414847324_Slide1.JPG",
+    "assetPath": "/assets/curriculum/subject-67ea663fb946037b8f551696.jpg",
+    "sha256": "76f9a4834a251035e23bdaeeea60c36db52ee6cc89a52ea5e9cbff1698ea4e54"
+  },
+  "67ea692ab946037b8f551acd": {
+    "courseId": "67ea6278b946037b8f551213",
+    "name": "Charaka Samhita (Uttarardha)",
+    "originalPath": "upload/1743415594042_Slide2.JPG",
+    "assetPath": "/assets/curriculum/subject-67ea692ab946037b8f551acd.jpg",
+    "sha256": "5f18bee30d6d2fa369ff8ac9a686ac998faf966959e079bdc7cfa619e8cd7dfe"
+  },
+  "67ea69dcb946037b8f551c33": {
+    "courseId": "67ea6278b946037b8f551213",
+    "name": "Sushruta Samhita",
+    "originalPath": "upload/1743415772179_Slide3.JPG",
+    "assetPath": "/assets/curriculum/subject-67ea69dcb946037b8f551c33.jpg",
+    "sha256": "ef76bef1d860d578c37547c2fdbe841249c64ca3eede018f9821e7670da8bf1b"
+  },
+  "67ea6c40b946037b8f551ff4": {
+    "courseId": "67ea6278b946037b8f551213",
+    "name": "Other Samhita",
+    "originalPath": "upload/1743416383924_Slide4.JPG",
+    "assetPath": "/assets/curriculum/subject-67ea6c40b946037b8f551ff4.jpg",
+    "sha256": "3342cf959122514e85742937e205bcc3f058822447bdf4fb90870b228c5482d3"
+  },
+  "67ea6ccbb946037b8f5520b4": {
+    "courseId": "67ea6278b946037b8f551213",
+    "name": "Ayurveda Subjects",
+    "originalPath": "upload/1743416523218_Slide5.JPG",
+    "assetPath": "/assets/curriculum/subject-67ea6ccbb946037b8f5520b4.jpg",
+    "sha256": "a451f2ebab969add9448214b84870fbeb575d620e8dfbaebdf08fc1d9ac78673"
+  },
+  "67ea7cb5b946037b8f553c15": {
+    "courseId": "67ea6278b946037b8f551213",
+    "name": "Modern Subjects",
+    "originalPath": "upload/1743420597290_Slide6.JPG",
+    "assetPath": "/assets/curriculum/subject-67ea7cb5b946037b8f553c15.jpg",
+    "sha256": "e1ddedcd948df91fef700ba3ae8d2427797c3cad0e93fe67684ed85ec0436f45"
+  },
+  "67eaa068b946037b8f5581a7": {
+    "courseId": "67ea6278b946037b8f551213",
+    "name": "Discussion Classes",
+    "originalPath": "upload/1773379914493_discussion classes.jpg",
+    "assetPath": "/assets/curriculum/subject-67eaa068b946037b8f5581a7.jpg",
+    "sha256": "82c197020e897675f097e701f89a977dac8ce262c12d1cf04084ad2e0995172a"
+  },
+  "67eaa154b946037b8f558365": {
+    "courseId": "67ea6278b946037b8f551213",
+    "name": "Revision Classes",
+    "originalPath": "upload/1743429972791_Slide8.JPG",
+    "assetPath": "/assets/curriculum/subject-67eaa154b946037b8f558365.jpg",
+    "sha256": "3e9952a3bc64238b6e87269a0baa9d9a20a45067c1fa49d286657f39f40971b4"
+  },
+  "68b2e1c6cc39fe474b7152cd": {
+    "courseId": "68b2bfddcc39fe474b711745",
+    "name": "Charaka Saptah 2025",
+    "originalPath": "upload/1756892997615_Thumbnail.png",
+    "assetPath": "/assets/curriculum/subject-68b2e1c6cc39fe474b7152cd.png",
+    "sha256": "61cf312f0f6b1c5633b8f9b22d42e9c979229c12dc01aede261b61d5d16a7614"
+  },
+  "694e7d5e8e4835469fc2c7ab": {
+    "courseId": "694e3fa56b9fae4c789611e0",
+    "name": "Charaka Samhita",
+    "originalPath": "upload/1767944713180_charaka samhita.jpeg",
+    "assetPath": "/assets/curriculum/subject-694e7d5e8e4835469fc2c7ab.jpg",
+    "sha256": "f2f2fe0072bf7ad80df5bd23a7fe102d7a46d330285ce12a7448a44b496a0126"
+  },
+  "695368d19b99ee4dafeaebe4": {
+    "courseId": "694e3fa56b9fae4c789611e0",
+    "name": "Charaka Samhita (Uttarardha)",
+    "originalPath": "upload/1767881737766_19.jpg",
+    "assetPath": "/assets/curriculum/subject-695368d19b99ee4dafeaebe4.jpg",
+    "sha256": "6dff728585f511fe307f1c239108425f475cc3603469b71f3eba49020a0a086f"
+  },
+  "6953692fcd92424dae6d5ac2": {
+    "courseId": "694e3fa56b9fae4c789611e0",
+    "name": "Sushruta Samhita",
+    "originalPath": "upload/1767881758960_20.jpg",
+    "assetPath": "/assets/curriculum/subject-6953692fcd92424dae6d5ac2.jpg",
+    "sha256": "2d495451b94c20314dda297b05bcea9d4b119d093b952b86163b30b51cb9cec6"
+  },
+  "69536a247c895d4db70ff18f": {
+    "courseId": "694e3fa56b9fae4c789611e0",
+    "name": "Ayurveda Subjects",
+    "originalPath": "upload/1767881780577_22.jpg",
+    "assetPath": "/assets/curriculum/subject-69536a247c895d4db70ff18f.jpg",
+    "sha256": "e7e06c45305e7ed33dbc255fb6f55542857ae0136bf8a39ea669e4e4e7f48956"
+  },
+  "69536a7f9b99ee4dafeaed48": {
+    "courseId": "694e3fa56b9fae4c789611e0",
+    "name": "Other Samhita",
+    "originalPath": "upload/1767881824594_21.jpg",
+    "assetPath": "/assets/curriculum/subject-69536a7f9b99ee4dafeaed48.jpg",
+    "sha256": "b810ef9a2bc915853cd4f5c9b3c751b413c8dd2752493cb3837c7a5db650de61"
+  },
+  "69536ad2cd92424dae6d5bff": {
+    "courseId": "694e3fa56b9fae4c789611e0",
+    "name": "Modern Subjects",
+    "originalPath": "upload/1767881799786_23.jpg",
+    "assetPath": "/assets/curriculum/subject-69536ad2cd92424dae6d5bff.jpg",
+    "sha256": "103625e624e520a297205f78ce1d491f8d11405075cf2c27ecd38e7d4c9d1598"
+  },
+  "69536b647c895d4db70ff298": {
+    "courseId": "694e3fa56b9fae4c789611e0",
+    "name": "General Studies",
+    "originalPath": "upload/1768035145886_GS.jpeg",
+    "assetPath": "/assets/curriculum/subject-69536b647c895d4db70ff298.jpg",
+    "sha256": "110e2b81f65c1a55158ac4639186c9038248742012381cd22550ecc7342d98f1"
+  },
+  "69536c7d7c895d4db70ff323": {
+    "courseId": "694e3fa56b9fae4c789611e0",
+    "name": "Revision & Discussions",
+    "originalPath": "upload/1768035174614_r&d.jpeg",
+    "assetPath": "/assets/curriculum/subject-69536c7d7c895d4db70ff323.jpg",
+    "sha256": "509cface7e0f27d51b125e7139e0857358389cfb54f50dfa707129f30965451a"
+  },
+  "69536d767c895d4db70ff374": {
+    "courseId": "694e3fa56b9fae4c789611e0",
+    "name": "Health Programs",
+    "originalPath": "upload/1768809450408_health programs.png",
+    "assetPath": "/assets/curriculum/subject-69536d767c895d4db70ff374.png",
+    "sha256": "fd7eae868413e917c7d3ffc78d4eb784e049f83f160b26f7f656ff99281ab4a9"
+  },
+  "6975f1013c55512ed870b561": {
+    "courseId": "696f279987d0d430e70d5032",
+    "name": "Kayachikitsa",
+    "originalPath": "upload/1777968039531_2.jpg",
+    "assetPath": "/assets/curriculum/subject-6975f1013c55512ed870b561.jpg",
+    "sha256": "52a4e0e49f810fda7ab5168a134a49af2e70ce52b8402ade88736774d4f747ee"
+  },
+  "6975f15a3c55512ed870b752": {
+    "courseId": "696f279987d0d430e70d5032",
+    "name": "Shalya Tantra",
+    "originalPath": "upload/1777968114521_3.jpg",
+    "assetPath": "/assets/curriculum/subject-6975f15a3c55512ed870b752.jpg",
+    "sha256": "851f0a9afac1892cdcd76e331cce9a56d0440dc9cb7b9909f6c2eb79eac93781"
+  },
+  "6975f1a93c55512ed870b8f8": {
+    "courseId": "696f279987d0d430e70d5032",
+    "name": "Shalakya Tantra",
+    "originalPath": "upload/1777968136088_4.jpg",
+    "assetPath": "/assets/curriculum/subject-6975f1a93c55512ed870b8f8.jpg",
+    "sha256": "ddd6f7fc35ef310a742b3806fefae04a64fec76f5b9c4176457cfaf5f214518b"
+  },
+  "6975f1f93c55512ed870bb23": {
+    "courseId": "696f279987d0d430e70d5032",
+    "name": "Panchakarma",
+    "originalPath": "upload/1777968229598_5.jpeg",
+    "assetPath": "/assets/curriculum/subject-6975f1f93c55512ed870bb23.jpg",
+    "sha256": "7a2b35153c479f7cbe8325aa9debcdd79569cf2983ece11142bdf1b39117dd56"
+  },
+  "6975f22e3c55512ed870bc05": {
+    "courseId": "696f279987d0d430e70d5032",
+    "name": "Research Methodology and Medical Statistics",
+    "originalPath": "upload/1777968256615_6.jpg",
+    "assetPath": "/assets/curriculum/subject-6975f22e3c55512ed870bc05.jpg",
+    "sha256": "e925281e117bb6bf5279e0d27ef6bf88fad99ac4a824704da667f1858d29c24c"
+  },
+  "6975f2643c55512ed870bd3a": {
+    "courseId": "696f279987d0d430e70d5032",
+    "name": "Prasuti Tantra & Stri Roga ",
+    "originalPath": "upload/1777968333939_PTSR.jpeg",
+    "assetPath": "/assets/curriculum/subject-6975f2643c55512ed870bd3a.jpg",
+    "sha256": "476e517f11bfa9a23c6826f5f9bc9a5baeedc85c68369f7b679d435b608060ed"
+  },
+  "6975f2a33c55512ed870be19": {
+    "courseId": "696f279987d0d430e70d5032",
+    "name": "Kaumarbhritya",
+    "originalPath": "upload/1777968374287_8.jpg",
+    "assetPath": "/assets/curriculum/subject-6975f2a33c55512ed870be19.jpg",
+    "sha256": "ed7c1ef948bf155586369f8375fcaaf6ce8306dacf0c4e7cf1fb1ed9dbaac726"
+  },
+  "6975f2e43c55512ed870bef7": {
+    "courseId": "696f276a87d0d430e70d4f37",
+    "name": "Dravyaguna",
+    "originalPath": "upload/1777968418588_10.jpg",
+    "assetPath": "/assets/curriculum/subject-6975f2e43c55512ed870bef7.jpg",
+    "sha256": "eeb4a01ffdc82dc06fdff6d3aff99684f59c69cca395b55dd7daa60e8e077f60"
+  },
+  "6975f3703c55512ed870c296": {
+    "courseId": "696f276a87d0d430e70d4f37",
+    "name": "Rasashastra & Bhaishajya kalpana",
+    "originalPath": "upload/1777970431431_11.jpg",
+    "assetPath": "/assets/curriculum/subject-6975f3703c55512ed870c296.jpg",
+    "sha256": "4838afceaa472383dac13fd22356494c47ea32445d0d4cf1bfbe39bacf553bfa"
+  },
+  "6975f3ac3c55512ed870c426": {
+    "courseId": "696f276a87d0d430e70d4f37",
+    "name": "Roga Nidan & Vikriti Vigyan",
+    "originalPath": "upload/1777968506768_12.jpg",
+    "assetPath": "/assets/curriculum/subject-6975f3ac3c55512ed870c426.jpg",
+    "sha256": "6836f9b75dd8eec41cdbdecf3a8a3fb359001ee7a356969b7b2c7abc33fb82ff"
+  },
+  "6975f4703c55512ed870c889": {
+    "courseId": "696f276a87d0d430e70d4f37",
+    "name": "Samhita Adhyayan-2",
+    "originalPath": "upload/1777969024907_13.jpg",
+    "assetPath": "/assets/curriculum/subject-6975f4703c55512ed870c889.jpg",
+    "sha256": "ac6484148ade88e9bd133c4bdc077c11a97fa78504c847512bf58aef357de14f"
+  },
+  "6975f4cb3c55512ed870cb06": {
+    "courseId": "696f279987d0d430e70d5032",
+    "name": "Samhita Adhyayan-3",
+    "originalPath": "upload/1777969053288_9.jpg",
+    "assetPath": "/assets/curriculum/subject-6975f4cb3c55512ed870cb06.jpg",
+    "sha256": "31afbb64c8740e65c3340fee4046aaf933c3bff807ed8cb0a15ae2a2986afb8a"
+  },
+  "69e47ac0aec32753dfcc0d3d": {
+    "courseId": "696f276a87d0d430e70d4f37",
+    "name": "Agad Tantra",
+    "originalPath": "upload/1777969080400_14.jpg",
+    "assetPath": "/assets/curriculum/subject-69e47ac0aec32753dfcc0d3d.jpg",
+    "sha256": "62910517a26e88d594cc21880cab3b88e98bb3727a2321850e68dbcd9ac254b2"
+  },
+  "69e47b1eaec32753dfcc0ea9": {
+    "courseId": "696f276a87d0d430e70d4f37",
+    "name": "Swasthavritta evam Yoga",
+    "originalPath": "upload/1777969167880_SW.jpeg",
+    "assetPath": "/assets/curriculum/subject-69e47b1eaec32753dfcc0ea9.jpg",
+    "sha256": "4a6b9913ea93e74809aa1e759876a205951d77305c3d890c5892443b6cb90500"
+  },
+  "69e5e54aaec32753dfd16485": {
+    "courseId": "696f273687d0d430e70d4dc7",
+    "name": "Samhita Adhyayan-1",
+    "originalPath": "upload/1777969198332_16.jpg",
+    "assetPath": "/assets/curriculum/subject-69e5e54aaec32753dfd16485.jpg",
+    "sha256": "cef474f0c89a6e5dc5a60b3f1d00a92133e3599b79512f90fdecc77bb46caae3"
+  },
+  "69e5e5d5aec32753dfd16705": {
+    "courseId": "696f273687d0d430e70d4dc7",
+    "name": "Rachana Sharira",
+    "originalPath": "upload/1777970386675_17.jpg",
+    "assetPath": "/assets/curriculum/subject-69e5e5d5aec32753dfd16705.jpg",
+    "sha256": "92a5192d0a9bbe75030ebf0ba8f02af01fe3a9e469819e9438658645df0c9f08"
+  },
+  "69e5e61faec32753dfd16776": {
+    "courseId": "696f273687d0d430e70d4dc7",
+    "name": "Kriya Sharira",
+    "originalPath": "upload/1777970317039_18.jpg",
+    "assetPath": "/assets/curriculum/subject-69e5e61faec32753dfd16776.jpg",
+    "sha256": "80d095d91704b4f37c732312b390d70f83943f839eda7ee20bd6c07452090a76"
+  },
+  "69e5e71aaec32753dfd16b88": {
+    "courseId": "696f273687d0d430e70d4dc7",
+    "name": "Padarth Vigyan",
+    "originalPath": "upload/1777970216798_19.jpg",
+    "assetPath": "/assets/curriculum/subject-69e5e71aaec32753dfd16b88.jpg",
+    "sha256": "9c34510960dd8616b895eab239f5ed5aa12cc9178b8b57fb3077a2aebbe9221b"
+  },
+  "69f09f2daec32753dff9ec07": {
+    "courseId": "696f273687d0d430e70d4dc7",
+    "name": "Sanskrita",
+    "originalPath": "upload/1777970199982_20.jpg",
+    "assetPath": "/assets/curriculum/subject-69f09f2daec32753dff9ec07.jpg",
+    "sha256": "e8bc8e7ea663dd3fb8e69ef017f1361ed00a9bc79f57a16a08d2b0fc88823d79"
+  },
+  "69f44243a08eda4f2205253e": {
+    "courseId": "69f30ebda08eda4f22febd85",
+    "name": "Charaka Samhita (Purvardha)",
+    "originalPath": "upload/1777645267248_19.png",
+    "assetPath": "/assets/curriculum/subject-69f44243a08eda4f2205253e.png",
+    "sha256": "52441467688ca1131ecf255ff574bd8b4f4cabbc16f296dcd52ac52753cb943d"
+  },
+  "69f44368a08eda4f22052b20": {
+    "courseId": "69f30ebda08eda4f22febd85",
+    "name": "Charaka Samhita (Uttarardha)",
+    "originalPath": "upload/1777645288643_20.png",
+    "assetPath": "/assets/curriculum/subject-69f44368a08eda4f22052b20.png",
+    "sha256": "6bd574a30e443c51f5673460ac25f1c2f5aee353361801d84fa36d6514771a72"
+  },
+  "69f44468a08eda4f22052f1f": {
+    "courseId": "69f30ebda08eda4f22febd85",
+    "name": "Sushruta Samhita",
+    "originalPath": "upload/1777645309862_21.png",
+    "assetPath": "/assets/curriculum/subject-69f44468a08eda4f22052f1f.png",
+    "sha256": "ce61a7ff4e163ef0de38949a2a87a7a4d9e87acdaa58f1fe389c34938dcc1ffe"
+  },
+  "69f444cda08eda4f220531b5": {
+    "courseId": "69f30ebda08eda4f22febd85",
+    "name": "Ayurveda Subjects",
+    "originalPath": "upload/1777645328255_23.png",
+    "assetPath": "/assets/curriculum/subject-69f444cda08eda4f220531b5.png",
+    "sha256": "d4cb4d9525963c4b591ede9bd55607618620c56b1625b143ae9b675f5c064b71"
+  },
+  "69f44564a08eda4f2205343f": {
+    "courseId": "69f30ebda08eda4f22febd85",
+    "name": "Modern Subjects",
+    "originalPath": "upload/1777645360704_24.png",
+    "assetPath": "/assets/curriculum/subject-69f44564a08eda4f2205343f.png",
+    "sha256": "42267ce5e7db8ee62dc06262f725bd0b2247720a8aa3829d579ec8ece3110e8e"
+  },
+  "69f44cb0a08eda4f22056cd9": {
+    "courseId": "69f30ebda08eda4f22febd85",
+    "name": "Other Samhita",
+    "originalPath": "upload/1777645458643_22.png",
+    "assetPath": "/assets/curriculum/subject-69f44cb0a08eda4f22056cd9.png",
+    "sha256": "dfd76e38533605d0d460648d183d5542402630cdc48c830cb62808e7c924e451"
+  },
+  "69f44ecda08eda4f22057c6b": {
+    "courseId": "69f30ebda08eda4f22febd85",
+    "name": "Revision Classes",
+    "originalPath": "upload/1777645372906_26.png",
+    "assetPath": "/assets/curriculum/subject-69f44ecda08eda4f22057c6b.png",
+    "sha256": "d0a00bb986bf9c206a7fc602ff948b9d0ec0c8b5daad6abc7ef7282a9c0baae4"
+  },
+  "69f44f3da08eda4f22057f3d": {
+    "courseId": "69f30ebda08eda4f22febd85",
+    "name": "Discussion Sessions",
+    "originalPath": "upload/1777645399621_25.png",
+    "assetPath": "/assets/curriculum/subject-69f44f3da08eda4f22057f3d.png",
+    "sha256": "adf877a46eb130cad72da79d4e94e6246006f6d10ed63e08da3829773255796a"
+  },
+  "69f44fa3a08eda4f22058272": {
+    "courseId": "69f30ebda08eda4f22febd85",
+    "name": "NExT Classes",
+    "originalPath": "upload/1777645442262_27.png",
+    "assetPath": "/assets/curriculum/subject-69f44fa3a08eda4f22058272.png",
+    "sha256": "9f78db79bbbdbd6d53a8cef18e8b68544c19cd6bb682e343da3f73dcee4e234a"
+  }
+}
