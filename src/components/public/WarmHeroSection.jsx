@@ -1,3 +1,4 @@
+import {isAppleTouchDevice} from '../../utils/appleVideoCompatibility';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import InstallAppButton from '../InstallAppButton';
@@ -138,6 +139,7 @@ export default function WarmHeroSection() {
 
   const bunnyEmbedUrl = `https://iframe.mediadelivery.net/embed/330113/${activeLecture.id}?autoplay=false&playsinline=true`;
   const bunnyDirectUrl = bunnyEmbedUrl;
+  const appleTouch = typeof navigator !== 'undefined' && isAppleTouchDevice(navigator);
 
   return (
     <section id="hero" className="v3-hero-section" aria-label="Hero Section">
@@ -322,7 +324,7 @@ export default function WarmHeroSection() {
 
                   {/* Responsive Iframe Container for Genuine Bunny Stream with no-referrer */}
                   <div className="v3-bunny-iframe-wrapper">
-                    {showInteractivePlayer ? <iframe
+                    {appleTouch ? <a href={bunnyDirectUrl} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer" className="v3-video-load-button" aria-label={`Watch demo lecture in browser: ${activeLecture.title}`}><Play size={36} aria-hidden="true" /><strong>Watch a free lecture</strong><span>Opens the video player in your browser</span></a> : showInteractivePlayer ? <iframe
                       src={bunnyEmbedUrl}
                       title={activeLecture.title}
                       loading="lazy"
