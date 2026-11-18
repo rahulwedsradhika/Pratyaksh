@@ -1,3 +1,4 @@
+import {storeStudentSession,activeSessionStudent} from './studentLifecycle.js';
 import {setStaticCacheHeaders} from './staticCache.js';
 import { asyncMap } from "./asyncCollections.js";import { membershipQuote, reserveCoupon } from './membershipPricing.js';
 import 'dotenv/config';
@@ -67,7 +68,7 @@ async function createStudentSessionToken(studentId) {
   const signingInput = `${header}.${payload}`;
   const signature = crypto.createHmac('sha256', getSessionSecret()).update(signingInput).digest('base64url');
   const token=`${signingInput}.${signature}`;
-  await db.prepare('INSERT INTO student_sessions(token_hash,student_id,expires_at,created_at) VALUES (?,?,?,?)').run(crypto.createHash('sha256').update(token).digest('hex'),studentId,new Date((now+60*60*12)*1000).toISOString(),new Date().toISOString());
+  await storeStudentSession(db,{tokenHash:crypto.createHash('sha256').update(token).digest('hex'),studentId,expiresAt:new Date((now+60*60*12)*1000).toISOString(),createdAt:new Date().toISOString()});
   return token;
 }
 
@@ -2127,9 +2128,7 @@ async function getAuthenticatedStudent(req) {
     return admin ? await ensureAdminLearner(admin) : null;
   }
   try {
-    const session=await db.prepare('SELECT student_id FROM student_sessions WHERE token_hash=? AND revoked_at IS NULL AND expires_at>?').get(crypto.createHash('sha256').update(token).digest('hex'),new Date().toISOString());
-    if(session?.student_id!==studentId)return null;
-    return (await db.prepare('SELECT * FROM students WHERE id = ?').get(studentId)) || null;
+    return await activeSessionStudent(db,{studentId,tokenHash:crypto.createHash('sha256').update(token).digest('hex')});
   } catch (err) {
     return null;
   }

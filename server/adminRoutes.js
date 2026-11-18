@@ -1,3 +1,4 @@
+import {installStudentLifecycle} from './studentLifecycle.js';
 import { installGatewayAdmin } from './gatewayAdmin.js';
 import { requirePricingAdmin, money, positiveInteger, couponInput } from './membershipPricing.js';
 import { getAdminOverview } from './adminAnalytics.js';
@@ -35,6 +36,7 @@ import {
 './razorpayService.js';
 
 export const adminRouter = express.Router();
+installStudentLifecycle(adminRouter,db,requireAdminAuth);
 installCurriculumAdmin(adminRouter,db,requireAdminAuth,requirePricingAdmin);
 
 const OWNER_EMAIL = (process.env.OWNER_EMAIL || (process.env.NODE_ENV!=='production'&&process.env.APP_ENV!=='production'?'mukeshk65018@gmail.com':'')).toLowerCase();
@@ -426,6 +428,7 @@ adminRouter.get('/students/:id', requireAdminAuth, async (req, res) => {
 // PUT /api/admin/students/:id
 adminRouter.put('/students/:id', requireAdminAuth, async (req, res) => {
   try {
+    if (Object.hasOwn(req.body || {}, 'is_suspended')) return res.status(req.admin.role === 'super_admin' ? 400 : 403).json({status:false,error:'Use the superadmin student access action to deactivate or reactivate an account.'});
     const { full_name, phone, academic_status, bams_year, exam_goal, is_suspended, admin_notes } = req.body;
     const now = new Date().toISOString();
 

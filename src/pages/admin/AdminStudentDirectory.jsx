@@ -48,6 +48,12 @@ export default function AdminStudentDirectory() {
   // Modals state
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [studentDetailOpen, setStudentDetailOpen] = useState(false);
+  const [accountAction, setAccountAction] = useState('');
+  const [confirmEmail, setConfirmEmail] = useState('');
+  const [accountBusy, setAccountBusy] = useState(false);
+  const [accountError, setAccountError] = useState('');
+  const [accountMessage, setAccountMessage] = useState('');
+  const isSuperadmin = adminUser?.role === 'super_admin';
   const [manualAddOpen, setManualAddOpen] = useState(false);
   const [extensionModalOpen, setExtensionModalOpen] = useState(false);
   const [extensionDays, setExtensionDays] = useState(30);
@@ -118,6 +124,7 @@ export default function AdminStudentDirectory() {
 
   // Fetch full student profile
   const openStudentDetail = async (studentId) => {
+    setAccountAction(''); setConfirmEmail(''); setAccountError(''); setAccountMessage('');
     try {
       const res = await fetch(`/api/admin/students/${studentId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
@@ -132,6 +139,35 @@ export default function AdminStudentDirectory() {
     } catch (err) {
       setError('Error fetching student details: ' + err.message);
     }
+  };
+
+  const changeStudentAccount = async () => {
+    if (!isSuperadmin || !selectedStudent || accountBusy || !accountAction) return;
+    const studentId=selectedStudent.student.id;
+    setAccountBusy(true);
+    setAccountError('');
+    try {
+      const deleting=accountAction === 'delete';
+      const response=await fetch(`/api/admin/students/${encodeURIComponent(studentId)}${deleting ? '' : '/access'}`, {
+        method: deleting ? 'DELETE' : 'PUT',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(deleting ? {confirmEmail} : {deactivated:accountAction === 'deactivate'})
+      });
+      const result=await response.json();
+      if (!response.ok || !result.status) throw Error(result.error || 'Unable to update student account.');
+      setAccountAction(''); setConfirmEmail(''); setAccountMessage(result.message);
+      if (deleting) {
+        setStudentDetailOpen(false); setSelectedStudent(null);
+        setSelectedIds(previous=>{const updated=new Set(previous);updated.delete(studentId);return updated;});
+        if (students.length === 1 && page > 1) setPage(page-1);
+        else await fetchStudents();
+      } else {
+        await openStudentDetail(studentId);
+        setAccountMessage(result.message);
+        await fetchStudents();
+      }
+    } catch(error) {setAccountError(error.message);}
+    finally {setAccountBusy(false);}
   };
 
   // Toggle selection
@@ -713,7 +749,7 @@ export default function AdminStudentDirectory() {
           MODAL: STUDENT FULL PROFILE INSPECTOR & HISTORY
           ========================================================== */}
       {studentDetailOpen && selectedStudent && (
-        <div className="admin-modal-backdrop" onClick={() => setStudentDetailOpen(false)}>
+        <div className="admin-modal-backdrop" onClick={() => { if (!accountBusy) setStudentDetailOpen(false); }}>
           <div className="admin-modal" style={{ maxWidth: 680 }} onClick={e => e.stopPropagation()}>
             <div className="admin-modal-header">
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
@@ -727,12 +763,37 @@ export default function AdminStudentDirectory() {
                   </div>
                 </div>
               </div>
-              <button type="button" className="admin-icon-btn" onClick={() => setStudentDetailOpen(false)}>
+              <button type="button" className="admin-icon-btn" onClick={() => { if (!accountBusy) setStudentDetailOpen(false); }}>
                 <X size={18} />
               </button>
             </div>
 
             <div className="admin-modal-body" style={{ maxHeight: '70vh', overflowY: 'auto' }}>
+              {isSuperadmin && <section className="admin-card" style={{padding:'1.25rem',marginBottom:'1.25rem'}} aria-label="Student account controls">
+                <h4 style={{marginTop:0}}>Account access</h4>
+                <p>Deactivation immediately signs this student out and blocks access until you reactivate them. Membership dates remain unchanged.</p>
+                <div style={{display:'flex',flexWrap:'wrap',gap:12}}>
+                  <button type="button" className="admin-btn admin-btn-secondary" disabled={accountBusy} onClick={()=>{setAccountAction(selectedStudent.student.is_suspended?'reactivate':'deactivate');setAccountError('');setAccountMessage('');}}>
+                    {selectedStudent.student.is_suspended?'Reactivate student':'Deactivate student'}
+                  </button>
+                  <button type="button" className="admin-btn admin-btn-danger" disabled={accountBusy} onClick={()=>{setAccountAction('delete');setConfirmEmail('');setAccountError('');setAccountMessage('');}}>Permanently delete student</button>
+                </div>
+                {accountMessage && <p role="status">{accountMessage}</p>}
+                {accountAction && <div style={{marginTop:16,paddingTop:16,borderTop:'1px solid var(--admin-border)'}}>
+                  <h5>{accountAction==='delete'?'Confirm permanent deletion':accountAction==='deactivate'?'Deactivate this student?':'Reactivate this student?'}</h5>
+                  {accountAction==='delete' ? <>
+                    <p>This cannot be undone. This removes their profile, Google link, sessions, OTPs, learning history, memberships and platform payment records. Their next registration starts fresh. Payments already processed by the gateway are not refunded. The admin action remains in the audit log.</p>
+                    <label htmlFor="delete-student-email">Type {selectedStudent.student.email} to confirm</label>
+                    <input id="delete-student-email" className="admin-input" type="email" autoComplete="off" value={confirmEmail} onChange={event=>setConfirmEmail(event.target.value)} disabled={accountBusy} style={{width:'100%',margin:'8px 0 16px'}} />
+                  </> : <p>{accountAction==='deactivate'?'They will lose access immediately. Their saved work and membership will be kept.':'They can sign in again. Classroom access still requires a valid membership.'}</p>}
+                  {accountError && <p role="alert" style={{color:'var(--admin-danger,#b91c1c)'}}>{accountError}</p>}
+                  <div style={{display:'flex',gap:12,flexWrap:'wrap'}}>
+                    <button type="button" className={`admin-btn ${accountAction==='delete'?'admin-btn-danger':'admin-btn-primary'}`} disabled={accountBusy || accountAction==='delete' && confirmEmail.trim().toLowerCase()!==selectedStudent.student.email.toLowerCase()} onClick={changeStudentAccount}>{accountBusy?'Saving…':accountAction==='delete'?'Delete permanently':accountAction==='deactivate'?'Confirm deactivation':'Confirm reactivation'}</button>
+                    <button type="button" className="admin-btn admin-btn-secondary" disabled={accountBusy} onClick={()=>{setAccountAction('');setAccountError('');}}>Cancel</button>
+                  </div>
+                </div>}
+              </section>}
+
               {/* Account Badges */}
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1.25rem' }}>
                 {selectedStudent.student.is_verified ? (
@@ -862,7 +923,7 @@ export default function AdminStudentDirectory() {
             </div>
 
             <div className="admin-modal-footer">
-              <button type="button" className="admin-btn admin-btn-secondary" onClick={() => setStudentDetailOpen(false)}>
+              <button type="button" className="admin-btn admin-btn-secondary" onClick={() => { if (!accountBusy) setStudentDetailOpen(false); }}>
                 Close Profile
               </button>
             </div>
